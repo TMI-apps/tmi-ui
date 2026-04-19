@@ -1,6 +1,6 @@
 {
   "name": "@tmi-apps/ui",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -21,6 +21,7 @@
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

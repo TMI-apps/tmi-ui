@@ -6,13 +6,15 @@ The library is a **pnpm workspace package** inside the `project-alpha-app` monor
 
 ## Contents
 
-| Component        | Since   | Peer deps beyond core         |
-| ---------------- | ------- | ----------------------------- |
-| `ThumbnailPill`  | `0.1.0` | `react-router-dom` (when `to` prop is used) |
+| Component         | Since   | Peer deps beyond core                                   |
+| ----------------- | ------- | ------------------------------------------------------- |
+| `ThumbnailPill`   | `0.1.0` | `react-router-dom` (when `to` prop is used)             |
+| `VideoEmbedModal` | `0.2.0` | `@mui/icons-material` (uses `@mui/icons-material/Close`) |
 
 For the full prop surface of each component, read its source — the exported types are the canonical contract:
 
 - `ThumbnailPill` → [`src/ThumbnailPill/ThumbnailPill.tsx`](src/ThumbnailPill/ThumbnailPill.tsx), `ThumbnailPillProps`.
+- `VideoEmbedModal` → [`src/VideoEmbedModal/VideoEmbedModal.tsx`](src/VideoEmbedModal/VideoEmbedModal.tsx), `VideoEmbedModalProps`.
 
 ## Peer dependencies (core)
 
@@ -23,6 +25,7 @@ Your consuming app must already ship compatible majors of these. Mismatches shou
 - `@mui/material ^7.3.6`
 - `@emotion/react ^11.14.0`
 - `@emotion/styled ^11.14.1`
+- `@mui/icons-material ^7.3.6` *(only needed by components that import MUI icons, e.g. `VideoEmbedModal`)*
 - `react-router-dom ^7.11.0` *(only needed by components that accept a `to` prop)*
 
 ## Install in another app
@@ -83,6 +86,30 @@ import { ThumbnailPill } from "@tmi-apps/ui";
   onClick={() => { /* ... */ }}
 />;
 ```
+
+### `VideoEmbedModal`
+
+Modal that embeds a YouTube or Vimeo video in a responsive 16:9 iframe. Privacy-enhanced (`youtube-nocookie.com`) for YouTube, autoplays on open, and returns `null` when the URL can't be resolved to a supported provider — so you can always render it unconditionally.
+
+```tsx
+import { useState } from "react";
+import { VideoEmbedModal } from "@tmi-apps/ui";
+
+const [open, setOpen] = useState(false);
+
+<VideoEmbedModal
+  open={open}
+  onClose={() => setOpen(false)}
+  url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  title="Intro video"
+  closeAriaLabel="Close" // override to localize, e.g. "Sluiten"
+/>;
+```
+
+Supported URL shapes:
+
+- YouTube: `youtube.com/watch?v=...`, `youtu.be/...`, `youtube.com/embed/...`
+- Vimeo: `vimeo.com/<id>`, `player.vimeo.com/video/<id>`
 
 ## Theme integration
 
@@ -168,6 +195,12 @@ pnpm --filter @tmi-apps/ui build
 The root app declares `"@tmi-apps/ui": "workspace:*"` in `package.json`, so local changes flow through on the next `pnpm install`.
 
 ## Versions
+
+### 0.2.0 — `VideoEmbedModal`
+
+- **New component.** `VideoEmbedModal` embeds YouTube or Vimeo videos in a responsive 16:9 iframe (privacy-enhanced `youtube-nocookie.com` for YouTube, autoplay on open). Returns `null` for unsupported URLs, so it's safe to render unconditionally.
+- **Localizable close button.** `closeAriaLabel` prop (defaults to `"Close"`) replaces the previously hard-coded Dutch "Sluiten".
+- **New peer dep.** `@mui/icons-material ^7.3.6` — consumed for the close button icon.
 
 ### 0.1.2
 
