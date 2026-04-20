@@ -1,8 +1,35 @@
 {
   "name": "@tmi-apps/ui",
   "version": "0.2.0",
+  "description": "Shared React + MUI UI primitives for TMI apps (ThumbnailPill, VideoEmbedModal).",
+  "keywords": [
+    "tmi",
+    "react",
+    "mui",
+    "material-ui",
+    "emotion",
+    "thumbnail",
+    "video",
+    "youtube",
+    "vimeo"
+  ],
+  "author": "TMI Apps",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TMI-apps/project-alpha-app.git",
+    "directory": "packages/ui"
+  },
+  "bugs": {
+    "url": "https://github.com/TMI-apps/project-alpha-app/issues"
+  },
+  "homepage": "https://github.com/TMI-apps/project-alpha-app/tree/main/packages/ui",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "private": false,
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -12,11 +39,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "prepare": "tsc -p tsconfig.build.json"
+    "prepare": "tsc -p tsconfig.build.json",
+    "verify:pack": "node ./scripts/verify-pack.mjs"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
