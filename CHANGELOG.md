@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`15049c4`](https://github.com/TMI-apps/tmi-ui/commit/15049c4237499a7ad06c1ae6bcdb5fc8b5b59839) Thanks [@TilBardaga](https://github.com/TilBardaga)! - **Package home is now this repository.**
+
+  `@tmi-apps/ui` is maintained and published from [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui). Install from **GitHub Packages** (see [docs/installation.md](docs/installation.md)). No breaking changes to component APIs or peer dependency ranges.
+
 All notable changes to `@tmi-apps/ui` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
