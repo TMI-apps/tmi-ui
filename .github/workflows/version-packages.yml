@@ -1,0 +1,70 @@
+# Consumes changesets and commits version + changelog to `main` (no second PR for that step).
+
+name: Version packages
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: version-packages-on-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  version:
+    name: Version packages
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js (for pending-changeset check only)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Detect pending changesets
+        id: pending
+        run: |
+          if node scripts/has-pending-changesets.cjs; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup pnpm
+        if: steps.pending.outputs.ready == 'true'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js (with pnpm cache for install)
+        if: steps.pending.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        if: steps.pending.outputs.ready == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run version packages
+        if: steps.pending.outputs.ready == 'true'
+        run: pnpm run version-packages
+
+      - name: Commit and push to main
+        if: steps.pending.outputs.ready == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: version packages [skip ci]"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"

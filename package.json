@@ -17,16 +17,19 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TMI-apps/project-alpha-app.git",
-    "directory": "packages/ui"
+    "url": "https://github.com/TMI-apps/tmi-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/TMI-apps/project-alpha-app/issues"
+    "url": "https://github.com/TMI-apps/tmi-ui/issues"
   },
-  "homepage": "https://github.com/TMI-apps/project-alpha-app/tree/main/packages/ui",
+  "homepage": "https://github.com/TMI-apps/tmi-ui#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
+  "packageManager": "pnpm@9.15.4",
   "private": false,
   "type": "module",
   "sideEffects": false,
@@ -40,12 +43,18 @@
   },
   "files": [
     "dist",
+    "README.md",
+    "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "prepare": "tsc -p tsconfig.build.json",
-    "verify:pack": "node ./scripts/verify-pack.mjs"
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "verify:pack": "node ./scripts/verify-pack.mjs",
+    "changeset": "changeset",
+    "version-packages": "changeset version && pnpm install",
+    "publish:github": "pnpm run build && pnpm publish --no-git-checks"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
@@ -57,6 +66,8 @@
     "react-router-dom": "^7.11.0"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.29.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",

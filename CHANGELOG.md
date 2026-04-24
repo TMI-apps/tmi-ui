@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- Initial setup: this package is developed and released from [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui). Install via **GitHub Packages** — see [docs/installation.md](docs/installation.md). The `0.3.0` release will document the repository move in the changelog entry (applied by Changesets).
+
 ## [0.2.0] - 2026-04-20
 
 ### Added
