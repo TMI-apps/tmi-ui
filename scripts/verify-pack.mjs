@@ -60,6 +60,9 @@ try {
   if (!lines.some((l) => l.includes("/dist/VideoEmbedModal/"))) {
     throw new Error("Tarball missing dist/VideoEmbedModal/*");
   }
+  if (!lines.some((l) => l.includes("/dist/PersistentStepperList/"))) {
+    throw new Error("Tarball missing dist/PersistentStepperList/*");
+  }
 
   const v = pkg.version;
   if (!tgzName.includes(v)) {
