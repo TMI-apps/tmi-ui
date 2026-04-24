@@ -4,10 +4,21 @@
 
 name: Publish
 
+# Tag push: must match (glob). `workflow_dispatch` lets you re-run when a prior tag
+# did not trigger (e.g. workflow added after the tag was first seen).
+# `release: published` runs when a GitHub Release is published (optional backup).
 on:
   push:
     tags:
       - "v*"
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why run (e.g. manual after tag)"
+        required: false
+        default: "manual"
 
 jobs:
   publish:
