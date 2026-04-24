@@ -5,6 +5,7 @@
  *
  * Added tokens:
  * - `theme.thumbnailPill.*` — ThumbnailPill sizing
+ * - `theme.checklist.*` — PersistentStepperList spacing (optional; component falls back to built-in defaults)
  * - `theme.palette.primary.surface` / `surfaceHover` — mode-aware low-opacity
  *   brand tints for component backgrounds / hover states. Optional; components
  *   should fall back to `alpha(primary.main, ...)` if absent.
@@ -21,6 +22,14 @@ declare module "@mui/material/styles" {
       pillMaxWidthAppBar: number;
       pillBorderRadius: number;
     };
+    checklist?: {
+      circleSize: number;
+      mainStepGap: number;
+      subStepGap: number;
+      subItemsPl: number;
+      subBulletSize: number;
+      circleFontSize: number;
+    };
   }
 
   interface ThemeOptions {
@@ -31,6 +40,14 @@ declare module "@mui/material/styles" {
       maxWidthAppBar?: number;
       pillMaxWidthAppBar?: number;
       pillBorderRadius?: number;
+    };
+    checklist?: {
+      circleSize?: number;
+      mainStepGap?: number;
+      subStepGap?: number;
+      subItemsPl?: number;
+      subBulletSize?: number;
+      circleFontSize?: number;
     };
   }
 

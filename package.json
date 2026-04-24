@@ -1,7 +1,7 @@
 {
   "name": "@tmi-apps/ui",
-  "version": "0.3.0",
-  "description": "Shared React + MUI UI primitives for TMI apps (ThumbnailPill, VideoEmbedModal).",
+  "version": "0.4.0",
+  "description": "Shared React + MUI UI primitives for TMI apps (ThumbnailPill, VideoEmbedModal, PersistentStepperList).",
   "keywords": [
     "tmi",
     "react",
@@ -23,13 +23,9 @@
     "url": "https://github.com/TMI-apps/tmi-ui/issues"
   },
   "homepage": "https://github.com/TMI-apps/tmi-ui#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "pnpm@9.15.4",
   "private": false,
   "type": "module",
   "sideEffects": false,
@@ -43,18 +39,12 @@
   },
   "files": [
     "dist",
-    "README.md",
-    "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "prepare": "tsc -p tsconfig.build.json",
-    "type-check": "tsc --noEmit -p tsconfig.json",
-    "verify:pack": "node ./scripts/verify-pack.mjs",
-    "changeset": "changeset",
-    "version-packages": "changeset version && pnpm install",
-    "publish:github": "pnpm run build && pnpm publish --no-git-checks"
+    "verify:pack": "node ./scripts/verify-pack.mjs"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
@@ -66,8 +56,6 @@
     "react-router-dom": "^7.11.0"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.29.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",
