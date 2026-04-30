@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+### Patch Changes
+
+- [`a074ec0`](https://github.com/TMI-apps/tmi-ui/commit/a074ec023bf092d312107e19ea64c03419965ed0) Thanks [@TilBardaga](https://github.com/TilBardaga)! - Add Vitest, Testing Library, ESLint, Prettier, expanded CI, and package tests. Update contributor docs and Cursor workflow skills.
+
 ## 0.4.2
 
 ### Patch Changes

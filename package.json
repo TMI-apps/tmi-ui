@@ -1,6 +1,6 @@
 {
   "name": "@tmi-apps/ui",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Shared React + MUI UI primitives for TMI apps (ThumbnailPill, VideoEmbedModal, PersistentStepperList).",
   "keywords": [
     "tmi",
