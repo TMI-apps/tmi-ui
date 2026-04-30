@@ -7,15 +7,15 @@
 3. **Version packages** — On push to `main`, the [Version packages workflow](../.github/workflows/version-packages.yml) runs. If there are pending changesets, it runs `pnpm run version-packages` (`changeset version` + `pnpm install`), then commits to `main` with message `chore: version packages [skip ci]`.
 4. **Tag** — On the commit that contains the new version in `package.json`, create and push a git tag:
 
-   ```bash
-   git pull origin main
-   git tag vX.Y.Z   # must match package.json "version", with a leading v
-   git push origin vX.Y.Z
-   ```
+```bash
+ git pull origin main
+ git tag vX.Y.Z   # must match package.json "version", with a leading v
+ git push origin vX.Y.Z
+```
 
 5. **Publish** — The [Publish workflow](../.github/workflows/publish.yml) runs on `v*` tag pushes, builds, and runs `pnpm publish` to `npm.pkg.github.com` using `GITHUB_TOKEN`.
 
-> **Important:** The **Version packages** workflow updates `package.json` and `CHANGELOG.md` only — it **does not** create a git tag. Until you **`git push origin vX.Y.Z`**, that version is **not** published to GitHub Packages. After pushing the tag, open **Actions → Publish** and confirm the run succeeded, then check **Packages** for `@tmi-apps/ui`.
+> **Important:** The **Version packages** workflow updates `package.json` and `CHANGELOG.md` only — it **does not** create a git tag. Until you `**git push origin vX.Y.Z`**, that version is **not** published to GitHub Packages. After pushing the tag, open **Actions → Publish** and confirm the run succeeded, then check **Packages\*\* for `@tmi-apps/ui`.
 
 ## Requirements
 

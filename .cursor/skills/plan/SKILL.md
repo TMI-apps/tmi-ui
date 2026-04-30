@@ -1,6 +1,7 @@
 ---
 
 ## name: plan
+
 description: Creates DEVELOPMENT_PLAN.md under docs/jobs/temp_job_/ with conflict & compliance. Use when the user runs plan.
 
 # plan
@@ -51,7 +52,7 @@ If **no**: single directory is default.
 
 - **Conflict & compliance** section first
 - Phases with **Goal**, **Steps**, **Gate** (each gate = runnable command or explicit check)
-- Name tests when adding non-trivial logic (if/when tests exist; today the repo may rely on type-check + build + verify:pack—state that honestly in the plan)
+- **Tests:** the repo has Vitest + Testing Library under `tests/`. For non-trivial logic, new components, or behavior changes, phases should include **add/update tests** and gates should include **`pnpm test:run`** (and **`pnpm type-check:test`** when TS in tests/config changes). Default **pre-merge** alignment with CI: see [workflow/RULE.md](../../rules/workflow/RULE.md) / [CONTRIBUTING.md](../../../CONTRIBUTING.md).
 - Write file to `**docs/jobs/temp_job_<name>/DEVELOPMENT_PLAN.md`**
 - If §2a: include **Working copy (Git)**
 

@@ -10,7 +10,6 @@ Shared UI primitives for TMI apps (React 19 + MUI 7).
 
 ## Contents
 
-
 | Component               | Since   | Peer deps beyond core                                                                   |
 | ----------------------- | ------- | --------------------------------------------------------------------------------------- |
 | `ThumbnailPill`         | `0.1.0` | `react-router-dom` (when `to` prop is used)                                             |
@@ -18,7 +17,6 @@ Shared UI primitives for TMI apps (React 19 + MUI 7).
 | `PersistentStepperList` | `0.4.0` | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
 | `textToStepperItems`    | `0.4.0` | (parser only — no MUI)                                                                  |
 | `usePersistentSteps`    | `0.4.0` | (hook only — `localStorage`)                                                            |
-
 
 For the full prop surface of each component, read its source — the exported types are the canonical contract:
 
@@ -29,7 +27,6 @@ For the full prop surface of each component, read its source — the exported ty
 
 Your consuming app must already ship compatible **majors** of these. Mismatches should be reported to this repository rather than patched with `--force`.
 
-
 | Package               | Required range | Notes                                                         |
 | --------------------- | -------------- | ------------------------------------------------------------- |
 | `react`               | `^19.2.0`      |                                                               |
@@ -39,7 +36,6 @@ Your consuming app must already ship compatible **majors** of these. Mismatches 
 | `@emotion/react`      | `^11.14.0`     |                                                               |
 | `@emotion/styled`     | `^11.14.1`     |                                                               |
 | `react-router-dom`    | `^7.11.0`      | Used when `ThumbnailPill` receives a `to` prop                |
-
 
 ## Verify the install
 
@@ -68,7 +64,9 @@ import { ThumbnailPill } from "@tmi-apps/ui";
 <ThumbnailPill
   title="Example"
   thumbnail="https://example.com/thumb.png"
-  onClick={() => { /* ... */ }}
+  onClick={() => {
+    /* ... */
+  }}
 />;
 ```
 
@@ -125,8 +123,8 @@ Importing the package registers MUI module augmentation globally. You do **not**
 
 Currently augmented:
 
-- `**theme.thumbnailPill`** *(optional)* — sizing for `ThumbnailPill` (defaults if omitted).
-- `**theme.palette.primary.surface`** / `**surfaceHover`** *(optional)* — low-opacity primary tints.
+- `**theme.thumbnailPill`\*\* _(optional)_ — sizing for `ThumbnailPill` (defaults if omitted).
+- `**theme.palette.primary.surface`** / `**surfaceHover`\*\* _(optional)_ — low-opacity primary tints.
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
@@ -134,10 +132,10 @@ If your app redeclared these keys, **remove** the duplicate — conflicting augm
 
 ## Known limitations
 
-- `**ThumbnailPill` uses `react-router-dom` `Link`** when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
-- `**VideoEmbedModal` — YouTube and Vimeo only.**
+- `**ThumbnailPill` uses `react-router-dom` `Link`\*\* when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
+- `**VideoEmbedModal` — YouTube and Vimeo only.\*\*
 - **Theme augmentation is global** when `@tmi-apps/ui` is imported.
-- **Storybook / package-level tests** — follow-up; track in this repo’s issues if needed.
+- **Storybook** — optional follow-up for visual docs. **Unit tests** live under `tests/`; run `pnpm test:run` locally (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## Local development (this repository)
 
@@ -163,14 +161,12 @@ Full history: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Quick reference
 
-
 | What               | Where                |
 | ------------------ | -------------------- |
 | Source             | `src/`               |
 | Build output       | `dist/` (gitignored) |
 | Theme augmentation | `src/theme.ts`       |
 | Verifying tarball  | `pnpm verify:pack`   |
-
 
 ## Migration from `project-alpha-app`
 

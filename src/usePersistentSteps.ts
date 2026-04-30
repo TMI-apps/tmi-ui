@@ -60,16 +60,23 @@ export const usePersistentSteps = ({
   stepIds,
   storageScope = "activity",
 }: UsePersistentStepsInput): UsePersistentStepsResult => {
-  const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>(() =>
-    loadPersistedState({ scope: storageScope, entityId, language })
+  const [checkedSteps, setCheckedSteps] = useState<Record<string, boolean>>(
+    () => loadPersistedState({ scope: storageScope, entityId, language }),
   );
 
   useEffect(() => {
-    setCheckedSteps(loadPersistedState({ scope: storageScope, entityId, language }));
+    // Re-hydrate from localStorage when storage identity changes (external persistence).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional sync from localStorage on key change
+    setCheckedSteps(
+      loadPersistedState({ scope: storageScope, entityId, language }),
+    );
   }, [storageScope, entityId, language]);
 
   useEffect(() => {
-    savePersistedState({ scope: storageScope, entityId, language }, checkedSteps);
+    savePersistedState(
+      { scope: storageScope, entityId, language },
+      checkedSteps,
+    );
   }, [storageScope, entityId, language, checkedSteps]);
 
   const toggleStep = useCallback((stepId: string) => {
@@ -79,7 +86,10 @@ export const usePersistentSteps = ({
     }));
   }, []);
 
-  const isChecked = useCallback((stepId: string) => checkedSteps[stepId] === true, [checkedSteps]);
+  const isChecked = useCallback(
+    (stepId: string) => checkedSteps[stepId] === true,
+    [checkedSteps],
+  );
 
   const completedCount = stepIds.filter((id) => checkedSteps[id]).length;
   const totalCount = stepIds.length;

@@ -32,6 +32,18 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
+      - name: Type check tests
+        run: pnpm type-check:test
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Tests
+        run: pnpm test:run
+
       - name: Build
         run: pnpm run build
 

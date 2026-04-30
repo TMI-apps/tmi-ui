@@ -32,10 +32,14 @@ function getYouTubeVideoId(url: string): string | null {
   const shortMatch = trimmed.match(/(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if (shortMatch) return shortMatch[1];
 
-  const embedMatch = trimmed.match(/(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  const embedMatch = trimmed.match(
+    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+  );
   if (embedMatch) return embedMatch[1];
 
-  const watchMatch = trimmed.match(/(?:youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/);
+  const watchMatch = trimmed.match(
+    /(?:youtube\.com\/watch\?.*v=)([a-zA-Z0-9_-]{11})/,
+  );
   if (watchMatch) return watchMatch[1];
 
   return null;
@@ -54,7 +58,9 @@ function getVimeoVideoId(url: string): string | null {
   return null;
 }
 
-function getEmbedSrc(url: string): { src: string; provider: VideoEmbedProvider } | null {
+function getEmbedSrc(
+  url: string,
+): { src: string; provider: VideoEmbedProvider } | null {
   if (!url || typeof url !== "string") return null;
 
   const ytId = getYouTubeVideoId(url);

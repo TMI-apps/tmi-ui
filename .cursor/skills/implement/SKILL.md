@@ -37,11 +37,20 @@ Infer which plan from the user message (job name, open file path under `docs/job
 
 ### 3. Gates (typical for this repo)
 
-Prefer concrete commands from the plan:
+- **Per phase:** run whatever **Gate** the plan names; it must pass before the next phase.
+- **Before telling the user to run `finish`:** run the **full** local suite from [.cursor/rules/workflow/RULE.md](../../rules/workflow/RULE.md) / [CONTRIBUTING.md](../../../CONTRIBUTING.md), unless the plan explicitly scopes gates down (document why in **Notes**).
+
+Full quality suite (run separately on Windows if `&&` misbehaves):
 
 - `pnpm type-check`
+- `pnpm type-check:test`
+- `pnpm lint`
+- `pnpm format:check`
+- `pnpm test:run`
 - `pnpm run build`
 - `pnpm verify:pack`
+
+**Tests** live under `tests/`. For new or changed component/parser/hook behavior, add or extend tests in the same PR/session unless the plan defers testing with a recorded decision.
 
 There is **no** Vite app or Playwright suite in-repo by default—use browser checks only if the plan defines a consumer repro or Storybook (not shipped here yet).
 

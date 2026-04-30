@@ -16,7 +16,7 @@
 
 ### Added
 
-- `**PersistentStepperList`** — Checklist with optional per-entity `localStorage` state; parse list-like `instructionText` into main and indented sub-steps; `labels` prop for progress and expand/collapse `aria` (defaults: English); optional `theme.checklist` sizing (see `src/theme.ts`).
+- `**PersistentStepperList`\*\* — Checklist with optional per-entity `localStorage` state; parse list-like `instructionText` into main and indented sub-steps; `labels` prop for progress and expand/collapse `aria` (defaults: English); optional `theme.checklist` sizing (see `src/theme.ts`).
 - `**textToStepperItems` / `StepItem**` — Parse markdown-style lines to steps for use with the checklist.
 - `**usePersistentSteps**` — Generic hook: `localStorage` key `scope:entityId:language`.
 - `**PersistentStepperStepItem**` — Exported for advanced layout use.

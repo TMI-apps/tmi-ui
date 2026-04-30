@@ -34,7 +34,9 @@ const DEFAULT_PILL_DIMS = {
   pillBorderRadius: 2,
 };
 
-function getPillDimensions(theme: { thumbnailPill?: typeof DEFAULT_PILL_DIMS }) {
+function getPillDimensions(theme: {
+  thumbnailPill?: typeof DEFAULT_PILL_DIMS;
+}) {
   return { ...DEFAULT_PILL_DIMS, ...theme.thumbnailPill };
 }
 
@@ -48,7 +50,12 @@ interface RenderThumbParams {
 
 function renderThumbOrPlaceholder(p: RenderThumbParams) {
   if (p.thumbnail) {
-    return <ThumbnailPillThumbImage thumbnail={p.thumbnail} thumbnailSize={p.thumbnailSize} />;
+    return (
+      <ThumbnailPillThumbImage
+        thumbnail={p.thumbnail}
+        thumbnailSize={p.thumbnailSize}
+      />
+    );
   }
   return (
     <ThumbnailPillThumbPlaceholder
@@ -137,5 +144,9 @@ export const ThumbnailPill = ({
     </Box>
   );
 
-  return <ThumbnailPillTooltipWrap tooltip={tooltip}>{pill}</ThumbnailPillTooltipWrap>;
+  return (
+    <ThumbnailPillTooltipWrap tooltip={tooltip}>
+      {pill}
+    </ThumbnailPillTooltipWrap>
+  );
 };

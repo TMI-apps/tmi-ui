@@ -1,4 +1,12 @@
-import { Box, Typography, Checkbox, IconButton, Collapse, useTheme, type Theme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Checkbox,
+  IconButton,
+  Collapse,
+  useTheme,
+  type Theme,
+} from "@mui/material";
 import type { MouseEvent } from "react";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Check from "@mui/icons-material/Check";
@@ -168,7 +176,14 @@ export function PersistentStepperStepItem({
   ariaCollapseSubSteps,
 }: PersistentStepperStepItemProps) {
   const theme = useTheme();
-  const { circleSize, mainStepGap, subStepGap, subItemsPl, subBulletSize, circleFontSize } = sizing;
+  const {
+    circleSize,
+    mainStepGap,
+    subStepGap,
+    subItemsPl,
+    subBulletSize,
+    circleFontSize,
+  } = sizing;
   const expandAria = isExpanded ? ariaCollapseSubSteps : ariaExpandSubSteps;
 
   return (

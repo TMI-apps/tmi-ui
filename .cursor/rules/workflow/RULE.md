@@ -24,7 +24,7 @@ alwaysApply: true
 
 ## Finish / push split
 
-1. `**finish`** — cleanup, changeset when user-facing, staging decision, **commit only** (local). See `finish` skill.
+1. `**finish`** — cleanup (debug only), changeset when user-facing, **default: stage full session** (ask user if ambiguous), **commit only** (local). See `finish` skill.
 2. `**push`** — clean working tree, fetch, confirm with user, **push only** (no `git add` / `git commit`).
 
 ## Changesets & changelog
@@ -44,6 +44,10 @@ Do **not** modify without **explicit user approval**:
 ## Validation commands (typical gates)
 
 - `pnpm type-check`
+- `pnpm type-check:test`
+- `pnpm lint`
+- `pnpm format:check`
+- `pnpm test:run`
 - `pnpm run build`
 - `pnpm verify:pack`
 

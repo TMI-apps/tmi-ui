@@ -31,8 +31,12 @@ export function ThumbnailPillThumbPlaceholder({
         alignItems: "center",
         justifyContent: "center",
         flexShrink: 0,
-        bgcolor: isAppBar ? alpha(t.palette.primary.contrastText, 0.2) : t.palette.action.hover,
-        color: isAppBar ? t.palette.primary.contrastText : t.palette.text.secondary,
+        bgcolor: isAppBar
+          ? alpha(t.palette.primary.contrastText, 0.2)
+          : t.palette.action.hover,
+        color: isAppBar
+          ? t.palette.primary.contrastText
+          : t.palette.text.secondary,
         "& .MuiSvgIcon-root": { fontSize: t.typography.pxToRem(iconSize) },
       })}
     >
@@ -46,7 +50,10 @@ interface ThumbImageProps {
   thumbnailSize: number;
 }
 
-export function ThumbnailPillThumbImage({ thumbnail, thumbnailSize }: ThumbImageProps) {
+export function ThumbnailPillThumbImage({
+  thumbnail,
+  thumbnailSize,
+}: ThumbImageProps) {
   return (
     <Box
       component="img"
@@ -81,7 +88,10 @@ export function ThumbnailPillTitleText({
       variant="body2"
       sx={(t: Theme) => ({
         fontSize: isAppBar
-          ? { xs: t.typography.pxToRem(titleFontSizeXs), sm: t.typography.body2.fontSize }
+          ? {
+              xs: t.typography.pxToRem(titleFontSizeXs),
+              sm: t.typography.body2.fontSize,
+            }
           : t.typography.body2.fontSize,
         overflow: "hidden",
         textOverflow: "ellipsis",
@@ -102,7 +112,12 @@ interface MainRowProps {
   children: ReactNode;
 }
 
-export function ThumbnailPillMainRow({ to, onClick, isAppBar, children }: MainRowProps) {
+export function ThumbnailPillMainRow({
+  to,
+  onClick,
+  isAppBar,
+  children,
+}: MainRowProps) {
   const rowSx = (t: Theme) => ({
     display: "flex",
     alignItems: "center",
@@ -179,7 +194,9 @@ const PADDING_WITH_CIRCLE = 0.25;
 const PADDING_WITH_SLOT = 0.5;
 const PADDING_BARE_TEXT = 1.5;
 
-export function buildPillContainerSx(p: BuildPillContainerSxParams): Record<string, unknown> {
+export function buildPillContainerSx(
+  p: BuildPillContainerSxParams,
+): Record<string, unknown> {
   const {
     theme,
     isAppBar,
@@ -195,7 +212,8 @@ export function buildPillContainerSx(p: BuildPillContainerSxParams): Record<stri
   const primarySurface =
     theme.palette.primary.surface ?? alpha(theme.palette.primary.main, 0.08);
   const primarySurfaceHover =
-    theme.palette.primary.surfaceHover ?? alpha(theme.palette.primary.main, 0.12);
+    theme.palette.primary.surfaceHover ??
+    alpha(theme.palette.primary.main, 0.12);
   const pl = hasLeftCircle ? PADDING_WITH_CIRCLE : PADDING_BARE_TEXT;
   const pr = hasRightCircle
     ? PADDING_WITH_CIRCLE
@@ -208,16 +226,20 @@ export function buildPillContainerSx(p: BuildPillContainerSxParams): Record<stri
     height: theme.spacing(PILL_HEIGHT_SPACING_UNITS),
     pl,
     pr,
-    borderRadius: theme.spacing(pillBorderRadius ?? DEFAULT_PILL_BORDER_RADIUS_INDEX),
+    borderRadius: theme.spacing(
+      pillBorderRadius ?? DEFAULT_PILL_BORDER_RADIUS_INDEX,
+    ),
     backgroundColor: isAppBar
       ? alpha(theme.palette.primary.contrastText, 0.15)
       : primarySurface,
     cursor: isClickable ? "pointer" : "default",
     minWidth: 0,
-    maxWidth: maxWidth ?? (isAppBar ? theme.spacing(pillMaxWidthAppBar) : "none"),
+    maxWidth:
+      maxWidth ?? (isAppBar ? theme.spacing(pillMaxWidthAppBar) : "none"),
     gap: 1.5,
     opacity: disabled ? 0.6 : 1,
-    "&:hover": isClickable && !isAppBar ? { backgroundColor: primarySurfaceHover } : {},
+    "&:hover":
+      isClickable && !isAppBar ? { backgroundColor: primarySurfaceHover } : {},
   };
 }
 
@@ -226,7 +248,10 @@ interface TooltipWrapProps {
   children: ReactNode;
 }
 
-export function ThumbnailPillTooltipWrap({ tooltip, children }: TooltipWrapProps) {
+export function ThumbnailPillTooltipWrap({
+  tooltip,
+  children,
+}: TooltipWrapProps) {
   if (tooltip === undefined || tooltip === null || tooltip === "") {
     return <>{children}</>;
   }
@@ -257,7 +282,9 @@ export function ThumbnailPillTooltipWrap({ tooltip, children }: TooltipWrapProps
         },
       }}
     >
-      <span style={{ display: "inline-flex", maxWidth: "100%" }}>{children}</span>
+      <span style={{ display: "inline-flex", maxWidth: "100%" }}>
+        {children}
+      </span>
     </Tooltip>
   );
 }

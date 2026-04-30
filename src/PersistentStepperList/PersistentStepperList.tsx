@@ -1,8 +1,14 @@
 import { useState, useCallback, type MouseEvent } from "react";
 import { Box, Typography, useTheme, alpha, type Theme } from "@mui/material";
 import { textToStepperItems } from "../textToStepperItems.js";
-import { usePersistentSteps, type ChecklistStorageScope } from "../usePersistentSteps.js";
-import { PersistentStepperStepItem, type ChecklistSizing } from "./PersistentStepperStepItem.js";
+import {
+  usePersistentSteps,
+  type ChecklistStorageScope,
+} from "../usePersistentSteps.js";
+import {
+  PersistentStepperStepItem,
+  type ChecklistSizing,
+} from "./PersistentStepperStepItem.js";
 
 export type ChecklistProgressSummaryVariant = "steps" | "criteria";
 
@@ -10,7 +16,7 @@ export interface PersistentStepperListLabels {
   formatProgress: (
     completed: number,
     total: number,
-    variant: ChecklistProgressSummaryVariant
+    variant: ChecklistProgressSummaryVariant,
   ) => string;
   /** aria-label when sub-steps are collapsed (click to expand) */
   ariaExpandSubSteps: string;
@@ -29,7 +35,9 @@ const defaultLabels: PersistentStepperListLabels = {
   ariaCollapseSubSteps: "Collapse sub-steps",
 };
 
-function mergeLabels(partial?: Partial<PersistentStepperListLabels>): PersistentStepperListLabels {
+function mergeLabels(
+  partial?: Partial<PersistentStepperListLabels>,
+): PersistentStepperListLabels {
   return { ...defaultLabels, ...partial };
 }
 
@@ -81,12 +89,13 @@ export const PersistentStepperList = ({
   const labels = mergeLabels(labelsProp);
   const steps = textToStepperItems(instructionText);
   const mainStepIds = steps.map((s) => s.id);
-  const { toggleStep, isChecked, completedCount, totalCount } = usePersistentSteps({
-    entityId: activityId,
-    language,
-    stepIds: mainStepIds,
-    storageScope,
-  });
+  const { toggleStep, isChecked, completedCount, totalCount } =
+    usePersistentSteps({
+      entityId: activityId,
+      language,
+      stepIds: mainStepIds,
+      storageScope,
+    });
 
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
@@ -106,14 +115,19 @@ export const PersistentStepperList = ({
   }
 
   const gradientBullet = `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`;
-  const hoverBg = theme.palette.primary.surface ?? alpha(theme.palette.primary.main, 0.08);
+  const hoverBg =
+    theme.palette.primary.surface ?? alpha(theme.palette.primary.main, 0.08);
   const sizing = getChecklistSizing(theme);
 
   return (
     <Box>
       {totalCount > 0 && (
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {labels.formatProgress(completedCount, totalCount, progressSummaryVariant)}
+          {labels.formatProgress(
+            completedCount,
+            totalCount,
+            progressSummaryVariant,
+          )}
         </Typography>
       )}
       <Box component="ul" sx={{ listStyle: "none", pl: 0, m: 0 }}>

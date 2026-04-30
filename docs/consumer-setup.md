@@ -21,7 +21,7 @@ Add committed `.npmrc` at the app root:
 
 ## 3. CI — token for install
 
-`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. `**GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as `**GH_PACKAGES_READ_TOKEN`**, then:
+`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. `**GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as `**GH_PACKAGES_READ_TOKEN`\*\*, then:
 
 ```yaml
 - run: pnpm install --frozen-lockfile

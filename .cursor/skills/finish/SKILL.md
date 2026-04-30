@@ -1,6 +1,6 @@
 ---
 name: finish
-description: Completes a session — cleanup, optional changeset, staging gate, conventional commit (local only, no push). Use when the user runs finish.
+description: Completes a session — cleanup (debug only), default stage-all coherent work, ask if unsure, optional changeset, conventional commit (local only, no push). Use when the user runs finish.
 ---
 
 # finish
@@ -41,14 +41,21 @@ No leading `[x.y.z]` in the subject for normal feature work; versioning comes fr
 
 ---
 
-## Staging decision gate (mandatory)
+## Staging (default: whole session; ask when unsure)
 
 Before `git commit`:
 
-1. Show **staged** files (`git diff --name-only --cached`).
-2. Show **unstaged** files (`git diff --name-only`).
-3. If there is unstaged work, **do not** silently commit—ask whether to include, exclude, or abort.
-4. Never `git add -A` without explicit user direction when unrelated changes may exist.
+1. **Cleanup first** — only remove debug logging / stray instrumentation (as in the intro). Do **not** delete intentional source, docs, or config the user meant to keep.
+2. Show **`git status`** (including untracked).
+3. **Default — stage everything for this session:** include **all** modified and **intentional** untracked files that belong to the work being finished. Use `git add -A` at the repo root when the change set is one coherent session; otherwise `git add` explicit paths after a quick scan.
+4. **Ask the user** before staging/committing when anything is **ambiguous**, for example:
+   - Mix of changes that look like **unrelated** work (hard to describe in one commit).
+   - **Untracked** files you cannot classify (editor cruft, duplicate plans, local experiments).
+   - **Protected** or sensitive paths surfaced without clear prior intent (see [workflow/RULE.md](../../rules/workflow/RULE.md)).
+   - Any **doubt** whether something **really** belongs in the repo — list the paths and ask: include, exclude, or split into another commit.
+5. Immediately before `git commit`, show what will land in the commit (e.g. `git diff --cached --stat` or `git diff --name-only --cached`).
+
+Never commit `node_modules`, build artifacts under `dist/`, or other ignored junk; those should stay out via `.gitignore`.
 
 ---
 
@@ -66,11 +73,17 @@ Before modifying `.cursor/**`, `.github/workflows/**`, `tsconfig*.json`, `packag
 
 ## Validation (when relevant)
 
-Run before commit when the change touches the library or build (see [workflow/RULE.md](../../rules/workflow/RULE.md) — on Windows prefer separate commands if `&&` misbehaves):
+Run before commit when the change touches the library, tests, tooling, or CI (see [workflow/RULE.md](../../rules/workflow/RULE.md) and [CONTRIBUTING.md](../../../CONTRIBUTING.md) — on Windows prefer **separate** commands if `&&` misbehaves):
 
 - `pnpm type-check`
+- `pnpm type-check:test`
+- `pnpm lint`
+- `pnpm format:check`
+- `pnpm test:run`
 - `pnpm run build`
 - `pnpm verify:pack`
+
+If only markdown outside the Prettier globs changed, use judgment; **behavior or `src/` changes** should pass the full list so CI matches local.
 
 ---
 

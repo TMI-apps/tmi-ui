@@ -17,8 +17,8 @@ This repo is a **small publishable UI library** (React + MUI peers, GitHub Packa
 | Skill       | Role                                                                      |
 | ----------- | ------------------------------------------------------------------------- |
 | `plan`      | Research + write `DEVELOPMENT_PLAN.md` under `docs/jobs/temp_job_<name>/` |
-| `implement` | Execute plan phases and gates                                             |
-| `finish`    | Changeset when needed, staging gate, commit (no push)                     |
+| `implement` | Execute plan phases and gates (full suite before `finish` unless plan says otherwise) |
+| `finish`    | Validation + changeset when needed; default stage full session, ask if unsure; commit (no push) |
 | `push`      | Verify tree + push only (after finish)                                    |
 | `prime`     | Session context: repo layout, rules, git state                            |
 
