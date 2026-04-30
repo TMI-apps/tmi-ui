@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2
+
+### Patch Changes
+
+- [`f777549`](https://github.com/TMI-apps/tmi-ui/commit/f77754905968c28f15d2c6e9b5fb410faf412657) Thanks [@TilBardaga](https://github.com/TilBardaga)! - Improve GitHub Packages consumer docs (cross-repo CI auth, generic install), clarify CONTRIBUTING release checklist, align release-flow and README migration. Add optional Cursor agent skills (`plan`, `implement`, `finish`, `push`, `prime`) and `docs/jobs` for development plans.
+
 ## 0.4.1
 
 ### Patch Changes
