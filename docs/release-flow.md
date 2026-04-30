@@ -9,7 +9,7 @@
 
    ```bash
    git pull origin main
-   git tag vX.Y.Z   # must match package.json version (e.g. v0.4.2)
+   git tag vX.Y.Z   # must match package.json "version", with a leading v
    git push origin vX.Y.Z
    ```
 
