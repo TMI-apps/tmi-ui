@@ -8,7 +8,7 @@ import {
   ThumbnailPillTitleText,
   ThumbnailPillTooltipWrap,
   buildPillContainerSx,
-} from "./ThumbnailPillParts";
+} from "./ThumbnailPillParts.js";
 
 export interface ThumbnailPillProps {
   thumbnail?: string;

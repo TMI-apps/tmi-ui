@@ -1,2 +1,2 @@
-export { VideoEmbedModal } from "./VideoEmbedModal";
-export type { VideoEmbedModalProps, VideoEmbedProvider } from "./VideoEmbedModal";
+export { VideoEmbedModal } from "./VideoEmbedModal.js";
+export type { VideoEmbedModalProps, VideoEmbedProvider } from "./VideoEmbedModal.js";

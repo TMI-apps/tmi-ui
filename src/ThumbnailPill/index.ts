@@ -1,2 +1,2 @@
-export { ThumbnailPill } from "./ThumbnailPill";
-export type { ThumbnailPillProps } from "./ThumbnailPill";
+export { ThumbnailPill } from "./ThumbnailPill.js";
+export type { ThumbnailPillProps } from "./ThumbnailPill.js";

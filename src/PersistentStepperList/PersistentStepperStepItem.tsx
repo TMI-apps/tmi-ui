@@ -2,7 +2,7 @@ import { Box, Typography, Checkbox, IconButton, Collapse, useTheme, type Theme }
 import type { MouseEvent } from "react";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Check from "@mui/icons-material/Check";
-import type { StepItem } from "../textToStepperItems";
+import type { StepItem } from "../textToStepperItems.js";
 
 export interface ChecklistSizing {
   circleSize: number;

@@ -1,8 +1,8 @@
 import { useState, useCallback, type MouseEvent } from "react";
 import { Box, Typography, useTheme, alpha, type Theme } from "@mui/material";
-import { textToStepperItems } from "../textToStepperItems";
-import { usePersistentSteps, type ChecklistStorageScope } from "../usePersistentSteps";
-import { PersistentStepperStepItem, type ChecklistSizing } from "./PersistentStepperStepItem";
+import { textToStepperItems } from "../textToStepperItems.js";
+import { usePersistentSteps, type ChecklistStorageScope } from "../usePersistentSteps.js";
+import { PersistentStepperStepItem, type ChecklistSizing } from "./PersistentStepperStepItem.js";
 
 export type ChecklistProgressSummaryVariant = "steps" | "criteria";
 
