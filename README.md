@@ -126,7 +126,7 @@ Importing the package registers MUI module augmentation globally. You do **not**
 Currently augmented:
 
 - `**theme.thumbnailPill`** *(optional)* — sizing for `ThumbnailPill` (defaults if omitted).
-- `**theme.palette.primary.surface*`* / `**surfaceHover**` *(optional)* — low-opacity primary tints.
+- `**theme.palette.primary.surface*`* / `**surfaceHover`** *(optional)* — low-opacity primary tints.
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
@@ -134,7 +134,7 @@ If your app redeclared these keys, **remove** the duplicate — conflicting augm
 
 ## Known limitations
 
-- `**ThumbnailPill` uses `react-router-dom` `Link*`* when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
+- `**ThumbnailPill` uses `react-router-dom` `Link`** when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
 - `**VideoEmbedModal` — YouTube and Vimeo only.**
 - **Theme augmentation is global** when `@tmi-apps/ui` is imported.
 - **Storybook / package-level tests** — follow-up; track in this repo’s issues if needed.
@@ -174,4 +174,4 @@ Full history: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Migration from `project-alpha-app`
 
-Previously, `@tmi-apps/ui` lived under `project-alpha-app/packages/ui`. It now releases only from **this** repo. Use GitHub Packages and `^0.3.0` (or the latest published version). In-app: add `.npmrc` for `@tmi-apps` → `npm.pkg.github.com`, install the package, remove duplicate theme augmentations, and drop any `file:` or monorepo `workspace:`* link to the old path.
+Previously, `@tmi-apps/ui` lived under `project-alpha-app/packages/ui`. It now releases only from **this** repo. Use GitHub Packages (see [docs/installation.md](./docs/installation.md)); pin a semver range in your app after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). In-app: add `.npmrc` for `@tmi-apps` → `npm.pkg.github.com`, install the package, remove duplicate theme augmentations, and drop any `file:` or monorepo `workspace:` link to the old path.

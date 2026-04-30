@@ -21,23 +21,23 @@ Add committed `.npmrc` at the app root:
 
 ## 3. CI — token for install
 
-In every workflow that runs `pnpm install` / `npm ci`, set:
+`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. `**GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as `**GH_PACKAGES_READ_TOKEN`**, then:
 
 ```yaml
-permissions:
-  packages: read
-
-env:
-  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+- run: pnpm install --frozen-lockfile
+  env:
+    NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_READ_TOKEN }}
 ```
 
-on the `pnpm install` step (same pattern as in [installation.md](./installation.md)).
+Only if your workflow runs in **the same repo that owns the package** (unusual for app consumers) can you use `secrets.GITHUB_TOKEN` with `permissions: packages: read` instead — see installation.md.
 
 ## 4. Install
 
 ```bash
-pnpm add @tmi-apps/ui@^0.3.0
+pnpm add @tmi-apps/ui
 ```
+
+(Same as [installation.md § Install](./installation.md#3-install-the-package): unpinned add = latest; then commit lockfile. Pin a `^x.y.z` range in `package.json` only when **your** team wants upgrade boundaries — see Releases on the tmi-ui repo.)
 
 ## 5. MUI types — no duplicate augmentations
 
@@ -58,4 +58,4 @@ If the app had a local copy of `ThumbnailPill` / `VideoEmbedModal`, delete it an
 
 ## Boilerplate
 
-New apps created from the boilerplate should ship with the `.npmrc` line above and a pinned `^0.3.0` (or current) version so `git clone` + `pnpm install` works after the developer sets `~/.npmrc` for local installs.
+New apps created from the boilerplate should ship with the `.npmrc` line above and `@tmi-apps/ui` listed in `package.json` with whatever semver range the template maintainers choose (updated when **they** bump the dependency), plus a committed lockfile — not a version baked into **this** documentation.
