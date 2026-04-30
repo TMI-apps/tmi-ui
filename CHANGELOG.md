@@ -16,7 +16,7 @@
 
 ### Added
 
-- `**PersistentStepperList**` — Checklist with optional per-entity `localStorage` state; parse list-like `instructionText` into main and indented sub-steps; `labels` prop for progress and expand/collapse `aria` (defaults: English); optional `theme.checklist` sizing (see `src/theme.ts`).
+- `**PersistentStepperList`** — Checklist with optional per-entity `localStorage` state; parse list-like `instructionText` into main and indented sub-steps; `labels` prop for progress and expand/collapse `aria` (defaults: English); optional `theme.checklist` sizing (see `src/theme.ts`).
 - `**textToStepperItems` / `StepItem**` — Parse markdown-style lines to steps for use with the checklist.
 - `**usePersistentSteps**` — Generic hook: `localStorage` key `scope:entityId:language`.
 - `**PersistentStepperStepItem**` — Exported for advanced layout use.
@@ -43,25 +43,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `**VideoEmbedModal`\*\* — Modal that embeds YouTube or Vimeo in a responsive 16:9 iframe (privacy-enhanced `youtube-nocookie.com` for YouTube, autoplay on open). Returns `null` for unsupported URLs. `closeAriaLabel` prop for localization (default `"Close"`).
+- `**VideoEmbedModal` — Modal that embeds YouTube or Vimeo in a responsive 16:9 iframe (privacy-enhanced `youtube-nocookie.com` for YouTube, autoplay on open). Returns `null` for unsupported URLs. `closeAriaLabel` prop for localization (default `"Close"`).
 - **Peer dependency:** `@mui/icons-material ^7.3.6` (close icon).
 
 ## [0.1.2] - 2026-04-19
 
 ### Fixed
 
-- `**ThumbnailPill` tooltip\*\* — Uses `disableInteractive`, 600 ms delays, and `pointerEvents: "none"` so the tooltip does not stick when moving the pointer onto it.
+- `**ThumbnailPill` tooltip — Uses `disableInteractive`, 600 ms delays, and `pointerEvents: "none"` so the tooltip does not stick when moving the pointer onto it.
 
 ## [0.1.1] - 2026-04-19
 
 ### Changed
 
-- `**ThumbnailPill`\*\* — Reads optional `theme.palette.primary.surface` / `surfaceHover` with `alpha(primary.main, 0.08 / 0.12)` fallback.
+- `**ThumbnailPill` — Reads optional `theme.palette.primary.surface` / `surfaceHover` with `alpha(primary.main, 0.08 / 0.12)` fallback.
 - **Layout** — Circle-side padding 2 px for symmetry; bare-text sides without circle/`rightSlot` use 12 px horizontal padding.
 
 ## [0.1.0] - 2026-04-19
 
 ### Added
 
-- Initial release: `**ThumbnailPill`\*\* with optional `react-router-dom` `Link` when `to` is set.
+- Initial release: `**ThumbnailPill` with optional `react-router-dom` `Link` when `to` is set.
 - MUI theme augmentation: `theme.thumbnailPill` sizing; optional `theme.palette.primary.surface` / `surfaceHover` on `PaletteColor`.

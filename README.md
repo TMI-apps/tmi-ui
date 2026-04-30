@@ -126,7 +126,7 @@ Importing the package registers MUI module augmentation globally. You do **not**
 Currently augmented:
 
 - `**theme.thumbnailPill`** *(optional)* — sizing for `ThumbnailPill` (defaults if omitted).
-- `**theme.palette.primary.surface*`* / `**surfaceHover`** *(optional)* — low-opacity primary tints.
+- `**theme.palette.primary.surface`** / `**surfaceHover`** *(optional)* — low-opacity primary tints.
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
