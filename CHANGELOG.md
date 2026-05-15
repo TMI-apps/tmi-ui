@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.5
+
+### Patch Changes
+
+- [`00da4d3`](https://github.com/TMI-apps/tmi-ui/commit/00da4d3a0d53ac07b58c62af22dad06e0ffe272f) Thanks [@TilBardaga](https://github.com/TilBardaga)! - Automate git tag push after Version packages bumps version on main (fallback manual tag documented).
+
 ## 0.4.4
 
 ### Patch Changes
