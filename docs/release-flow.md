@@ -1,5 +1,7 @@
 # Release flow (Changesets + GitHub Packages)
 
+This library is **open source** ([MIT](../LICENSE)); releases are published as **`@tmi-apps/ui`** on **GitHub Packages**. Keep the repository and package **public** so documented consumer installs remain consistent with maintainer expectations.
+
 ## Overview
 
 1. **Changeset** — For each release-worthy change, add a file under `.changeset/` (`pnpm changeset`). This records semver intent (patch / minor / major), not a hand-picked `x.y.z`.
@@ -20,7 +22,8 @@
 ## Requirements
 
 - **Repository settings** — Actions must be allowed to read/write contents and, for publish, `packages: write`. The default `GITHUB_TOKEN` is sufficient for publishing within the same org.
-- **Branch protection** — If `main` is protected, allow [github-actions[bot]](https://github.com/orgs/TMI-apps/people) to push the version commit, or use a follow-up PR model (team choice).
+- **Branch protection** — Protect **`main`** with required pull requests and status checks. If `main` is protected, allow [github-actions[bot]](https://github.com/orgs/TMI-apps/people) to push the version commit from **Version packages**, or use a follow-up PR model (team choice).
+- **Manual workflow runs** — Restrict **workflow_dispatch** on the Publish workflow to trusted maintainers (repo/org settings).
 
 ## First-time publish
 

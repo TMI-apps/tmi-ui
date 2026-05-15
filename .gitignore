@@ -5,3 +5,8 @@ coverage
 .turbo
 .DS_Store
 *.log
+
+# Local secrets — never commit
+.env
+.env.*
+!.env.example

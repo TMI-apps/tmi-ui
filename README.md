@@ -1,10 +1,14 @@
 # @tmi-apps/ui
 
-Shared UI primitives for TMI apps (React 19 + MUI 7).
+Shared UI primitives for React 19 + MUI 7.
 
-**Repository:** [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui)  
-**License:** [LICENSE](./LICENSE) (UNLICENSED — proprietary; all rights reserved).  
-**Release notes:** [CHANGELOG.md](./CHANGELOG.md).
+**Maintained by TMI Publishing B.V.** · Source: [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui)
+
+**License:** [MIT](./LICENSE) · **Release notes:** [CHANGELOG.md](./CHANGELOG.md)
+
+**Security:** [SECURITY.md](./SECURITY.md)
+
+There is **no SLA** for issues or pull requests; responses are best-effort.
 
 **Install from GitHub Packages** — see **[docs/installation.md](./docs/installation.md)** (`.npmrc`, auth, `pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
 
@@ -123,8 +127,8 @@ Importing the package registers MUI module augmentation globally. You do **not**
 
 Currently augmented:
 
-- `**theme.thumbnailPill`\*\* _(optional)_ — sizing for `ThumbnailPill` (defaults if omitted).
-- `**theme.palette.primary.surface`** / `**surfaceHover`\*\* _(optional)_ — low-opacity primary tints.
+- **`theme.thumbnailPill`** _(optional)_ — sizing for `ThumbnailPill` (defaults if omitted).
+- **`theme.palette.primary.surface`** / **`surfaceHover`** _(optional)_ — low-opacity primary tints.
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
@@ -132,8 +136,8 @@ If your app redeclared these keys, **remove** the duplicate — conflicting augm
 
 ## Known limitations
 
-- `**ThumbnailPill` uses `react-router-dom` `Link`\*\* when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
-- `**VideoEmbedModal` — YouTube and Vimeo only.\*\*
+- **`ThumbnailPill`** uses **`react-router-dom`** `Link` when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
+- **`VideoEmbedModal`** — YouTube and Vimeo only.
 - **Theme augmentation is global** when `@tmi-apps/ui` is imported.
 - **Storybook** — optional follow-up for visual docs. **Unit tests** live under `tests/`; run `pnpm test:run` locally (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
@@ -168,6 +172,6 @@ Full history: [CHANGELOG.md](./CHANGELOG.md).
 | Theme augmentation | `src/theme.ts`       |
 | Verifying tarball  | `pnpm verify:pack`   |
 
-## Migration from `project-alpha-app`
+## Migration from a vendored or monorepo copy
 
-Previously, `@tmi-apps/ui` lived under `project-alpha-app/packages/ui`. It now releases only from **this** repo. Use GitHub Packages (see [docs/installation.md](./docs/installation.md)); pin a semver range in your app after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). In-app: add `.npmrc` for `@tmi-apps` → `npm.pkg.github.com`, install the package, remove duplicate theme augmentations, and drop any `file:` or monorepo `workspace:` link to the old path.
+If you previously depended on a **local path**, **`workspace:`**, or **`file:`** link to this library inside another repository, switch to the published package instead. Use GitHub Packages (see [docs/installation.md](./docs/installation.md)); pin a semver range after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). Add `.npmrc` mapping `@tmi-apps` → `npm.pkg.github.com`, install `@tmi-apps/ui`, remove duplicate MUI theme augmentations, and remove the old vendored dependency.

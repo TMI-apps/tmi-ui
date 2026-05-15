@@ -1,6 +1,6 @@
 # Consumer setup checklist
 
-Use this when adding `@tmi-apps/ui` to a TMI app (e.g. project-alpha, MILA, lesmateriaal) or the boilerplate.
+Use this when adding `@tmi-apps/ui` to **your application** (or your team’s app template / boilerplate).
 
 ## 1. Preflight — peer major versions
 
@@ -21,7 +21,7 @@ Add committed `.npmrc` at the app root:
 
 ## 3. CI — token for install
 
-`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. `**GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as `**GH_PACKAGES_READ_TOKEN`\*\*, then:
+`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. **`GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as **`GH_PACKAGES_READ_TOKEN`**, then:
 
 ```yaml
 - run: pnpm install --frozen-lockfile
@@ -58,4 +58,4 @@ If the app had a local copy of `ThumbnailPill` / `VideoEmbedModal`, delete it an
 
 ## Boilerplate
 
-New apps created from the boilerplate should ship with the `.npmrc` line above and `@tmi-apps/ui` listed in `package.json` with whatever semver range the template maintainers choose (updated when **they** bump the dependency), plus a committed lockfile — not a version baked into **this** documentation.
+Team templates should ship with the `.npmrc` line above and `@tmi-apps/ui` listed in `package.json` with whatever semver range template maintainers choose (updated when **they** bump the dependency), plus a committed lockfile — not a version baked into **this** documentation.

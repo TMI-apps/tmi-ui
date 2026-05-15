@@ -1,6 +1,8 @@
 # Install `@tmi-apps/ui` (GitHub Packages)
 
-`@tmi-apps/ui` is published to the GitHub org registry at `https://npm.pkg.github.com` under the `@tmi-apps` scope.
+`@tmi-apps/ui` is **open source** ([MIT](../LICENSE)). It is published to the GitHub org registry at `https://npm.pkg.github.com` under the `@tmi-apps` scope.
+
+For installs from repositories **other than** this one, ensure the **`@tmi-apps/ui`** package visibility on GitHub Packages is **public** (org/repo settings). Installing scoped packages from GitHub Packages typically still requires authentication — see § Authenticate below.
 
 ## 1. Point pnpm at the registry (committed in each app)
 
@@ -14,7 +16,7 @@ Add a root `.npmrc` in the consumer repository:
 
 ### CI (GitHub Actions)
 
-**Consumer app in a different repository** — this is the normal case for `@tmi-apps/ui`: the package is built and published from [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui), while your app (e.g. project-alpha-app) lives in its own repo. The workflow’s default **`GITHUB_TOKEN` is scoped only to that workflow’s repository**. It does **not** grant read access to packages whose publication is tied to another repo, so `pnpm install` / `npm ci` often fails with **401** or **403** when pulling `@tmi-apps/ui`.
+**Consumer app in a different repository** — this is the normal case for `@tmi-apps/ui`: the package is built and published from [TMI-apps/tmi-ui](https://github.com/TMI-apps/tmi-ui), while **your application** lives in its own repo. The workflow’s default **`GITHUB_TOKEN` is scoped only to that workflow’s repository**. It does **not** grant read access to packages whose publication is tied to another repo, so `pnpm install` / `npm ci` often fails with **401** or **403** when pulling `@tmi-apps/ui`.
 
 Use a **repository or org secret** that holds a token able to read GitHub Packages for your org, conventionally named `GH_PACKAGES_READ_TOKEN`:
 

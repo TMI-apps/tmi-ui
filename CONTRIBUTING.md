@@ -2,6 +2,30 @@
 
 Optional **Cursor** workflow (plan / implement / finish / push / prime): see [.cursor/rules/INDEX.md](.cursor/rules/INDEX.md).
 
+## Licensing and organization
+
+This project is published under the **MIT License** (see [LICENSE](./LICENSE)); copyright **TMI Publishing B.V.**
+
+Maintainers must ensure **organizational intellectual-property approval** applies before releasing substantive changes under this license (employees, contractors, and third-party snippets/fonts/icons must not conflict with MIT distribution).
+
+## Security
+
+- [Security policy](./SECURITY.md) — report vulnerabilities privately; do not post secrets or credentials in issues or discussions.
+
+## Contributions (no CLA)
+
+We **do not** use a Contributor License Agreement (CLA). By submitting a pull request, you agree your contributions are licensed under the **same MIT license** as this repository.
+
+## Maintainer notes — GitHub settings
+
+Align the hosted repository with these expectations:
+
+- **`main`** — branch protection: pull requests required, required status checks (CI).
+- **Publish workflow** — restrict **workflow_dispatch** on publish workflows to maintainers where possible.
+- **Visibility** — keep the GitHub repository and **`@tmi-apps/ui`** GitHub Packages artifact **public** for documented install flows.
+
+Release mechanics: [docs/release-flow.md](./docs/release-flow.md).
+
 ## Structure
 
 - One folder per component under `src/<ComponentName>/`.
