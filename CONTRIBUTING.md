@@ -33,6 +33,25 @@ Release mechanics: [docs/release-flow.md](./docs/release-flow.md).
 - **Tests:** co-located logic is covered from `tests/**/*.test.{ts,tsx}` (imports use the same `*.js` specifiers as production code).
 - MUI theme augmentation lives in `src/theme.ts` (side-effect import from the package entry). Any new token must be declared there and components must fall back if the token is missing.
 
+## Participating
+
+1. Branch from **`main`** (for example `feature/<name>`), commit, open a **PR** to `main`.
+2. Keep **CI green** (see the PR checklist below).
+3. For user-facing or release-worthy changes, add a **Changeset** on the branch before merge (`pnpm changeset` — semver intent).
+
+External contributors without direct repo access: **fork** and open a PR as usual.
+
+## Adding a component
+
+1. Create **`src/<ComponentName>/`** with the component and a barrel **`index.ts`** where it helps exports.
+2. Export the component and public **types** from [`src/index.ts`](./src/index.ts) (same `*.js` import specifiers as the rest of this package).
+3. Add tests under **`tests/<Name>.test.tsx`** (or `.ts` for non-React logic).
+4. Optional **MUI theme tokens:** extend [`src/theme.ts`](./src/theme.ts) only; components must **degrade gracefully** when tokens are absent.
+5. Update [`README.md`](./README.md) (contents table, peers, smoke notes) when consumers need to know.
+6. Run **`pnpm changeset`** — typically **minor** for new API surface, **patch** for fixes.
+
+**Visual checks in a real app** are outside this repo: while developing, use **`pnpm link`** or a **`file:`** dependency from a consumer app (or an internal playground) so components run in full app context.
+
 ## Rules
 
 - **No imports** from app layers: no data clients, no Airtable/Supabase types, no app path aliases (`@/…` from consumers). This package only uses React, MUI, Emotion, and `react-router-dom` (peer).
@@ -42,8 +61,8 @@ Release mechanics: [docs/release-flow.md](./docs/release-flow.md).
 
 1. Add a **Changeset**: `pnpm changeset` (patch / minor / major).
 2. Open a PR to `main`.
-3. After merge, the **Version packages** workflow updates `package.json` and `CHANGELOG.md`.
-4. **Tag** the release commit: `git tag vX.Y.Z && git push origin vX.Y.Z` (see [docs/release-flow.md](docs/release-flow.md)).
+3. After merge, the **Version packages** workflow updates `package.json` and `CHANGELOG.md`, then **pushes the `vX.Y.Z` tag** automatically (when a bump commit was created).
+4. **Fallback only** — if tagging failed, push the tag manually (see [docs/release-flow.md](docs/release-flow.md#manual-tag-fallback-only)).
 5. The **Publish** workflow publishes to GitHub Packages on the tag push.
 
 ## PR checklist

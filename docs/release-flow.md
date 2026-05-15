@@ -7,17 +7,30 @@ This library is **open source** ([MIT](../LICENSE)); releases are published as *
 1. **Changeset** — For each release-worthy change, add a file under `.changeset/` (`pnpm changeset`). This records semver intent (patch / minor / major), not a hand-picked `x.y.z`.
 2. **PR to `main`** — Review and merge.
 3. **Version packages** — On push to `main`, the [Version packages workflow](../.github/workflows/version-packages.yml) runs. If there are pending changesets, it runs `pnpm run version-packages` (`changeset version` + `pnpm install`), then commits to `main` with message `chore: version packages [skip ci]`.
-4. **Tag** — On the commit that contains the new version in `package.json`, create and push a git tag:
-
-```bash
- git pull origin main
- git tag vX.Y.Z   # must match package.json "version", with a leading v
- git push origin vX.Y.Z
-```
-
+4. **Tag** — After that commit, the same workflow **creates and pushes** a git tag `vX.Y.Z` that matches `package.json` `"version"` (only when a version commit was actually created; if the tag already exists on the remote, the step is skipped).
 5. **Publish** — The [Publish workflow](../.github/workflows/publish.yml) runs on `v*` tag pushes, builds, and runs `pnpm publish` to `npm.pkg.github.com` using `GITHUB_TOKEN`.
 
-> **Important:** The **Version packages** workflow updates `package.json` and `CHANGELOG.md` only — it **does not** create a git tag. Until you `**git push origin vX.Y.Z`**, that version is **not** published to GitHub Packages. After pushing the tag, open **Actions → Publish** and confirm the run succeeded, then check **Packages\*\* for `@tmi-apps/ui`.
+> **Important:** Until the **tag** exists and **Publish** has succeeded, that version is **not** on GitHub Packages. After merging, open **Actions** and confirm **Version packages** then **Publish** completed, then check **Packages** for `@tmi-apps/ui`.
+
+## Manual tag (fallback only)
+
+Use this only if automation failed (for example workflow error) or you must repoint a release:
+
+```bash
+git pull origin main
+git tag vX.Y.Z   # must match package.json "version", with a leading v
+git push origin vX.Y.Z
+```
+
+If the tag already exists remotely, delete or bump the version appropriately before retrying — avoid duplicate publishes of the same semver.
+
+## Verify automation
+
+After a changeset merges to `main`:
+
+1. **Version packages** — Should run, commit the bump, then push tag `vX.Y.Z`.
+2. **Publish** — Should run on that tag push and finish without errors.
+3. Confirm the version under the repository **Packages** tab.
 
 ## Requirements
 
@@ -27,4 +40,4 @@ This library is **open source** ([MIT](../LICENSE)); releases are published as *
 
 ## First-time publish
 
-After a merge that includes a changeset and the **Version packages** commit on `main` has applied the new version in `package.json`, tag that commit and push the tag; confirm the **Publish** workflow completes and the package appears under the repo’s **Packages**.
+After a merge that includes a changeset, wait for **Version packages** to apply the new version on `main`, then confirm the **automatic tag** and **Publish** workflow runs; verify the package under the repo’s **Packages**.

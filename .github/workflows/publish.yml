@@ -1,7 +1,6 @@
 # Publish to GitHub Packages when a version tag (v*) is pushed.
-# After "Version packages" runs on main, create and push the tag, e.g.:
-#   git tag v0.3.0 && git push origin v0.3.0
-
+# Tags are normally created by the Version packages workflow after changesets merge.
+# workflow_dispatch lets you re-run when a prior tag did not trigger (e.g. workflow added later).
 name: Publish
 
 # Tag push: must match (glob). `workflow_dispatch` lets you re-run when a prior tag

@@ -62,9 +62,25 @@ jobs:
         run: pnpm run version-packages
 
       - name: Commit and push to main
+        id: auto_commit
         if: steps.pending.outputs.ready == 'true'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: version packages [skip ci]"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
+
+      - name: Push version tag
+        if: steps.pending.outputs.ready == 'true' && steps.auto_commit.outputs.commit_hash != ''
+        env:
+          COMMIT_HASH: ${{ steps.auto_commit.outputs.commit_hash }}
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v${VERSION}"
+          if git ls-remote --tags origin "refs/tags/${TAG}" | grep -q .; then
+            echo "Remote tag ${TAG} already exists; skipping."
+            exit 0
+          fi
+          git tag "${TAG}" "${COMMIT_HASH}"
+          git push origin "refs/tags/${TAG}"
