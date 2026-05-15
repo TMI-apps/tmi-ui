@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.4
+
+### Patch Changes
+
+- [`fa90e9e`](https://github.com/TMI-apps/tmi-ui/commit/fa90e9e40bddb2161a9ff594864412d9e350140e) Thanks [@TilBardaga](https://github.com/TilBardaga)! - Open source under MIT (TMI Publishing B.V.). Add SECURITY policy; refresh README and docs for public distribution via GitHub Packages.
+
 ## 0.4.3
 
 ### Patch Changes
