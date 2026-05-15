@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- [`550c771`](https://github.com/TMI-apps/tmi-ui/commit/550c7714d2482ea9cd19cd03af20d5870eb6b4a9) Thanks [@TilBardaga](https://github.com/TilBardaga)! - **BREAKING:** Publish under the npm scope **`@tmi-packages`** as **`@tmi-packages/ui`** (was `@tmi-apps/ui`) so the package name matches the npm organization. Consumers must update `package.json` and all `import` paths.
+
+  Also includes: public **registry.npmjs.org** publishing (no GitHub Packages for this package), optional **`TAG_PUSH_TOKEN`** so tag pushes trigger **Publish**, and docs/handoff updates. Remove legacy `.npmrc` lines such as `@tmi-apps:registry=https://npm.pkg.github.com` when migrating.
+
 ## 0.4.6
 
 ### Patch Changes
