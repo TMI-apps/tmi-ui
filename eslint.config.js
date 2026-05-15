@@ -41,11 +41,11 @@ export default tseslint.config(
           paths: [
             {
               name: "airtable",
-              message: "Data clients do not belong in @tmi-apps/ui.",
+              message: "Data clients do not belong in @tmi-packages/ui.",
             },
             {
               name: "@supabase/supabase-js",
-              message: "Data clients do not belong in @tmi-apps/ui.",
+              message: "Data clients do not belong in @tmi-packages/ui.",
             },
           ],
         },

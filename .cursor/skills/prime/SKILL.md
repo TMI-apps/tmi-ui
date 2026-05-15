@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # prime
 
-Orient the agent to **@tmi-apps/ui** before substantive work.
+Orient the agent to **@tmi-packages/ui** before substantive work.
 
 ## Process
 

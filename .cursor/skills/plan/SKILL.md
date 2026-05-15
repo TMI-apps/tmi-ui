@@ -6,7 +6,7 @@ description: Creates DEVELOPMENT_PLAN.md under docs/jobs/temp_job_/ with conflic
 
 # plan
 
-Create a development plan for work in **@tmi-apps/ui**. Research implementation options, check repo norms, and write `DEVELOPMENT_PLAN.md` in `docs/jobs/temp_job_<name>/`.
+Create a development plan for work in **@tmi-packages/ui**. Research implementation options, check repo norms, and write `DEVELOPMENT_PLAN.md` in `docs/jobs/temp_job_<name>/`.
 
 **Critical:** Resolve **conflict & compliance** first (peers, exports, theme, ESM dist, docs consumers read). Steps in each phase must reflect that.
 

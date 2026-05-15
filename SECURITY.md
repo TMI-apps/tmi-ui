@@ -17,7 +17,7 @@ We aim to acknowledge reports in a reasonable timeframe and coordinate disclosur
 
 ## Scope
 
-Reports should concern this repository (`@tmi-apps/ui` / **tmi-ui**). Consumer applications that depend on this package have their own security posture and disclosure process.
+Reports should concern this repository (`@tmi-packages/ui` / **tmi-ui**). Consumer applications that depend on this package have their own security posture and disclosure process.
 
 ## Maintainers — history hygiene
 

@@ -8,22 +8,33 @@ Meer detail: [release-flow.md](../release-flow.md) · workflow: [.github/workflo
 
 ## Wat je nodig hebt (voor je start)
 
-| #   | Vereiste                                                                                                                               |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **npm:** account met **publish** op scope **`@tmi-apps`** (org-lid / token mag publiceren). GitHub-lidmaatschap alleen is niet genoeg. |
-| 2   | **GitHub:** rechten om **Actions secrets** te beheren op repo `TMI-apps/tmi-ui` (of org-secret die deze repo mag gebruiken).           |
-| 3   | Op `main`: migratie-code + **changeset** gemerged (anders geen nette version bump / publish).                                          |
+| #   | Vereiste                                                                                                                                                    |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **npm:** account met **publish** op scope **`@tmi-packages`** (org-lid / token mag publiceren). GitHub-lidmaatschap alleen is niet genoeg.                  |
+| 2   | **GitHub:** rechten om **Actions secrets** te beheren op repo `TMI-apps/tmi-ui` (of org-secret die deze repo mag gebruiken).                                |
+| 3   | Op `main`: migratie-code + **changeset** gemerged (anders geen nette version bump / publish).                                                               |
+| 4   | **GitHub:** secret `TAG_PUSH_TOKEN` (PAT met `repo`) toegevoegd — anders start **Publish** niet automatisch na een tag (GitHub-beperking). Zie **Deel B2**. |
+
+---
+
+## Deel B2 — GitHub: `TAG_PUSH_TOKEN` (Publish na tag automatisch)
+
+**Probleem:** De **Version packages**-workflow pusht de `v…`-tag met de standaard **`GITHUB_TOKEN`**. GitHub start daardoor **geen tweede workflow** — dus **Publish** draait niet, terwijl de tag wél bestaat.
+
+**Oplossing:** Maak een **[classic PAT](https://github.com/settings/tokens)** met scope **`repo`** (of fine-grained: **Contents: Read and write** op `TMI-apps/tmi-ui`). Zet die als repository secret **`TAG_PUSH_TOKEN`**. De workflow gebruikt hem **alleen** voor `git push` van de tag, zodat **Publish** wél wordt getriggerd.
+
+**Tot `TAG_PUSH_TOKEN` staat:** na elke release **Actions → Publish → Run workflow** handmatig (of tijdelijk tag opnieuw pushen met een PAT vanaf je machine — lastiger).
 
 ---
 
 ## Deel A — npm: token maken (aanbevolen pad voor CI)
 
 **Waarvoor:** alleen **GitHub Actions** heeft dit token nodig om `pnpm publish` te mogen draaien.  
-**Niet nodig** voor collega’s die alleen `pnpm add @tmi-apps/ui` in een app doen — zij gebruiken het **public** pakket zonder login.
+**Niet nodig** voor collega’s die alleen `pnpm add @tmi-packages/ui` in een app doen — zij gebruiken het **public** pakket zonder login.
 
 ### Stap 1 — Inloggen
 
-1. Ga naar [npmjs.com](https://www.npmjs.com/) en log in met een account dat bij de org / scope **`@tmi-apps`** **mag publiceren** (rollen staan in npm, niet in GitHub).
+1. Ga naar [npmjs.com](https://www.npmjs.com/) en log in met een account dat bij de org / scope **`@tmi-packages`** **mag publiceren** (rollen staan in npm, niet in GitHub).
 
 ### Stap 2 — Access Tokens openen
 
@@ -33,13 +44,13 @@ Meer detail: [release-flow.md](../release-flow.md) · workflow: [.github/workflo
 
 ### Stap 3 — Nieuw token: welk type / welke rechten?
 
-npm verandert namen geregeld, maar je zoekt steeds hetzelfde: een token dat **mag publiceren** naar packages onder **`@tmi-apps`**, liefst zo beperkt mogelijk.
+npm verandert namen geregeld, maar je zoekt steeds hetzelfde: een token dat **mag publiceren** naar packages onder **`@tmi-packages`**, liefst zo beperkt mogelijk.
 
-- **Granular access token** (granulair): je kiest **welke pakketten of scopes** het token mag aanpakken. Dat is meestal het **beste**: geef alleen **Publish** voor **`@tmi-apps/ui`** (of voor de hele **`@tmi-apps` scope** als de UI dat zo aanbiedt en jullie dat beleid zo willen).
+- **Granular access token** (granulair): je kiest **welke pakketten of scopes** het token mag aanpakken. Dat is meestal het **beste**: geef alleen **Publish** voor **`@tmi-packages/ui`** (of voor de hele **`@tmi-packages` scope** als de UI dat zo aanbiedt en jullie dat beleid zo willen).
 - **Classic** token: oudere stijl; als npm die nog toont, kies minimaal rechten die **publiceren** op jullie scope toestaan (vaak iets met **publish** of **write** — lees de npm-uitleg naast de checkboxen).
 - **Automation token**: bedoeld voor **machines/CI**; prima als npm die aanbiedt en je daar expliciet **publish** voor jullie package/scope kunt geven.
 
-**Wat de zin “granular of automation” bedoelde:** het zijn **twee verschillende producten/tokens** op npm. Je hoeft niet beide — maak **één** token. Kies in de UI degene waar je **publish** voor `@tmi-apps/ui` (of `@tmi-apps`) kunt aanzetten. Zie je alleen “granular”, neem die. Zie je alleen “automation” met juiste publish-rechten, mag die ook.
+**Wat de zin “granular of automation” bedoelde:** het zijn **twee verschillende producten/tokens** op npm. Je hoeft niet beide — maak **één** token. Kies in de UI degene waar je **publish** voor `@tmi-packages/ui` (of `@tmi-packages` scope) kunt aanzetten. Zie je alleen “granular”, neem die. Zie je alleen “automation” met juiste publish-rechten, mag die ook.
 
 Als je vastloopt: kijk in de npm-tokenwizard **welke vinkjes** staan bij dit pakket of deze org — alles wat “read only” is, is **onvoldoende** om te releasen.
 
@@ -94,9 +105,9 @@ Doe dit in **deze volgorde**:
 
 ## Deel D — Controleren dat het op npm staat
 
-1. Open [https://www.npmjs.com/package/@tmi-apps/ui](https://www.npmjs.com/package/@tmi-apps/ui).
+1. Open [https://www.npmjs.com/package/@tmi-packages/ui](https://www.npmjs.com/package/@tmi-packages/ui).
 2. Check: de **nieuwe versie** staat erbij en het pakket is **public**.
-3. (Optioneel) Lege map, `pnpm init -y`, daarna `pnpm add @tmi-apps/ui@<versie>` — moet werken **zonder** `.npmrc` naar GitHub Packages.
+3. (Optioneel) Lege map, `pnpm init -y`, daarna `pnpm add @tmi-packages/ui@<versie>` — moet werken **zonder** `.npmrc` naar GitHub Packages.
 
 Pas **daarna** intern zeggen: “we consumeren van npm.”
 
@@ -104,9 +115,9 @@ Pas **daarna** intern zeggen: “we consumeren van npm.”
 
 ## Deel E — Andere app-repo’s (niet tmi-ui)
 
-Voor elke app die `@tmi-apps/ui` eerst via **GitHub Packages** installeerde:
+Voor elke app die `@tmi-packages/ui` eerst via **GitHub Packages** installeerde:
 
-1. Verwijder `@tmi-apps:registry=https://npm.pkg.github.com` uit `.npmrc` als alleen dit pakket die nodig had.
+1. Verwijder eventueel deze **legacy** regel uit `.npmrc` (oude GitHub Packages-mapping): `@tmi-apps:registry=https://npm.pkg.github.com` — alleen als niets anders die nog nodig heeft.
 2. Verwijder `GH_PACKAGES_READ_TOKEN` uit CI als die alleen voor dit pakket was.
 3. `pnpm install` → lockfile commit → build/test.
 
@@ -131,7 +142,7 @@ Als je **geen** lang NPM-token in GitHub wilt:
 
 Alleen als CI steeds blijft falen en je **snel** het pakket op npm wilt **claimen**:
 
-1. `npm login` (account met publish op `@tmi-apps`).
+1. `npm login` (account met publish op `@tmi-packages`).
 2. In deze repo na `pnpm install` en `pnpm run build`:  
    `npm publish --access public`  
    (in deze repo staat `publishConfig` al goed — flag is dan vooral extra duidelijk.)
@@ -141,9 +152,10 @@ Alleen als CI steeds blijft falen en je **snel** het pakket op npm wilt **claime
 
 ## Snel: wat is fout?
 
-| Symptoom               | Meest waarschijnlijk                                                                                                                                            |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 402 / 403 bij publish  | Geen publish-recht op `@tmi-apps`, of package niet public.                                                                                                      |
-| Auth error in Actions  | `NPM_TOKEN` ontbreekt, verkeerde secret-naam, of token verlopen.                                                                                                |
-| Version packages faalt | Branch protection / bot mag niet naar `main` pushen.                                                                                                            |
-| Tag maar geen Publish  | Actions uitgeschakeld, of kijk of **Publish** run voor die tag handmatig opnieuw starten (`workflow_dispatch` of tag opnieuw — voorzichtig met dubbele semver). |
+| Symptoom                         | Meest waarschijnlijk                                                                                                                                            |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tag op GitHub, nooit Publish-run | `TAG_PUSH_TOKEN` mist: tag ging met `GITHUB_TOKEN` → **Publish** triggert niet. Zet `TAG_PUSH_TOKEN` of start **Publish** handmatig.                            |
+| 402 / 403 bij publish            | Geen publish-recht op `@tmi-packages`, of package niet public.                                                                                                  |
+| Auth error in Actions            | `NPM_TOKEN` ontbreekt, verkeerde secret-naam, of token verlopen.                                                                                                |
+| Version packages faalt           | Branch protection / bot mag niet naar `main` pushen.                                                                                                            |
+| Tag maar geen Publish            | Actions uitgeschakeld, of kijk of **Publish** run voor die tag handmatig opnieuw starten (`workflow_dispatch` of tag opnieuw — voorzichtig met dubbele semver). |

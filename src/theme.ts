@@ -1,5 +1,5 @@
 /**
- * MUI theme augmentation for @tmi-apps/ui.
+ * MUI theme augmentation for @tmi-packages/ui.
  * Imported for side effects from the package entry so consumers get the
  * augmented `Theme`, `ThemeOptions`, and `PaletteColor` types automatically.
  *

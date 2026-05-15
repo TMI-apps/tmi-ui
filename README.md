@@ -1,4 +1,4 @@
-# @tmi-apps/ui
+# @tmi-packages/ui
 
 Shared UI primitives for React 19 + MUI 7.
 
@@ -44,10 +44,10 @@ Your consuming app must already ship compatible **majors** of these. Mismatches 
 ## Verify the install
 
 ```bash
-pnpm ls @tmi-apps/ui
+pnpm ls @tmi-packages/ui
 ```
 
-Confirm `node_modules/@tmi-apps/ui/dist/index.js` and `node_modules/@tmi-apps/ui/dist/index.d.ts` exist.
+Confirm `node_modules/@tmi-packages/ui/dist/index.js` and `node_modules/@tmi-packages/ui/dist/index.d.ts` exist.
 
 ## Smoke test (after upgrade or first install)
 
@@ -63,7 +63,7 @@ Confirm `node_modules/@tmi-apps/ui/dist/index.js` and `node_modules/@tmi-apps/ui
 ### `ThumbnailPill`
 
 ```tsx
-import { ThumbnailPill } from "@tmi-apps/ui";
+import { ThumbnailPill } from "@tmi-packages/ui";
 
 <ThumbnailPill
   title="Example"
@@ -95,7 +95,7 @@ Modal that embeds a YouTube or Vimeo video in a responsive 16:9 iframe. Privacy-
 
 ```tsx
 import { useState } from "react";
-import { VideoEmbedModal } from "@tmi-apps/ui";
+import { VideoEmbedModal } from "@tmi-packages/ui";
 
 const [open, setOpen] = useState(false);
 
@@ -138,7 +138,7 @@ If your app redeclared these keys, **remove** the duplicate — conflicting augm
 
 - **`ThumbnailPill`** uses **`react-router-dom`** `Link` when `to` is set. Other routers: omit `to` and use `onClick` + `navigate(...)`.
 - **`VideoEmbedModal`** — YouTube and Vimeo only.
-- **Theme augmentation is global** when `@tmi-apps/ui` is imported.
+- **Theme augmentation is global** when `@tmi-packages/ui` is imported.
 - **Storybook** — optional follow-up for visual docs. **Unit tests** live under `tests/`; run `pnpm test:run` locally (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## Local development (this repository)
@@ -174,4 +174,4 @@ Full history: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Migration from a vendored or monorepo copy
 
-If you previously depended on a **local path**, **`workspace:`**, or **`file:`** link to this library inside another repository, switch to the published package instead. Install from [npm](https://www.npmjs.com/package/@tmi-apps/ui); pin a semver range after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). Run `pnpm add @tmi-apps/ui`, remove duplicate MUI theme augmentations, and remove the old vendored dependency. If you used GitHub Packages before, follow [docs/consumer-setup.md](./docs/consumer-setup.md#migrating-from-github-packages).
+If you previously depended on a **local path**, **`workspace:`**, or **`file:`** link to this library inside another repository, switch to the published package instead. Install from [npm](https://www.npmjs.com/package/@tmi-packages/ui); pin a semver range after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). Run `pnpm add @tmi-packages/ui`, remove duplicate MUI theme augmentations, and remove the old vendored dependency. If you used GitHub Packages before, follow [docs/consumer-setup.md](./docs/consumer-setup.md#migrating-from-github-packages).

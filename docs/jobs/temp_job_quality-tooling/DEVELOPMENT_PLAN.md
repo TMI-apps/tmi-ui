@@ -14,7 +14,7 @@
 
 ## Summary
 
-Add a right-sized quality-tooling layer to `@tmi-apps/ui`, informed by `project-alpha-app` but scoped for a small publishable component library. The logical target is:
+Add a right-sized quality-tooling layer to `@tmi-packages/ui`, informed by `project-alpha-app` but scoped for a small publishable component library. The logical target is:
 
 - Vitest + Testing Library for utility, hook, and component regression tests.
 - Lightweight ESLint + Prettier checks aligned with TypeScript/React library code.

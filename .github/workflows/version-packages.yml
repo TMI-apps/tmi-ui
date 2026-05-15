@@ -70,10 +70,14 @@ jobs:
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
+      # Pushes using the default GITHUB_TOKEN do not trigger other workflows (e.g. Publish on tag).
+      # Use a PAT so the tag push runs as a real user and starts the Publish workflow.
+      # Secret: classic PAT with `repo`, or fine-grained PAT with Contents: Read and write on this repo.
       - name: Push version tag
         if: steps.pending.outputs.ready == 'true' && steps.auto_commit.outputs.commit_hash != ''
         env:
           COMMIT_HASH: ${{ steps.auto_commit.outputs.commit_hash }}
+          TAG_PUSH_TOKEN: ${{ secrets.TAG_PUSH_TOKEN }}
         run: |
           set -euo pipefail
           VERSION="$(node -p "require('./package.json').version")"
@@ -83,4 +87,9 @@ jobs:
             exit 0
           fi
           git tag "${TAG}" "${COMMIT_HASH}"
+          if [ -n "${TAG_PUSH_TOKEN}" ]; then
+            git remote set-url origin "https://x-access-token:${TAG_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          else
+            echo "::warning::TAG_PUSH_TOKEN secret is not set. Tag is pushed with GITHUB_TOKEN; the Publish workflow will NOT start automatically. Add repo secret TAG_PUSH_TOKEN (PAT with repo scope), or run Publish manually for this tag (Actions → Publish → Run workflow)."
+          fi
           git push origin "refs/tags/${TAG}"

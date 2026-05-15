@@ -1,4 +1,4 @@
-# Rules index (`@tmi-apps/ui`)
+# Rules index (`@tmi-packages/ui`)
 
 This repo is a **small publishable UI library** (React + MUI peers, published to **npm**). Rules stay minimal; most governance lives in [CONTRIBUTING.md](../../CONTRIBUTING.md) and [README.md](../../README.md).
 

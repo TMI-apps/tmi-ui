@@ -1,17 +1,19 @@
 # Release flow (Changesets + npm)
 
-This library is **open source** ([MIT](../LICENSE)); releases are published as **`@tmi-apps/ui`** on the **public npm registry** ([npmjs](https://www.npmjs.com/package/@tmi-apps/ui)).
+This library is **open source** ([MIT](../LICENSE)); releases are published as **`@tmi-packages/ui`** on the **public npm registry** ([npmjs](https://www.npmjs.com/package/@tmi-packages/ui)).
 
 ## Maintainer prerequisites (one-time)
 
 Before the first successful automated publish from this repository:
 
-1. **npm scope `@tmi-apps`** — An npm org or user that can **publish** packages under that scope ([npm teams & 2FA](https://docs.npmjs.com/organizations/managing-organization-members) / org policy). Without publish rights, `pnpm publish` fails.
-2. **CI authentication to npm** — Choose one (or combine with provenance):
+1. **npm scope `@tmi-packages`** — An npm org or user that can **publish** packages under that scope ([npm teams & 2FA](https://docs.npmjs.com/organizations/managing-organization-members) / org policy). Without publish rights, `pnpm publish` fails.
+2. **GitHub — tag push that triggers Publish** — The [Version packages workflow](../.github/workflows/version-packages.yml) creates the `v*` tag. Pushes made with only the default `GITHUB_TOKEN` **do not** trigger other workflows, so **Publish** would not run. Add repository secret **`TAG_PUSH_TOKEN`**: a [classic PAT](https://github.com/settings/tokens) with **`repo`** scope (or a fine-grained PAT with **Contents: Read and write** on this repo), belonging to a user/bot that may push tags. The workflow uses it only for `git push` of the tag so **Publish** starts automatically. Until this is set, run **Publish** manually after each release tag (**Actions → Publish → Run workflow**).
+
+3. **CI authentication to npm** — Choose one (or combine with provenance):
    - **A)** Create an [automation or granular token](https://docs.npmjs.com/about-access-tokens) on npm with permission to publish this package. Add it as a GitHub repository (or org) secret **`NPM_TOKEN`** — the [Publish workflow](../.github/workflows/publish.yml) passes it as `NODE_AUTH_TOKEN`.
    - **B)** **[Trusted Publishing](https://docs.npmjs.com/trusted-publishers)** (OIDC) — Link this GitHub repo to the package on npm so publishes can use short-lived tokens. The workflow already requests `id-token: write`; finish the npm-side setup in the npm web UI. If you rely **only** on Trusted Publishing, you may not need a stored `NPM_TOKEN` (per npm’s current behavior — verify on npm docs if that changes).
 
-Maintainers must complete these steps in **npm** and **GitHub** settings; they cannot be done by repo automation alone.
+Maintainers must complete **TAG_PUSH_TOKEN**, **npm token / OIDC**, and related steps in **GitHub** and **npm** settings; they cannot be done by repo automation alone.
 
 ## Overview
 
@@ -25,8 +27,8 @@ Maintainers must complete these steps in **npm** and **GitHub** settings; they c
 
 ## After Publish: verify on npm
 
-1. Open [https://www.npmjs.com/package/@tmi-apps/ui](https://www.npmjs.com/package/@tmi-apps/ui) and confirm the new **version** is listed and **public**.
-2. Optionally run `pnpm add @tmi-apps/ui@<version>` in a clean temp project to sanity-check resolution.
+1. Open [https://www.npmjs.com/package/@tmi-packages/ui](https://www.npmjs.com/package/@tmi-packages/ui) and confirm the new **version** is listed and **public**.
+2. Optionally run `pnpm add @tmi-packages/ui@<version>` in a clean temp project to sanity-check resolution.
 
 ## Manual tag (fallback only)
 
@@ -51,6 +53,7 @@ After a changeset merges to `main`:
 ## Requirements
 
 - **GitHub Actions** — The Publish workflow needs **`contents: read`** and **`id-token: write`** (provenance / OIDC). It does **not** use `packages: write` (that was for GitHub Packages).
+- **Secret `TAG_PUSH_TOKEN`** — PAT (`repo` or fine-grained contents write) so the **tag push** from [Version packages](../.github/workflows/version-packages.yml) triggers **Publish** (otherwise GitHub suppresses chained workflows for `GITHUB_TOKEN` pushes). Without it, run **Publish** manually after each tag.
 - **Secret `NPM_TOKEN`** — Required unless Trusted Publishing fully replaces token-based auth for your setup; add under **Settings → Secrets and variables → Actions**.
 - **Branch protection** — Protect **`main`** with required pull requests and status checks. If `main` is protected, allow [github-actions[bot]](https://github.com/orgs/TMI-apps/people) to push the version commit from **Version packages**, or use a follow-up PR model (team choice).
 - **Manual workflow runs** — Restrict **workflow_dispatch** on the Publish workflow to trusted maintainers (repo/org settings).

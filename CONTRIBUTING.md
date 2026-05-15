@@ -1,4 +1,4 @@
-# Contributing to `@tmi-apps/ui`
+# Contributing to `@tmi-packages/ui`
 
 Optional **Cursor** workflow (plan / implement / finish / push / prime): see [.cursor/rules/INDEX.md](.cursor/rules/INDEX.md).
 
@@ -22,7 +22,7 @@ Align the hosted repository with these expectations:
 
 - **`main`** — branch protection: pull requests required, required status checks (CI).
 - **Publish workflow** — restrict **workflow_dispatch** on publish workflows to maintainers where possible.
-- **Visibility** — Keep the GitHub repository **public** and the **`@tmi-apps/ui`** package on npm **public** for documented install flows.
+- **Visibility** — Keep the GitHub repository **public** and the **`@tmi-packages/ui`** package on npm **public** for documented install flows.
 
 Release mechanics: [docs/release-flow.md](./docs/release-flow.md).
 
