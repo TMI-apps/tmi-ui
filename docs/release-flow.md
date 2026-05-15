@@ -1,6 +1,17 @@
-# Release flow (Changesets + GitHub Packages)
+# Release flow (Changesets + npm)
 
-This library is **open source** ([MIT](../LICENSE)); releases are published as **`@tmi-apps/ui`** on **GitHub Packages**. Keep the repository and package **public** so documented consumer installs remain consistent with maintainer expectations.
+This library is **open source** ([MIT](../LICENSE)); releases are published as **`@tmi-apps/ui`** on the **public npm registry** ([npmjs](https://www.npmjs.com/package/@tmi-apps/ui)).
+
+## Maintainer prerequisites (one-time)
+
+Before the first successful automated publish from this repository:
+
+1. **npm scope `@tmi-apps`** — An npm org or user that can **publish** packages under that scope ([npm teams & 2FA](https://docs.npmjs.com/organizations/managing-organization-members) / org policy). Without publish rights, `pnpm publish` fails.
+2. **CI authentication to npm** — Choose one (or combine with provenance):
+   - **A)** Create an [automation or granular token](https://docs.npmjs.com/about-access-tokens) on npm with permission to publish this package. Add it as a GitHub repository (or org) secret **`NPM_TOKEN`** — the [Publish workflow](../.github/workflows/publish.yml) passes it as `NODE_AUTH_TOKEN`.
+   - **B)** **[Trusted Publishing](https://docs.npmjs.com/trusted-publishers)** (OIDC) — Link this GitHub repo to the package on npm so publishes can use short-lived tokens. The workflow already requests `id-token: write`; finish the npm-side setup in the npm web UI. If you rely **only** on Trusted Publishing, you may not need a stored `NPM_TOKEN` (per npm’s current behavior — verify on npm docs if that changes).
+
+Maintainers must complete these steps in **npm** and **GitHub** settings; they cannot be done by repo automation alone.
 
 ## Overview
 
@@ -8,9 +19,14 @@ This library is **open source** ([MIT](../LICENSE)); releases are published as *
 2. **PR to `main`** — Review and merge.
 3. **Version packages** — On push to `main`, the [Version packages workflow](../.github/workflows/version-packages.yml) runs. If there are pending changesets, it runs `pnpm run version-packages` (`changeset version` + `pnpm install`), then commits to `main` with message `chore: version packages [skip ci]`.
 4. **Tag** — After that commit, the same workflow **creates and pushes** a git tag `vX.Y.Z` that matches `package.json` `"version"` (only when a version commit was actually created; if the tag already exists on the remote, the step is skipped).
-5. **Publish** — The [Publish workflow](../.github/workflows/publish.yml) runs on `v*` tag pushes, builds, and runs `pnpm publish` to `npm.pkg.github.com` using `GITHUB_TOKEN`.
+5. **Publish** — The [Publish workflow](../.github/workflows/publish.yml) runs on `v*` tag pushes, builds, and runs `pnpm publish` to **registry.npmjs.org** using **`NPM_TOKEN`** (and/or Trusted Publishing / OIDC as configured).
 
-> **Important:** Until the **tag** exists and **Publish** has succeeded, that version is **not** on GitHub Packages. After merging, open **Actions** and confirm **Version packages** then **Publish** completed, then check **Packages** for `@tmi-apps/ui`.
+> **Important:** Until the **tag** exists and **Publish** has succeeded, that version is **not** on npm. After merging, open **Actions** and confirm **Version packages** then **Publish** completed, then verify the package on npm (below).
+
+## After Publish: verify on npm
+
+1. Open [https://www.npmjs.com/package/@tmi-apps/ui](https://www.npmjs.com/package/@tmi-apps/ui) and confirm the new **version** is listed and **public**.
+2. Optionally run `pnpm add @tmi-apps/ui@<version>` in a clean temp project to sanity-check resolution.
 
 ## Manual tag (fallback only)
 
@@ -30,14 +46,19 @@ After a changeset merges to `main`:
 
 1. **Version packages** — Should run, commit the bump, then push tag `vX.Y.Z`.
 2. **Publish** — Should run on that tag push and finish without errors.
-3. Confirm the version under the repository **Packages** tab.
+3. Confirm the version on **npmjs** (link above).
 
 ## Requirements
 
-- **Repository settings** — Actions must be allowed to read/write contents and, for publish, `packages: write`. The default `GITHUB_TOKEN` is sufficient for publishing within the same org.
+- **GitHub Actions** — The Publish workflow needs **`contents: read`** and **`id-token: write`** (provenance / OIDC). It does **not** use `packages: write` (that was for GitHub Packages).
+- **Secret `NPM_TOKEN`** — Required unless Trusted Publishing fully replaces token-based auth for your setup; add under **Settings → Secrets and variables → Actions**.
 - **Branch protection** — Protect **`main`** with required pull requests and status checks. If `main` is protected, allow [github-actions[bot]](https://github.com/orgs/TMI-apps/people) to push the version commit from **Version packages**, or use a follow-up PR model (team choice).
 - **Manual workflow runs** — Restrict **workflow_dispatch** on the Publish workflow to trusted maintainers (repo/org settings).
 
-## First-time publish
+## First-time publish to npm
 
-After a merge that includes a changeset, wait for **Version packages** to apply the new version on `main`, then confirm the **automatic tag** and **Publish** workflow runs; verify the package under the repo’s **Packages**.
+After a merge that includes a changeset, wait for **Version packages** to apply the new version on `main`, then confirm the **automatic tag** and **Publish** workflow run. Verify the package page on npm and that the version is **public** (`publishConfig.access` is `"public"` in [`package.json`](../package.json)).
+
+## Optional: legacy GitHub Packages
+
+Older versions may still appear under the repo’s **Packages** tab. Deprecate or document them as needed; new releases go **only** to npm.

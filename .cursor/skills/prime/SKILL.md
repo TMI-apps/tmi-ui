@@ -36,7 +36,7 @@ Orient the agent to **@tmi-apps/ui** before substantive work.
 
 Concise summary:
 
-- **What** this repo is (published UI library, GitHub Packages).
+- **What** this repo is (published UI library, npm registry).
 - **Key paths** (`src/`, `docs/`, `dist/` build output gitignored).
 - **Peers / consumers** (auth: see `docs/installation.md`).
 - **Current branch / cleanliness / recent commits**.

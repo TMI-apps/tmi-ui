@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/TMI-apps/tmi-ui#readme",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -62,7 +63,7 @@
     "verify:pack": "node ./scripts/verify-pack.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version && pnpm install",
-    "publish:github": "pnpm run build && pnpm publish --no-git-checks"
+    "publish:npm": "pnpm run build && pnpm publish --no-git-checks"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",

@@ -22,7 +22,7 @@ Align the hosted repository with these expectations:
 
 - **`main`** — branch protection: pull requests required, required status checks (CI).
 - **Publish workflow** — restrict **workflow_dispatch** on publish workflows to maintainers where possible.
-- **Visibility** — keep the GitHub repository and **`@tmi-apps/ui`** GitHub Packages artifact **public** for documented install flows.
+- **Visibility** — Keep the GitHub repository **public** and the **`@tmi-apps/ui`** package on npm **public** for documented install flows.
 
 Release mechanics: [docs/release-flow.md](./docs/release-flow.md).
 
@@ -63,7 +63,7 @@ External contributors without direct repo access: **fork** and open a PR as usua
 2. Open a PR to `main`.
 3. After merge, the **Version packages** workflow updates `package.json` and `CHANGELOG.md`, then **pushes the `vX.Y.Z` tag** automatically (when a bump commit was created).
 4. **Fallback only** — if tagging failed, push the tag manually (see [docs/release-flow.md](docs/release-flow.md#manual-tag-fallback-only)).
-5. The **Publish** workflow publishes to GitHub Packages on the tag push.
+5. The **Publish** workflow publishes to **npm** (registry.npmjs.org) on the tag push.
 
 ## PR checklist
 

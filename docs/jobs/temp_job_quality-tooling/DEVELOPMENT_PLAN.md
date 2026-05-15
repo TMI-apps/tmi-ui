@@ -50,7 +50,7 @@ Out of scope:
 
 ## Existing Functionality
 
-- Current scripts: `type-check`, `build`, `verify:pack`, `changeset`, `version-packages`, `publish:github`.
+- Current scripts: `type-check`, `build`, `verify:pack`, `changeset`, `version-packages`, `publish:npm`.
 - Current CI runs: install, type-check, build, verify pack.
 - Existing exported targets worth testing first:
   - `textToStepperItems`

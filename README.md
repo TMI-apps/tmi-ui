@@ -10,7 +10,7 @@ Shared UI primitives for React 19 + MUI 7.
 
 There is **no SLA** for issues or pull requests; responses are best-effort.
 
-**Install from GitHub Packages** — see **[docs/installation.md](./docs/installation.md)** (`.npmrc`, auth, `pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+**Install from npm** — see **[docs/installation.md](./docs/installation.md)** (`pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
 
 ## Contents
 
@@ -174,4 +174,4 @@ Full history: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Migration from a vendored or monorepo copy
 
-If you previously depended on a **local path**, **`workspace:`**, or **`file:`** link to this library inside another repository, switch to the published package instead. Use GitHub Packages (see [docs/installation.md](./docs/installation.md)); pin a semver range after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). Add `.npmrc` mapping `@tmi-apps` → `npm.pkg.github.com`, install `@tmi-apps/ui`, remove duplicate MUI theme augmentations, and remove the old vendored dependency.
+If you previously depended on a **local path**, **`workspace:`**, or **`file:`** link to this library inside another repository, switch to the published package instead. Install from [npm](https://www.npmjs.com/package/@tmi-apps/ui); pin a semver range after checking [Releases](https://github.com/TMI-apps/tmi-ui/releases). Run `pnpm add @tmi-apps/ui`, remove duplicate MUI theme augmentations, and remove the old vendored dependency. If you used GitHub Packages before, follow [docs/consumer-setup.md](./docs/consumer-setup.md#migrating-from-github-packages).

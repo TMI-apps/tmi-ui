@@ -13,23 +13,15 @@ Align these in the app before adding the dependency (see `package.json` peer ran
 
 ## 2. Registry
 
-Add committed `.npmrc` at the app root:
+**Default npm registry** — `@tmi-apps/ui` is **public** on [npm](https://www.npmjs.com/package/@tmi-apps/ui). You **do not** need a committed `.npmrc` that maps `@tmi-apps` to GitHub Packages.
 
-```ini
-@tmi-apps:registry=https://npm.pkg.github.com
-```
+## 3. CI
 
-## 3. CI — token for install
-
-`@tmi-apps/ui` is published from **tmi-ui**, not from your app repo. **`GITHUB_TOKEN` in your app’s workflows usually cannot read that package** (401/403). Follow **[installation.md § CI](./installation.md#2-authenticate)**: store a classic PAT with `read:packages` (and SSO authorization if needed) as **`GH_PACKAGES_READ_TOKEN`**, then:
+Use an ordinary install step (no `GH_PACKAGES_READ_TOKEN` required for this package):
 
 ```yaml
 - run: pnpm install --frozen-lockfile
-  env:
-    NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_READ_TOKEN }}
 ```
-
-Only if your workflow runs in **the same repo that owns the package** (unusual for app consumers) can you use `secrets.GITHUB_TOKEN` with `permissions: packages: read` instead — see installation.md.
 
 ## 4. Install
 
@@ -37,7 +29,7 @@ Only if your workflow runs in **the same repo that owns the package** (unusual f
 pnpm add @tmi-apps/ui
 ```
 
-(Same as [installation.md § Install](./installation.md#3-install-the-package): unpinned add = latest; then commit lockfile. Pin a `^x.y.z` range in `package.json` only when **your** team wants upgrade boundaries — see Releases on the tmi-ui repo.)
+(Same as [installation.md § Install](./installation.md#1-install-the-package): unpinned add = latest; then commit lockfile. Pin a `^x.y.z` range in `package.json` when **your** team wants upgrade boundaries — see Releases on the tmi-ui repo.)
 
 ## 5. MUI types — no duplicate augmentations
 
@@ -58,4 +50,16 @@ If the app had a local copy of `ThumbnailPill` / `VideoEmbedModal`, delete it an
 
 ## Boilerplate
 
-Team templates should ship with the `.npmrc` line above and `@tmi-apps/ui` listed in `package.json` with whatever semver range template maintainers choose (updated when **they** bump the dependency), plus a committed lockfile — not a version baked into **this** documentation.
+Team templates should list `@tmi-apps/ui` in `package.json` with whatever semver range template maintainers choose (updated when **they** bump the dependency), plus a committed lockfile — not a version baked into **this** documentation.
+
+## Migrating from GitHub Packages
+
+If the app previously installed `@tmi-apps/ui` from GitHub Packages, update as follows:
+
+1. **Remove** from the app root `.npmrc` the line `@tmi-apps:registry=https://npm.pkg.github.com` **if** it was only needed for `@tmi-apps/ui`. If you still use **other** packages from that registry, keep the file but adjust scope/registry lines so `@tmi-apps/ui` resolves from npm (often: drop the global `@tmi-apps` override, or rely on individual package lock entries).
+2. **Remove** the `GH_PACKAGES_READ_TOKEN` secret (and `NODE_AUTH_TOKEN` wiring for install) **if** it was only used so CI could read `@tmi-apps/ui` from GitHub Packages.
+3. Run **`pnpm install`** and refresh the lockfile; run **`pnpm build`** and tests.
+
+## See also
+
+- [installation.md](./installation.md) — install details and CI edge cases
