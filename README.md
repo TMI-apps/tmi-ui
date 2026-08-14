@@ -14,32 +14,39 @@ There is **no SLA** for issues or pull requests; responses are best-effort.
 
 ## Contents
 
-| Component               | Since   | Peer deps beyond core                                                                   |
-| ----------------------- | ------- | --------------------------------------------------------------------------------------- |
-| `ThumbnailPill`         | `0.1.0` | `react-router-dom` (when `to` prop is used)                                             |
-| `VideoEmbedModal`       | `0.2.0` | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                |
-| `PersistentStepperList` | `0.4.0` | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
-| `textToStepperItems`    | `0.4.0` | (parser only — no MUI)                                                                  |
-| `usePersistentSteps`    | `0.4.0` | (hook only — `localStorage`)                                                            |
+| Component               | Since      | Peer deps beyond core                                                                   |
+| ----------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| `ThumbnailPill`         | `0.1.0`    | `react-router-dom` (when `to` prop is used)                                             |
+| `VideoEmbedModal`       | `0.2.0`    | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                |
+| `PersistentStepperList` | `0.4.0`    | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
+| `textToStepperItems`    | `0.4.0`    | (parser only — no MUI)                                                                  |
+| `usePersistentSteps`    | `0.4.0`    | (hook only — `localStorage`)                                                            |
+| TMI table (Phase 2)     | unreleased | `@tanstack/react-table`; optional `createTmiTableTheme` for `theme.detailPanelHero`     |
 
 For the full prop surface of each component, read its source — the exported types are the canonical contract:
 
 - `ThumbnailPill` → `[src/ThumbnailPill/ThumbnailPill.tsx](src/ThumbnailPill/ThumbnailPill.tsx)`, `ThumbnailPillProps`.
 - `VideoEmbedModal` → `[src/VideoEmbedModal/VideoEmbedModal.tsx](src/VideoEmbedModal/VideoEmbedModal.tsx)`, `VideoEmbedModalProps`.
+- TMI table Phase 2 (satellites + types + `createTmiTableTheme`) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Grid/workspace stay unexported until a later ingest phase.
 
 ## Peer dependencies
 
 Your consuming app must already ship compatible **majors** of these. Mismatches should be reported to this repository rather than patched with `--force`.
 
-| Package               | Required range | Notes                                                         |
-| --------------------- | -------------- | ------------------------------------------------------------- |
-| `react`               | `^19.2.0`      |                                                               |
-| `react-dom`           | `^19.2.0`      |                                                               |
-| `@mui/material`       | `^7.3.6`       |                                                               |
-| `@mui/icons-material` | `^7.3.6`       | Used by `VideoEmbedModal` and `PersistentStepperList` (icons) |
-| `@emotion/react`      | `^11.14.0`     |                                                               |
-| `@emotion/styled`     | `^11.14.1`     |                                                               |
-| `react-router-dom`    | `^7.11.0`      | Used when `ThumbnailPill` receives a `to` prop                |
+| Package                   | Required range | Notes                                                         |
+| ------------------------- | -------------- | ------------------------------------------------------------- |
+| `react`                   | `^19.2.0`      |                                                               |
+| `react-dom`               | `^19.2.0`      |                                                               |
+| `@mui/material`           | `^7.3.6`       |                                                               |
+| `@mui/icons-material`     | `^7.3.6`       | Used by `VideoEmbedModal` and `PersistentStepperList` (icons) |
+| `@emotion/react`          | `^11.14.0`     |                                                               |
+| `@emotion/styled`         | `^11.14.1`     |                                                               |
+| `react-router-dom`        | `^7.11.0`      | Used when `ThumbnailPill` receives a `to` prop                |
+| `@tanstack/react-table`   | `^8.21.3`      | TMI table column helpers                                      |
+| `@tanstack/react-virtual` | `3.13.24`      | Grid virtualization (public grid export later)                |
+| `@dnd-kit/core`           | `^6.3.1`       | Row-reorder types / later grid                                |
+| `@dnd-kit/sortable`       | `^10.0.0`      | Later grid                                                    |
+| `@dnd-kit/utilities`      | `^3.2.2`       | Later grid                                                    |
 
 ## Verify the install
 

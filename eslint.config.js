@@ -48,11 +48,28 @@ export default tseslint.config(
               message: "Data clients do not belong in @tmi-packages/ui.",
             },
           ],
+          patterns: [
+            {
+              group: ["@/*"],
+              message: "Use package-relative .js imports, not app @/ aliases.",
+            },
+          ],
         },
       ],
     },
     settings: {
       react: { version: "detect" },
+    },
+  },
+  {
+    files: [
+      "src/DataTable/lesmateriaal-import/**/*.{ts,tsx}",
+      "tests/DataTable/lesmateriaal-import/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/refs": "off",
+      "react-hooks/immutability": "off",
     },
   },
   eslintConfigPrettier,
