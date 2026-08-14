@@ -1,6 +1,10 @@
 # Publish to the public npm registry when a version tag (v*) is pushed.
 # Tags are normally created by the Version packages workflow after changesets merge.
 # workflow_dispatch lets you re-run when a prior tag did not trigger (e.g. workflow added later).
+#
+# Auth: npm Trusted Publisher (OIDC) for repo TMI-apps/tmi-ui, workflow file publish.yml.
+# Do not set NODE_AUTH_TOKEN or setup-node registry-url on publish — those write .npmrc
+# auth and npm then skips OIDC (surfaces as E404 on PUT).
 name: Publish
 
 on:
@@ -21,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      # npm provenance + Trusted Publishing (OIDC), if enabled for this package on npmjs
       id-token: write
 
     steps:
@@ -33,9 +36,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -43,9 +45,5 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      # Authentication: add repo secret NPM_TOKEN (automation/granular token), and/or configure
-      # Trusted Publishing on npmjs for this repo — see docs/release-flow.md
       - name: Publish to npm
-        run: pnpm publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --no-git-checks
