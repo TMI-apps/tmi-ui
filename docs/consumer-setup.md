@@ -10,6 +10,8 @@ Align these in the app before adding the dependency (see `package.json` peer ran
 - `@mui/material` / `@mui/icons-material` ^7
 - `@emotion/react` / `@emotion/styled` ^11
 - `react-router-dom` ^7 (if you use `ThumbnailPill` with `to=`)
+- `@tanstack/react-table` ^8.21 (TMI table satellites / column helpers)
+- `@tanstack/react-virtual` 3.13.x and `@dnd-kit/*` (needed when you adopt the grid; already peer-declared)
 
 ## 2. Registry
 

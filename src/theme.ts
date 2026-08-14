@@ -6,10 +6,13 @@
  * Added tokens:
  * - `theme.thumbnailPill.*` — ThumbnailPill sizing
  * - `theme.checklist.*` — PersistentStepperList spacing (optional; component falls back to built-in defaults)
+ * - `theme.detailPanelHero` — table detail-hero tokens; apply via `createTmiTableTheme`
  * - `theme.palette.primary.surface` / `surfaceHover` — mode-aware low-opacity
  *   brand tints for component backgrounds / hover states. Optional; components
  *   should fall back to `alpha(primary.main, ...)` if absent.
  */
+import type { DetailPanelHeroTokens } from "./DataTable/lesmateriaal-import/shared-theme/detailPanelHeroTheme.js";
+
 export {};
 
 declare module "@mui/material/styles" {
@@ -22,6 +25,8 @@ declare module "@mui/material/styles" {
       pillMaxWidthAppBar: number;
       pillBorderRadius: number;
     };
+    /** Filled by `createTmiTableTheme`. Required on Theme after that factory runs. */
+    detailPanelHero: DetailPanelHeroTokens;
     checklist?: {
       circleSize: number;
       mainStepGap: number;
@@ -49,6 +54,7 @@ declare module "@mui/material/styles" {
       subBulletSize?: number;
       circleFontSize?: number;
     };
+    detailPanelHero?: DetailPanelHeroTokens;
   }
 
   interface PaletteColor {

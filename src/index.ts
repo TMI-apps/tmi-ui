@@ -26,3 +26,33 @@ export type {
 } from "./PersistentStepperList/PersistentStepperList.js";
 export { PersistentStepperStepItem } from "./PersistentStepperList/PersistentStepperStepItem.js";
 export type { ChecklistSizing } from "./PersistentStepperList/PersistentStepperStepItem.js";
+
+export {
+  AirtableAttachmentThumbnailCell,
+  createAirtableAttachmentThumbnailColumn,
+  createTmiTableTheme,
+  DATA_TABLE_TOOLTIP_PROPS,
+  DataTableTruncatedOverflow,
+  DataTableTruncatedText,
+  getTableInteractionSkin,
+  TABLE_ROW_THUMB_COLUMN_PX,
+  TableRowActionButton,
+  TableRowThumbnailPlaceholder,
+  TableRowThumbnailShell,
+} from "./DataTable/index.js";
+export type {
+  AirtableAttachmentThumbnailCellProps,
+  DatabaseViewerRowDropZone,
+  DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderEndMeta,
+  DatabaseViewerRowReorderPointerSample,
+  DataTableTruncatedOverflowProps,
+  DataTableTruncatedTextProps,
+  TableInteractionSkin,
+  TableInteractionSkinPreset,
+  TableRowActionButtonProps,
+  TMITableColumnMeta,
+  TMITableDebugConfig,
+  TMITableSelectionConfig,
+  TMITableTreeConfig,
+} from "./DataTable/index.js";

@@ -1,7 +1,7 @@
 {
   "name": "@tmi-packages/ui",
   "version": "1.0.0",
-  "description": "Shared React + MUI UI primitives (ThumbnailPill, VideoEmbedModal, PersistentStepperList).",
+  "description": "Shared React + MUI UI primitives (ThumbnailPill, VideoEmbedModal, PersistentStepperList, TMI table satellites).",
   "keywords": [
     "tmi",
     "react",
@@ -72,7 +72,12 @@
     "@mui/material": "^7.3.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.11.0"
+    "react-router-dom": "^7.11.0",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "3.13.24",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
@@ -82,6 +87,11 @@
     "@eslint/js": "^9.39.2",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "3.13.24",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
