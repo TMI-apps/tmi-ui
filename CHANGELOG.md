@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- [#4](https://github.com/TMI-apps/tmi-ui/pull/4) [`a6b93f3`](https://github.com/TMI-apps/tmi-ui/commit/a6b93f3ad02a381a45b8dac6193438c93a26e507) Thanks [@TomFranse](https://github.com/TomFranse)! - Export TMI table Phase 3 public API (workspace, detail/hero shell, unsaved-changes dialog, optimistic feedback, and `createTmiTableTheme` workspace drawer z-index). Grid remains unexported.
+
 ## 1.1.0
 
 ### Minor Changes
