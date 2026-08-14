@@ -21,13 +21,13 @@ There is **no SLA** for issues or pull requests; responses are best-effort.
 | `PersistentStepperList` | `0.4.0`  | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
 | `textToStepperItems`    | `0.4.0`  | (parser only — no MUI)                                                                  |
 | `usePersistentSteps`    | `0.4.0`  | (hook only — `localStorage`)                                                            |
-| TMI table (Phase 2–3)   | `1.1.0`+ | `@tanstack/react-table`; `createTmiTableTheme` for hero + workspace drawer z-index      |
+| TMI table (full grid)   | `1.3.0`+ | `@tanstack/react-table`, `@tanstack/react-virtual`, `@dnd-kit/*`; `createTmiTableTheme` |
 
 For the full prop surface of each component, read its source — the exported types are the canonical contract:
 
 - `ThumbnailPill` → `[src/ThumbnailPill/ThumbnailPill.tsx](src/ThumbnailPill/ThumbnailPill.tsx)`, `ThumbnailPillProps`.
 - `VideoEmbedModal` → `[src/VideoEmbedModal/VideoEmbedModal.tsx](src/VideoEmbedModal/VideoEmbedModal.tsx)`, `VideoEmbedModalProps`.
-- TMI table Phase 2–3 (satellites, workspace, detail/hero shell, `createTmiTableTheme`) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Grid (`TMITable` / `DatabaseViewer`) stays unexported until a later ingest phase.
+- TMI table (`TMITable`, workspace, detail shell, grid utils) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Prefer `TMITable` over deprecated `DatabaseViewer`.
 
 ## Peer dependencies
 
@@ -144,13 +144,13 @@ If your app redeclared these keys, **remove** the duplicate — conflicting augm
 
 ### TMI table workspace overlays (Decision #2)
 
-`TMITableWorkspace` installs an internal overlay-stack provider around the detail drawer so portaled menus (column menu, scope popover) stack above the drawer. That provider is **not** a public export — keep a single overlay stack in the **app** for non-table UI (video dialogs, autocomplete outside the workspace).
-
-For those app overlays, pass the same drawer z-index the workspace uses:
+`TMITableWorkspace` installs `PortaledOverlayStackProvider` around the detail drawer. **Re-export that provider from the same package** in the app (`@/shared/context/PortaledOverlayStackContext` → `@tmi-packages/ui`) so autocomplete and other portaled UI share one React context with the workspace drawer.
 
 ```ts
 import {
   createTmiTableTheme,
+  PortaledOverlayStackProvider,
+  usePortaledOverlayPopperZIndex,
   workspaceDetailDrawerModalZ,
 } from "@tmi-packages/ui";
 
@@ -160,7 +160,7 @@ const hostModalZ =
   workspaceDetailDrawerModalZ(theme);
 ```
 
-Do not import `TMITable` / `DatabaseViewer` from this package yet (Phase 4). `UnsavedChangesDialog` takes the consumer’s edit-session state; `useRecordEditSession` stays in the app.
+`UnsavedChangesDialog` takes the consumer’s edit-session state; `useRecordEditSession` stays in the app. Selection/export hooks and `tableLoadDebug` stay app-only; inject `debug.onTableLoadSettled` from an app `TmiTable.tsx` wrapper if needed.
 
 ## Known limitations
 
