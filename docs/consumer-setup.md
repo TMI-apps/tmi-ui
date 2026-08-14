@@ -13,6 +13,8 @@ Align these in the app before adding the dependency (see `package.json` peer ran
 - `@tanstack/react-table` ^8.21 (TMI table satellites / column helpers)
 - `@tanstack/react-virtual` 3.13.x and `@dnd-kit/*` (needed when you adopt the grid; already peer-declared)
 
+For TMI table **workspace / detail heroes**, wrap your MUI theme with `createTmiTableTheme`. App-level portaled overlays (outside the workspace) should use `workspaceDetailDrawerModalZ(theme)` — see README § TMI table workspace overlays.
+
 ## 2. Registry
 
 **Default npm registry** — `@tmi-packages/ui` is **public** on [npm](https://www.npmjs.com/package/@tmi-packages/ui). You **do not** need a committed `.npmrc` that maps **`@tmi-packages`** (or any scope) to GitHub Packages for this package.

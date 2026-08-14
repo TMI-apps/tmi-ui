@@ -7,6 +7,7 @@
  * - `theme.thumbnailPill.*` — ThumbnailPill sizing
  * - `theme.checklist.*` — PersistentStepperList spacing (optional; component falls back to built-in defaults)
  * - `theme.detailPanelHero` — table detail-hero tokens; apply via `createTmiTableTheme`
+ * - `theme.tmiTableWorkspace.detailDrawerModalZ` — workspace detail-drawer stacking; apply via `createTmiTableTheme`
  * - `theme.palette.primary.surface` / `surfaceHover` — mode-aware low-opacity
  *   brand tints for component backgrounds / hover states. Optional; components
  *   should fall back to `alpha(primary.main, ...)` if absent.
@@ -27,6 +28,10 @@ declare module "@mui/material/styles" {
     };
     /** Filled by `createTmiTableTheme`. Required on Theme after that factory runs. */
     detailPanelHero: DetailPanelHeroTokens;
+    /** Filled by `createTmiTableTheme`. Workspace detail-drawer modal z-index. */
+    tmiTableWorkspace: {
+      detailDrawerModalZ: number;
+    };
     checklist?: {
       circleSize: number;
       mainStepGap: number;
@@ -55,6 +60,9 @@ declare module "@mui/material/styles" {
       circleFontSize?: number;
     };
     detailPanelHero?: DetailPanelHeroTokens;
+    tmiTableWorkspace?: {
+      detailDrawerModalZ?: number;
+    };
   }
 
   interface PaletteColor {

@@ -1,8 +1,11 @@
 import { createTheme, type Theme } from "@mui/material/styles";
 import { buildDetailPanelHeroTokens } from "../shared-theme/detailPanelHeroTheme.js";
+import { workspaceDetailDrawerModalZ } from "../shared-theme/workspaceDetailDrawerZIndex.js";
 
 /**
- * Extends a consumer MUI theme with TMI table tokens (`detailPanelHero`).
+ * Extends a consumer MUI theme with TMI table tokens:
+ * `detailPanelHero` (incl. stats-strip meta colors) and
+ * `tmiTableWorkspace.detailDrawerModalZ` (drawer stacking).
  * Row hover/selection still comes from {@link getTableInteractionSkin} (palette-derived).
  */
 export function createTmiTableTheme(base: Theme): Theme {
@@ -18,5 +21,10 @@ export function createTmiTableTheme(base: Theme): Theme {
     tableRowLine: base.palette.divider,
   });
 
-  return createTheme(base, { detailPanelHero });
+  return createTheme(base, {
+    detailPanelHero,
+    tmiTableWorkspace: {
+      detailDrawerModalZ: workspaceDetailDrawerModalZ(base),
+    },
+  });
 }
