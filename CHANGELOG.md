@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+### Minor Changes
+
+- [#2](https://github.com/TMI-apps/tmi-ui/pull/2) [`12f5034`](https://github.com/TMI-apps/tmi-ui/commit/12f5034d04db828e92a18a6cad1953b9709c8b6f) Thanks [@TomFranse](https://github.com/TomFranse)! - Export TMI table Phase 2 public API (row satellites, column helper, table types, and `createTmiTableTheme`). Grid and workspace remain unexported.
+
 ## 1.0.0
 
 ### Major Changes
