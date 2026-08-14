@@ -14,20 +14,20 @@ There is **no SLA** for issues or pull requests; responses are best-effort.
 
 ## Contents
 
-| Component               | Since      | Peer deps beyond core                                                                   |
-| ----------------------- | ---------- | --------------------------------------------------------------------------------------- |
-| `ThumbnailPill`         | `0.1.0`    | `react-router-dom` (when `to` prop is used)                                             |
-| `VideoEmbedModal`       | `0.2.0`    | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                |
-| `PersistentStepperList` | `0.4.0`    | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
-| `textToStepperItems`    | `0.4.0`    | (parser only — no MUI)                                                                  |
-| `usePersistentSteps`    | `0.4.0`    | (hook only — `localStorage`)                                                            |
-| TMI table (Phase 2)     | unreleased | `@tanstack/react-table`; optional `createTmiTableTheme` for `theme.detailPanelHero`     |
+| Component               | Since    | Peer deps beyond core                                                                   |
+| ----------------------- | -------- | --------------------------------------------------------------------------------------- |
+| `ThumbnailPill`         | `0.1.0`  | `react-router-dom` (when `to` prop is used)                                             |
+| `VideoEmbedModal`       | `0.2.0`  | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                |
+| `PersistentStepperList` | `0.4.0`  | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`) |
+| `textToStepperItems`    | `0.4.0`  | (parser only — no MUI)                                                                  |
+| `usePersistentSteps`    | `0.4.0`  | (hook only — `localStorage`)                                                            |
+| TMI table (Phase 2–3)   | `1.1.0`+ | `@tanstack/react-table`; `createTmiTableTheme` for hero + workspace drawer z-index      |
 
 For the full prop surface of each component, read its source — the exported types are the canonical contract:
 
 - `ThumbnailPill` → `[src/ThumbnailPill/ThumbnailPill.tsx](src/ThumbnailPill/ThumbnailPill.tsx)`, `ThumbnailPillProps`.
 - `VideoEmbedModal` → `[src/VideoEmbedModal/VideoEmbedModal.tsx](src/VideoEmbedModal/VideoEmbedModal.tsx)`, `VideoEmbedModalProps`.
-- TMI table Phase 2 (satellites + types + `createTmiTableTheme`) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Grid/workspace stay unexported until a later ingest phase.
+- TMI table Phase 2–3 (satellites, workspace, detail/hero shell, `createTmiTableTheme`) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Grid (`TMITable` / `DatabaseViewer`) stays unexported until a later ingest phase.
 
 ## Peer dependencies
 
@@ -136,10 +136,31 @@ Currently augmented:
 
 - **`theme.thumbnailPill`** _(optional)_ — sizing for `ThumbnailPill` (defaults if omitted).
 - **`theme.palette.primary.surface`** / **`surfaceHover`** _(optional)_ — low-opacity primary tints.
+- **`theme.detailPanelHero`** / **`theme.tmiTableWorkspace`** — filled by `createTmiTableTheme(baseTheme)` before rendering table workspace/hero.
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
-**This library does not ship a full `createTheme`:** each app builds its own theme and may pass the optional tokens above.
+**This library does not ship a full `createTheme`:** each app builds its own theme and may pass the optional tokens above. For TMI table workspace and detail heroes, wrap the app theme with `createTmiTableTheme`.
+
+### TMI table workspace overlays (Decision #2)
+
+`TMITableWorkspace` installs an internal overlay-stack provider around the detail drawer so portaled menus (column menu, scope popover) stack above the drawer. That provider is **not** a public export — keep a single overlay stack in the **app** for non-table UI (video dialogs, autocomplete outside the workspace).
+
+For those app overlays, pass the same drawer z-index the workspace uses:
+
+```ts
+import {
+  createTmiTableTheme,
+  workspaceDetailDrawerModalZ,
+} from "@tmi-packages/ui";
+
+const theme = createTmiTableTheme(appTheme);
+const hostModalZ =
+  theme.tmiTableWorkspace.detailDrawerModalZ ??
+  workspaceDetailDrawerModalZ(theme);
+```
+
+Do not import `TMITable` / `DatabaseViewer` from this package yet (Phase 4). `UnsavedChangesDialog` takes the consumer’s edit-session state; `useRecordEditSession` stays in the app.
 
 ## Known limitations
 
