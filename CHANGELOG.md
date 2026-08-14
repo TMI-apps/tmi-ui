@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+### Minor Changes
+
+- [#5](https://github.com/TMI-apps/tmi-ui/pull/5) [`fe526a4`](https://github.com/TMI-apps/tmi-ui/commit/fe526a441cbe12ca0575dc82e55a1609945a307b) Thanks [@TomFranse](https://github.com/TomFranse)! - Export TMI table grid (`TMITable` / `DatabaseViewer`), overlay stack context, and grid utilities. `TMITable` no longer defaults to app `tableLoadDebug` logging.
+
 ## 1.2.0
 
 ### Minor Changes
