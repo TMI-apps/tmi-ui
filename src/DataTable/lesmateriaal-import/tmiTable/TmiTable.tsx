@@ -1,6 +1,4 @@
 import { useMemo, type ReactElement } from "react";
-import type { TMITableLoadSettledPayload } from "../shared-types/tmiTableConfig.types.js";
-import { logTableLoadSummary } from "../shared-utils/tableLoadDebug.js";
 import {
   DatabaseViewer,
   staticClientVirtualizedList,
@@ -12,13 +10,11 @@ import {
 
 export type TmiTableProps<TData extends object> = DatabaseViewerProps<TData>;
 
-function reportTableLoadSettled(payload: TMITableLoadSettledPayload): void {
-  logTableLoadSummary(payload as unknown as Record<string, unknown>);
-}
-
 /**
  * Company table master: TanStack Table + MUI shell ({@link DatabaseViewer}).
  * Display name: TMI-table.
+ *
+ * Does not default `debug.onTableLoadSettled` — inject from the app (e.g. `logTableLoadSummary`).
  */
 export function TMITable<TData extends object>(
   props: TmiTableProps<TData>,
@@ -31,7 +27,6 @@ export function TMITable<TData extends object>(
       ...base,
       tableLoadResetKey: base.tableLoadResetKey ?? tableLoadResetKey,
       debugTableContext: base.debugTableContext ?? debugTableContext,
-      onTableLoadSettled: base.onTableLoadSettled ?? reportTableLoadSettled,
     };
   }, [debug, tableLoadResetKey, debugTableContext]);
 

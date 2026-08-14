@@ -115,3 +115,78 @@ export {
 } from "./lesmateriaal-import/tmiTable/feedback/OptimisticTableFeedbackContext.js";
 export type { TmiTableLocaleText } from "./lesmateriaal-import/tmiTable/feedback/tmiTableLocaleText.js";
 export type { OptimisticTableFeedbackControls } from "./lesmateriaal-import/shared-types/optimisticTableFeedback.types.js";
+
+export {
+  PortaledOverlayStackProvider,
+  usePortaledOverlayPopperZIndex,
+  useWorkspaceDrawerOverlayZIndex,
+} from "./lesmateriaal-import/shared-context/PortaledOverlayStackContext.js";
+
+export {
+  DBV_REORDER_ROW_ID_ATTR,
+  computeDatabaseViewerRowDropZone,
+  resolveDatabaseViewerReorderRowElement,
+} from "./lesmateriaal-import/shared-utils/databaseViewerRowReorderZone.js";
+
+export {
+  getInitialColumnVisibilityFromColumns,
+  getPinnedCellSx,
+  treeRowCanExpand,
+  getTreeRowIndentBoundaryCellIndex,
+  getLeadingContentShiftDepth,
+} from "./lesmateriaal-import/tmiTable/table/databaseViewerTableModelUtils.js";
+
+export {
+  buildShiftRangeRowSelection,
+  buildModifierToggleRowSelection,
+  buildPlainClickRowSelection,
+  resolveDatabaseViewerRowSelectionFromClick,
+} from "./lesmateriaal-import/tmiTable/table/databaseViewerRowSelection.js";
+export type { DatabaseViewerRowSelectionClick } from "./lesmateriaal-import/tmiTable/table/databaseViewerRowSelection.js";
+
+export {
+  buildDatabaseViewerVirtualRowKey,
+  warnDuplicateDatabaseViewerVirtualRowKeys,
+} from "./lesmateriaal-import/tmiTable/table/databaseViewerVirtualRowKey.js";
+
+export { shouldClearRowSelectionForKeyChange } from "./lesmateriaal-import/tmiTable/table/databaseViewerClearRowSelection.js";
+
+export { useDatabaseViewerBodyRowInteractions } from "./lesmateriaal-import/tmiTable/table/useDatabaseViewerBodyRowInteractions.js";
+export type {
+  DatabaseViewerRowClickMeta,
+  DatabaseViewerRowSelectionConfig,
+} from "./lesmateriaal-import/tmiTable/table/useDatabaseViewerBodyRowInteractions.js";
+
+export {
+  TMITable,
+  staticClientVirtualizedList,
+} from "./lesmateriaal-import/tmiTable/TmiTable.js";
+export type {
+  TmiTableProps,
+  TmiTableProps as TMITableProps,
+  DatabaseViewerRowFileDrop,
+  TMITableServerInfinite,
+} from "./lesmateriaal-import/tmiTable/TmiTable.js";
+
+export {
+  DatabaseViewer,
+  databaseViewerTableHeaderLabelCellSx,
+  getDatabaseViewerBodyTableSx,
+  getDatabaseViewerHeaderTableSx,
+  getDatabaseViewerScrollContainerSx,
+  getDatabaseViewerStickyHeaderBgSx,
+} from "./lesmateriaal-import/tmiTable/table/index.js";
+export type { DatabaseViewerProps } from "./lesmateriaal-import/tmiTable/table/DatabaseViewer.js";
+export type { DatabaseViewerSurfaceMode } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";
+export type { DatabaseViewerColumnMenuState } from "./lesmateriaal-import/tmiTable/table/DatabaseViewerColumnMenu.js";
+export { HEADER_LONG_PRESS_MS } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";
+
+export { TmiRowReorderDndProvider } from "./lesmateriaal-import/tmiTable/context/TmiRowReorderDndProvider.js";
+export type { TmiRowReorderDndProviderProps } from "./lesmateriaal-import/tmiTable/context/TmiRowReorderDndProvider.js";
+
+export type {
+  DatabaseViewerScopeSummary,
+  DatabaseViewerScopeSummaryItem,
+  TMITableScopeSummary,
+  TMITableScopeSummaryItem,
+} from "./lesmateriaal-import/shared-types/tmiTableMeta.types.js";
