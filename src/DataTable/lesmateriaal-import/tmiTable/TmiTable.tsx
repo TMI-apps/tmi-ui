@@ -15,6 +15,8 @@ export type TmiTableProps<TData extends object> = DatabaseViewerProps<TData>;
  * Display name: TMI-table.
  *
  * Does not default `debug.onTableLoadSettled` — inject from the app (e.g. `logTableLoadSummary`).
+ * Omit `maxHeight` to fill remaining workspace/standalone height; pass a number to pin;
+ * pass `maxHeight={false}` for content-sized nested/dialog tables.
  */
 export function TMITable<TData extends object>(
   props: TmiTableProps<TData>,

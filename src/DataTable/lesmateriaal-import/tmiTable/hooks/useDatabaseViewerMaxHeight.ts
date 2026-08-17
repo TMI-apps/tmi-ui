@@ -2,9 +2,11 @@ import { useDatabaseTableDetailWorkspaceLayout } from "../context/DatabaseTableD
 import { useDatabaseTableDetailWorkspaceHeights } from "./useDatabaseTableDetailWorkspaceHeights.js";
 
 /**
- * `DatabaseViewer` / table `maxHeight` aligned with the table+detail workspace.
- * When rendered inside `TMITableWorkspace`, uses the provider value;
- * otherwise falls back to the same breakpoint hook (standalone tables).
+ * Layout `maxHeight` for the table+detail workspace (provider) or standalone breakpoint/`100%` fill.
+ *
+ * @deprecated Omit `maxHeight` on `TMITable` / `DatabaseViewer` to fill remaining height.
+ * Pass a number (or string) to pin. Pass `maxHeight={false}` for content-sized nested/dialog tables.
+ * Kept exported for one release for existing call sites.
  */
 export function useDatabaseViewerMaxHeight(): number | string {
   const ctx = useDatabaseTableDetailWorkspaceLayout();

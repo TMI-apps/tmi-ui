@@ -54,6 +54,8 @@ Uses:
 - Server infinite scroll via `serverInfinite`.
 - Fully client-loaded lists via `staticClientVirtualizedList(total)`.
 
+**Height:** omit `maxHeight` to fill; pass a number to pin; pass `maxHeight={false}` for content-sized nested/dialog tables. `useDatabaseViewerMaxHeight` is deprecated for this use case (still exported one release).
+
 Prefer:
 
 ```ts
@@ -136,10 +138,10 @@ SSOT type: `TMITableColumnMeta` from `@/components/common/tmiTable` (defined in 
 | Flag                        | Use                                                                       |
 | --------------------------- | ------------------------------------------------------------------------- |
 | `defaultHidden`             | Opt-in columns                                                            |
-| `isTreeColumn`              | Single hierarchy column with chevrons                                     |
+| `isTreeColumn`              | Single hierarchy column with chevrons (edge-to-edge, no text inset)       |
 | `treeRowIndentBoundary`     | Last column included in tree-depth row graphic indentation                |
-| `fullHeightInteractive`     | Full-cell interactive control                                             |
-| `iconSurrogateCell`         | Icon column hover tint (pair with `fullHeightInteractive` for icon cells) |
+| `fullHeightInteractive`     | Icon-only action column: no text inset (height stretch is default for all body cells) |
+| `iconSurrogateCell`         | Icon column hover tint (edge-to-edge, no text inset)                      |
 | `rowThumbnailCell`          | Full-bleed thumbnail                                                      |
 | `scopeSummaryHeaderTrigger` | “Wat je nu ziet” header trigger                                           |
 | `wrapCellContent`           | Body cell: allow wrapping / visible overflow (chips); default is single-line ellipsis |
@@ -149,7 +151,7 @@ SSOT type: `TMITableColumnMeta` from `@/components/common/tmiTable` (defined in 
 
 ## Row actions
 
-Use `TableRowActionButton` from `@/components/common/TableRowActionButton` for any icon/button in a row. Pair with `meta: { fullHeightInteractive: true }`. Call `event.stopPropagation()` when the row is also clickable.
+Use `TableRowActionButton` from `@/components/common/TableRowActionButton` for any icon/button in a row. Every body cell is a 48px stretch band (`p: 0`), so the button fills the row height. Use `fullHeightInteractive` / `iconSurrogateCell` / `isTreeColumn` only to drop the default horizontal text inset. Call `event.stopPropagation()` when the row is also clickable.
 
 References: `LesmateriaalRowActionsCell`, `LinkOpenCell`, `TableRowThumbnailShell`, `AirtableAttachmentThumbnailCell`.
 
@@ -224,7 +226,7 @@ Feature `*Table` components accept `selection?: TMITableSelectionConfig` only. `
 
 ## Import rules
 
-- **Feature / page / feature-hook code:** `@/components/common/tmiTable` only (public names: `TMITable`, `TMITableServerInfinite`, `TMITableColumnMeta`, `useDatabaseViewerMaxHeight`, config types).
+- **Feature / page / feature-hook code:** `@/components/common/tmiTable` only (public names: `TMITable`, `TMITableServerInfinite`, `TMITableColumnMeta`, config types). Omit `maxHeight` to fill; do not call `useDatabaseViewerMaxHeight` on page tables.
 - **Internals maintenance:** may import from `./table/...` **inside** this package; do not leak deep paths to features.
 
 ## Extension rules

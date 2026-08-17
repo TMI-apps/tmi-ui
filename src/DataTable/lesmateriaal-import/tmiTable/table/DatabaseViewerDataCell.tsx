@@ -63,45 +63,31 @@ export function DatabaseViewerDataCell<TData extends object>({
     meta,
   });
 
-  const inner =
-    meta?.fullHeightInteractive || meta?.rowThumbnailCell ? (
-      <Box
-        sx={getDatabaseViewerFullHeightCellInnerSx({
-          meta,
-          interactionSkinPreset,
-          leadingContentShiftDepth,
-          clipLeadingRowCorner: leadingContentShiftDepth > 0 && index === 0,
-        })}
-      >
-        {meta.isTreeColumn ? (
-          <DatabaseViewerTreeCellContent
-            row={row}
-            table={table}
-            treeRowExpandableOverride={treeRowExpandableOverride}
-            onTreeRowWillExpand={onTreeRowWillExpand}
-            treeRowPartiallyExpanded={treeRowPartiallyExpanded}
-            reorderTreeDragHandle={reorderTreeDragHandle}
-          >
-            {renderedCell}
-          </DatabaseViewerTreeCellContent>
-        ) : (
-          renderedCell
-        )}
-      </Box>
-    ) : meta?.isTreeColumn ? (
-      <DatabaseViewerTreeCellContent
-        row={row}
-        table={table}
-        treeRowExpandableOverride={treeRowExpandableOverride}
-        onTreeRowWillExpand={onTreeRowWillExpand}
-        treeRowPartiallyExpanded={treeRowPartiallyExpanded}
-        reorderTreeDragHandle={reorderTreeDragHandle}
-      >
-        {renderedCell}
-      </DatabaseViewerTreeCellContent>
-    ) : (
-      renderedCell
-    );
+  const inner = (
+    <Box
+      sx={getDatabaseViewerFullHeightCellInnerSx({
+        meta,
+        interactionSkinPreset,
+        leadingContentShiftDepth,
+        clipLeadingRowCorner: leadingContentShiftDepth > 0 && index === 0,
+      })}
+    >
+      {meta?.isTreeColumn ? (
+        <DatabaseViewerTreeCellContent
+          row={row}
+          table={table}
+          treeRowExpandableOverride={treeRowExpandableOverride}
+          onTreeRowWillExpand={onTreeRowWillExpand}
+          treeRowPartiallyExpanded={treeRowPartiallyExpanded}
+          reorderTreeDragHandle={reorderTreeDragHandle}
+        >
+          {renderedCell}
+        </DatabaseViewerTreeCellContent>
+      ) : (
+        renderedCell
+      )}
+    </Box>
+  );
 
   return (
     <TableCell

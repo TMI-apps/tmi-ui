@@ -39,6 +39,12 @@ import {
   useState,
 } from "react";
 import { useDatabaseViewerExpandedState } from "../hooks/useDatabaseViewerExpandedState.js";
+import { useDatabaseViewerMaxHeight } from "../hooks/useDatabaseViewerMaxHeight.js";
+import {
+  resolveTMITableMaxHeight,
+  tmiTableHeightMode,
+  type TMITableMaxHeightProp,
+} from "../hooks/resolveTMITableMaxHeight.js";
 import type { DatabaseViewerScopeSummary } from "../../shared-types/tmiTableMeta.types.js";
 import type { TableInteractionSkinPreset } from "../../shared-theme/tableInteractionSkin.js";
 import {
@@ -112,7 +118,12 @@ export interface DatabaseViewerProps<TData extends object> {
   onRowIntent?: (row: TData) => void;
   emptyMessage?: string;
   ariaLabel?: string;
-  maxHeight?: number | string;
+  /**
+   * Height policy for the virtualized grid (pixel/`100%` fill, not content auto-height).
+   * Omit to fill remaining workspace/standalone slot via {@link useDatabaseViewerMaxHeight}.
+   * Pass a number or CSS length to pin. Pass `false` for content-sized nested/dialog tables.
+   */
+  maxHeight?: TMITableMaxHeightProp;
   expandAllOnDataChange?: boolean;
   /**
    * When `expandAllOnDataChange` is false, only reset row expansion to collapsed when
@@ -240,7 +251,7 @@ export function DatabaseViewer<TData extends object>({
   onRowIntent,
   emptyMessage = "Geen resultaten gevonden.",
   ariaLabel = "Database viewer tabel",
-  maxHeight = 600,
+  maxHeight: maxHeightProp,
   expandAllOnDataChange = true,
   expandResetKey,
   initialSorting = DEFAULT_INITIAL_SORTING,
@@ -310,6 +321,13 @@ export function DatabaseViewer<TData extends object>({
   const resolvedTableLoadResetKey = debugConfig.tableLoadResetKey;
   const resolvedDebugTableContext = debugConfig.debugTableContext;
   const resolvedOnTableLoadSettled = debugConfig.onTableLoadSettled;
+  const layoutMaxHeight = useDatabaseViewerMaxHeight();
+  const resolvedMaxHeight = resolveTMITableMaxHeight(
+    maxHeightProp,
+    layoutMaxHeight,
+  );
+  const fillHeight = resolvedMaxHeight === "100%";
+  const heightMode = tmiTableHeightMode(resolvedMaxHeight);
   const [summaryAnchorEl, setSummaryAnchorEl] = useState<HTMLElement | null>(
     null,
   );
@@ -843,13 +861,11 @@ export function DatabaseViewer<TData extends object>({
 
   const colCount = table.getVisibleLeafColumns().length;
 
-  // When `maxHeight` is `"100%"` the viewer is expected to fill a parent that
+  // When resolved height is `"100%"` the viewer is expected to fill a parent that
   // has a defined, bounded height (e.g. a flex:1 / min-height:0 cell inside a
-  // viewport-height container). Percentage `maxHeight` alone cannot stretch a
+  // viewport-height container). Percentage height alone cannot stretch a
   // shrink-wrapped flex item, so we additionally set `height: 100%` and turn
   // the surface into a flex column that lets the body region flex to fill.
-  const fillHeight = maxHeight === "100%";
-
   const content = (
     <>
       {rowSelectionEnabled && selectedRowCount > 0 ? (
@@ -872,12 +888,15 @@ export function DatabaseViewer<TData extends object>({
       ) : null}
       <Box
         ref={viewerWrapperRef}
+        data-tmi-table-height-mode={heightMode}
         sx={{
           display: "flex",
           flexDirection: "column",
           ...(fillHeight
             ? { height: "100%", flex: 1, minHeight: 0 }
-            : { maxHeight, minHeight: 0 }),
+            : resolvedMaxHeight !== undefined
+              ? { maxHeight: resolvedMaxHeight, minHeight: 0 }
+              : { minHeight: 0 }),
           width: "100%",
           position: "relative",
         }}

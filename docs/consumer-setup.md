@@ -35,6 +35,8 @@ pnpm add @tmi-packages/ui
 
 (Same as [installation.md § Install](./installation.md#1-install-the-package): unpinned add = latest; then commit lockfile. Pin a `^x.y.z` range in `package.json` when **your** team wants upgrade boundaries — see Releases on the tmi-ui repo.)
 
+`^1.2.0` allows later **1.x** patches and minors (new optional API, bugfixes) and **does not** install **2.0.0**. A lockfile keeps the exact version until the app runs an update. Majors require an explicit range bump and a compile/UI pass. Library classification rules: [CONTRIBUTING.md — Public API and semver](../CONTRIBUTING.md#public-api-and-semver).
+
 ## 5. MUI types — no duplicate augmentations
 
 If the app had local `declare module "@mui/material/styles"` blocks for `thumbnailPill` or `primary.surface` / `surfaceHover`, **remove** those duplicates. Import the library for side effects where you bootstrap MUI types (e.g. next to your existing MUI type imports):

@@ -20,6 +20,7 @@ export {
   getDatabaseViewerStickyHeaderBgSx,
 } from "./table/index.js";
 export type { DatabaseViewerProps } from "./table/DatabaseViewer.js";
+export type { TMITableMaxHeightProp } from "./hooks/resolveTMITableMaxHeight.js";
 export type { DatabaseViewerSurfaceMode } from "./table/databaseViewerConstants.js";
 export type { DatabaseViewerColumnMenuState } from "./table/DatabaseViewerColumnMenu.js";
 export { HEADER_LONG_PRESS_MS } from "./table/databaseViewerConstants.js";

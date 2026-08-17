@@ -81,11 +81,12 @@ This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts`
 | Area          | Symbols                                                                                                                                                      |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Grid          | `TMITable`, `DatabaseViewer` (deprecated alias), `staticClientVirtualizedList`                                                                               |
-| Workspace     | `TMITableWorkspace`, layout hooks/contexts (`useDatabaseViewerMaxHeight`, `useDatabaseTableDetailWorkspaceHeights`, …)                                       |
+| Workspace     | `TMITableWorkspace`, layout hooks/contexts (`useDatabaseViewerMaxHeight` / `useTMITableMaxHeight` deprecated for fill-height; omit `maxHeight` instead)      |
 | Detail / hero | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`, `DetailPanelHeroStatsStrip`, `DetailPanelSectionHeading`, `UnsavedChangesDialog`, `RecordWorkspaceShell` |
 | Overlay       | `PortaledOverlayStackProvider`, `usePortaledOverlayPopperZIndex`, `useWorkspaceDrawerOverlayZIndex`, `workspaceDetailDrawerModalZ`                           |
 | Reorder       | `TmiRowReorderDndProvider`                                                                                                                                   |
 | Thumbnails    | `createAirtableAttachmentThumbnailColumn`, `TableRowThumbnailShell`, `AirtableAttachmentThumbnailCell`                                                       |
+| Row actions   | `TableRowActionButton`                                                                                                                                       |
 | Feedback      | `OptimisticTableFeedbackProvider`, `useOptimisticTableFeedback`, `TmiTableLocaleText`                                                                        |
 
 ### Theme
@@ -126,7 +127,13 @@ const columns: ColumnDef<Row>[] = [{ accessorKey: "name", header: "Name" }];
 />;
 ```
 
+**Height:** omit `maxHeight` to fill remaining space in `TMITableWorkspace` / `RecordWorkspaceShell` (or the standalone breakpoint / `100%` slot the layout hook already uses — not a raw `100vh`). Pass a number to pin (`maxHeight={600}`). Pass `maxHeight={false}` for content-sized nested/dialog/compact tables so they do not stretch to the workspace. Virtualization still uses a real pixel/`100%` box when filling; do not treat omit as content auto-height.
+
+`useDatabaseViewerMaxHeight` / `useTMITableMaxHeight` stay exported for one release but are **deprecated** for this use case.
+
 Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree`. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`.
+
+Body cells are a **48px** stretch band (`p: 0`). `TableRowActionButton` fills that height (chevrons, icon columns, custom actions). Default content keeps a 16px horizontal inset; set `meta.fullHeightInteractive`, `iconSurrogateCell`, or `isTreeColumn` to drop it. Do not set `fullHeightInteractive` on plain text columns.
 
 ### Workspace
 
@@ -269,11 +276,13 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Versioning
 
-- **MAJOR** — breaking API changes (coordinate with consumers).
-- **MINOR** — new components or non-breaking additions.
-- **PATCH** — bug fixes; docs-only consumer guidance.
+Follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Extending an existing component does **not** break apps if existing props, exports, and defaults stay valid.
 
-Full history: [CHANGELOG.md](./CHANGELOG.md).
+- **MAJOR** — breaking API or behavior (coordinate with consumers).
+- **MINOR** — additive surface (new components, optional props, tokens with fallbacks).
+- **PATCH** — bug fixes; docs-only consumer guidance; no intended contract change.
+
+How to classify a change, deprecation, and opt-in vs default flips: [CONTRIBUTING.md — Public API and semver](./CONTRIBUTING.md#public-api-and-semver). Pipeline: [docs/release-flow.md](./docs/release-flow.md). History: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Quick reference
 

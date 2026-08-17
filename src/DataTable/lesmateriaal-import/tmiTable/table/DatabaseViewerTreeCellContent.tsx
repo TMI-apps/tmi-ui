@@ -108,6 +108,9 @@ export function DatabaseViewerTreeCellContent<TData extends object>({
               : (reorderTreeDragHandle.listeners ?? {}))}
             onPointerDown={(event) => {
               event.stopPropagation();
+              if (!reorderTreeDragHandle.disabled) {
+                reorderTreeDragHandle.listeners?.onPointerDown?.(event);
+              }
             }}
           >
             <DragIndicatorOutlined fontSize="small" aria-hidden />

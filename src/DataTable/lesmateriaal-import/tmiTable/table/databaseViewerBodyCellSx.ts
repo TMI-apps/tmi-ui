@@ -13,6 +13,7 @@ import {
 } from "./databaseViewerColumnSizeStyle.js";
 import { getPinnedCellSx } from "./databaseViewerTableModelUtils.js";
 import {
+  DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
   DATABASE_VIEWER_TREE_ROW_INDENT_SPACING_UNITS,
   getDatabaseViewerTreeRowIndentCss,
 } from "./databaseViewerTableStyles.js";
@@ -64,14 +65,42 @@ function viewerIconColumnWidthConstraints(
   return getDatabaseViewerIconSurrogateWidthSx(columnWidthCss);
 }
 
+/**
+ * Edge-to-edge interactive cells (no default text inset). Tree chevrons,
+ * icon surrogates, thumbnails, and explicit action columns.
+ * Every body cell uses the 48px stretch band; this only skips horizontal
+ * content padding so row action buttons can fill the bar.
+ */
+export function databaseViewerCellIsEdgeToEdgeInteractive(
+  meta: DatabaseViewerColumnMeta | undefined,
+): boolean {
+  return Boolean(
+    meta?.fullHeightInteractive ||
+    meta?.rowThumbnailCell ||
+    meta?.isTreeColumn ||
+    meta?.iconSurrogateCell,
+  );
+}
+
 function viewerFullHeightCellBandSx(
   meta: DatabaseViewerColumnMeta | undefined,
-): { p: 0; position: "relative"; height: number } | undefined {
-  if (!meta?.fullHeightInteractive && !meta?.rowThumbnailCell) return undefined;
+): {
+  p: 0;
+  position: "relative";
+  height?: number;
+  minHeight?: number;
+} {
+  if (meta?.wrapCellContent) {
+    return {
+      p: 0,
+      position: "relative",
+      minHeight: DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+    };
+  }
   return {
     p: 0,
     position: "relative",
-    height: 48,
+    height: DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
   };
 }
 
@@ -97,15 +126,13 @@ function viewerCellTextFlowSx(
 }
 
 function viewerDragOverSx(params: {
-  meta: DatabaseViewerColumnMeta | undefined;
   isDragOver: boolean;
   isFirst: boolean;
   isLast: boolean;
 }): Record<string, unknown> | undefined {
-  const { meta, isDragOver, isFirst, isLast } = params;
+  const { isDragOver, isFirst, isLast } = params;
   if (!isDragOver) return undefined;
   return {
-    ...(meta?.fullHeightInteractive ? {} : { position: "relative" }),
     "&::after": getDatabaseViewerDragAfterSx(isFirst, isLast),
   };
 }
@@ -243,12 +270,11 @@ export function getDatabaseViewerBodyTableCellSx<TData extends object>(params: {
   const cellWidthPx = cell.column.getSize();
 
   const iconSx = viewerIconColumnWidthConstraints(meta, columnWidthCss);
-  const heightBandSx = viewerFullHeightCellBandSx(meta);
 
   return {
     width: columnWidthCss,
     ...(iconSx ?? {}),
-    ...(heightBandSx ?? {}),
+    ...viewerFullHeightCellBandSx(meta),
     ...viewerCellTextFlowSx(meta),
     ...(leadingContentShiftDepth > 0 ? { overflow: "visible" } : {}),
     ...viewerCellPaintSx({
@@ -262,7 +288,7 @@ export function getDatabaseViewerBodyTableCellSx<TData extends object>(params: {
     }),
     borderBottom: "none",
     borderRadius: getDatabaseViewerDataCellCornerRadius(isFirst, isLast),
-    ...(viewerDragOverSx({ meta, isDragOver, isFirst, isLast }) ?? {}),
+    ...(viewerDragOverSx({ isDragOver, isFirst, isLast }) ?? {}),
     ...getPinnedCellSx(cell.column),
   };
 }
@@ -321,10 +347,21 @@ export function getDatabaseViewerFullHeightCellInnerSx({
       },
     };
   }
+  if (databaseViewerCellIsEdgeToEdgeInteractive(meta)) {
+    return {
+      ...fullHeightCellInnerBaseSx,
+      ...leadingShiftSx,
+      ...leadingCornerSx,
+      justifyContent: "center",
+    };
+  }
   return {
     ...fullHeightCellInnerBaseSx,
     ...leadingShiftSx,
     ...leadingCornerSx,
-    justifyContent: "center",
+    alignItems: "center",
+    px: 2,
+    minWidth: 0,
+    width: "100%",
   };
 }
