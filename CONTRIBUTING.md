@@ -47,8 +47,10 @@ External contributors without direct repo access: **fork** and open a PR as usua
 2. Export the component and public **types** from [`src/index.ts`](./src/index.ts) (same `*.js` import specifiers as the rest of this package).
 3. Add tests under **`tests/<Name>.test.tsx`** (or `.ts` for non-React logic).
 4. Optional **MUI theme tokens:** extend [`src/theme.ts`](./src/theme.ts) only; components must **degrade gracefully** when tokens are absent.
-5. Update [`README.md`](./README.md) (contents table, peers, smoke notes, **TMI table** section) when consumers need to know.
+5. Update [`README.md`](./README.md) (contents table, peers, smoke notes, **Integration ledger** for affected components) when consumers need to know.
 6. Run **`pnpm changeset`** — typically **minor** for new API surface, **patch** for fixes; see [Public API and semver](#public-api-and-semver) if the change might alter existing call sites or defaults.
+
+**Consumer integration:** process skill lives in [`.agents/skills/adopt-from-tmi-ui/`](./.agents/skills/adopt-from-tmi-ui/SKILL.md) (published in the npm tarball). Maintainer workflow skills stay under `.cursor/skills/`. **New or changed public export → add/update the matching Integration ledger row** in README. If README exceeds ~500 lines, split ledgers to `docs/ledgers/` (link from README) in a follow-up.
 
 **Visual checks in a real app** are outside this repo: while developing, use **`pnpm link`** or a **`file:`** dependency from a consumer app (or an internal playground) so components run in full app context.
 

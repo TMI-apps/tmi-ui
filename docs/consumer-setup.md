@@ -2,6 +2,8 @@
 
 Use this when adding `@tmi-packages/ui` to **your application** (or your team’s app template / boilerplate).
 
+**Adopt protocol:** integration ledgers live in the [package README](../README.md#components). Copy the [adopt skill](#5-adopt-skill-cursor) into your app so Cursor agents follow infer → wire → skip-walk.
+
 ## 1. Preflight — peer major versions
 
 Align these in the app before adding the dependency (see `package.json` peer ranges):
@@ -37,7 +39,27 @@ pnpm add @tmi-packages/ui
 
 `^1.2.0` allows later **1.x** patches and minors (new optional API, bugfixes) and **does not** install **2.0.0**. A lockfile keeps the exact version until the app runs an update. Majors require an explicit range bump and a compile/UI pass. Library classification rules: [CONTRIBUTING.md — Public API and semver](../CONTRIBUTING.md#public-api-and-semver).
 
-## 5. MUI types — no duplicate augmentations
+## 5. Adopt skill (Cursor)
+
+After **every** `pnpm add` / `pnpm update` of `@tmi-packages/ui`, copy the integration skill into your app so agents use the README ledgers and skip-walk protocol:
+
+**Unix / macOS / Git Bash:**
+
+```bash
+mkdir -p .agents/skills
+cp -r node_modules/@tmi-packages/ui/.agents/skills/adopt-from-tmi-ui .agents/skills/
+```
+
+**PowerShell:**
+
+```powershell
+New-Item -ItemType Directory -Force -Path .agents/skills | Out-Null
+Copy-Item -Recurse -Force node_modules/@tmi-packages/ui/.agents/skills/adopt-from-tmi-ui .agents/skills/
+```
+
+Recopy when the package minor changes — the skill’s `forPackageVersion` should match your installed version.
+
+## 6. MUI types — no duplicate augmentations
 
 If the app had local `declare module "@mui/material/styles"` blocks for `thumbnailPill` or `primary.surface` / `surfaceHover`, **remove** those duplicates. Import the library for side effects where you bootstrap MUI types (e.g. next to your existing MUI type imports):
 
@@ -45,11 +67,11 @@ If the app had local `declare module "@mui/material/styles"` blocks for `thumbna
 import "@tmi-packages/ui";
 ```
 
-## 6. Vendored copies
+## 7. Vendored copies
 
 If the app had a local copy of `ThumbnailPill` / `VideoEmbedModal`, delete it and import from `@tmi-packages/ui`.
 
-## 7. Verify
+## 8. Verify
 
 - `pnpm type-check && pnpm build`
 - Quick UI: render `ThumbnailPill` and a `VideoEmbedModal` on a dev route.
@@ -73,4 +95,5 @@ If the app used the old name **`@tmi-apps/ui`** or installed from **GitHub Packa
 ## See also
 
 - [installation.md](./installation.md) — install details and CI edge cases
+- [README — Components / integration ledgers](../README.md#components) — capability catalog per export
 - [README — TMI table](../README.md#tmi-table) — grid public API

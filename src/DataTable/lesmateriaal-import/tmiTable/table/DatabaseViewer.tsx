@@ -100,9 +100,12 @@ import { DatabaseViewerInlineErrorBanner } from "./DatabaseViewerInlineErrorBann
 
 const DEFAULT_INITIAL_SORTING: SortingState = [];
 
+/** Column defs from the app's `@tanstack/react-table` resolve (pnpm peer symlink type identity). */
+export type TMITableColumnDef<TData extends object> = ColumnDef<TData, any>;
+
 export interface DatabaseViewerProps<TData extends object> {
   data: TData[];
-  columns: Array<ColumnDef<TData, unknown>>;
+  columns: Array<TMITableColumnDef<TData>>;
   loading: boolean;
   /**
    * When true, shows a scrim + spinner over the table (headers + body) while
