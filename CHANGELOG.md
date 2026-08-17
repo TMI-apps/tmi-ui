@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0
+
+### Minor Changes
+
+- [#9](https://github.com/TMI-apps/tmi-ui/pull/9) [`9dbaf78`](https://github.com/TMI-apps/tmi-ui/commit/9dbaf78d1416efaa817b76a2e0be1e012f18b00d) Thanks [@TomFranse](https://github.com/TomFranse)! - Publish adopt-from-tmi-ui agent skill in the npm tarball; add Integration ledgers for all public exports in README.
+
+  Export `TMITableColumnDef`, `logTableLoadSummary`, `isTableLoadDebugEnabled`, `TABLE_LOAD_DEBUG_LOG_PREFIX`, and `TMITableLoadSettledPayload`. Widen `DatabaseViewer` column typing for pnpm peer identity. Remove legacy `debug:lesmateriaalTableLoad` localStorage key.
+
+  Recopy `.agents/skills/adopt-from-tmi-ui` into consumer apps after every package bump.
+
 ## 1.4.0
 
 ### Minor Changes
