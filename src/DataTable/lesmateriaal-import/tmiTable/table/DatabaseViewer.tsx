@@ -101,6 +101,7 @@ import { DatabaseViewerInlineErrorBanner } from "./DatabaseViewerInlineErrorBann
 const DEFAULT_INITIAL_SORTING: SortingState = [];
 
 /** Column defs from the app's `@tanstack/react-table` resolve (pnpm peer symlink type identity). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TanStack ColumnDef is invariant in TValue; wide TValue at package boundary
 export type TMITableColumnDef<TData extends object> = ColumnDef<TData, any>;
 
 export interface DatabaseViewerProps<TData extends object> {
