@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+### Patch Changes
+
+- [#7](https://github.com/TMI-apps/tmi-ui/pull/7) [`5b6cfcc`](https://github.com/TMI-apps/tmi-ui/commit/5b6cfccc65825de6a09ed737bc734b248bb57816) Thanks [@TomFranse](https://github.com/TomFranse)! - README is the TMI table public-API SSOT (extract-complete surface is 1.3.x). Documents Vite `optimizeDeps.include` (never exclude).
+
 ## 1.3.0
 
 ### Minor Changes
