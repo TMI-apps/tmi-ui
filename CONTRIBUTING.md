@@ -47,15 +47,32 @@ External contributors without direct repo access: **fork** and open a PR as usua
 2. Export the component and public **types** from [`src/index.ts`](./src/index.ts) (same `*.js` import specifiers as the rest of this package).
 3. Add tests under **`tests/<Name>.test.tsx`** (or `.ts` for non-React logic).
 4. Optional **MUI theme tokens:** extend [`src/theme.ts`](./src/theme.ts) only; components must **degrade gracefully** when tokens are absent.
-5. Update [`README.md`](./README.md) (contents table, peers, smoke notes) when consumers need to know.
-6. Run **`pnpm changeset`** — typically **minor** for new API surface, **patch** for fixes.
+5. Update [`README.md`](./README.md) (contents table, peers, smoke notes, **TMI table** section) when consumers need to know.
+6. Run **`pnpm changeset`** — typically **minor** for new API surface, **patch** for fixes; see [Public API and semver](#public-api-and-semver) if the change might alter existing call sites or defaults.
 
 **Visual checks in a real app** are outside this repo: while developing, use **`pnpm link`** or a **`file:`** dependency from a consumer app (or an internal playground) so components run in full app context.
 
 ## Rules
 
-- **No imports** from app layers: no data clients, no Airtable/Supabase types, no app path aliases (`@/…` from consumers). This package only uses React, MUI, Emotion, and `react-router-dom` (peer).
+- **No imports** from app layers: no data clients, no Airtable/Supabase types, no app path aliases (`@/…` from consumers). Runtime stays on declared **peerDependencies** (React, MUI, Emotion, router, TanStack table/virtual, dnd-kit).
 - **Peer dependencies** — do not add runtime dependencies on things the app should own; use `peerDependencies` and document in `README.md`.
+- **Public API** — only what `src/index.ts` exports (and documented theme tokens) is a consumer contract. Keep internals unexported. Prefer optional props, slots, or new exports over required new config. Consumer how-to for the table lives in [`README.md` § TMI table](./README.md#tmi-table).
+
+## Public API and semver
+
+This follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Extending an existing component is **not** breaking if old call sites and defaults still work.
+
+| Changeset | Use when                                                        | Typical examples                                                                                                                                                        |
+| --------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **patch** | Fix; no intended API or default change                          | Bugfix, docs-only SSOT updates, internal refactor with identical public behavior                                                                                        |
+| **minor** | Additive; existing usage still type-checks and behaves the same | New component; new **optional** prop; new export; new theme token with a fallback; `@deprecated` on an old path while it still works                                    |
+| **major** | Existing consumer code can fail at compile or runtime           | Rename/remove export or prop; optional → required; change a default apps already rely on; incompatible TypeScript shape; peer **major** bump without dual-range support |
+
+**Do not** ship a silent default flip for new behavior. Prefer an opt-in flag (default off) in a **minor**, then change the default (or remove the old path) in the next **major**. Deprecate in a minor; remove in a major. Coordinate majors with consuming apps before merge.
+
+Adding fields to **input** props is usually a minor. Changing **output** / callback payload shapes, or types consumers exhaustively switch on, often needs a major.
+
+Consumers typically depend on `^1.x` plus a lockfile: they take patches and minors when **they** update; they do **not** take `2.0.0` until they bump the range. See [docs/consumer-setup.md](./docs/consumer-setup.md).
 
 ## Releases
 
