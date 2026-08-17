@@ -1,10 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { TMITableLoadSettledPayload } from "../../../../src/DataTable/lesmateriaal-import/shared-types/tmiTableConfig.types.js";
+
+const envMocks = vi.hoisted(() => ({
+  isViteDevBuild: vi.fn(() => false),
+}));
+
+vi.mock(
+  "../../../../src/DataTable/lesmateriaal-import/shared-utils/tableLoadDebugEnv.js",
+  () => ({
+    isViteDevBuild: envMocks.isViteDevBuild,
+  }),
+);
+
 import {
   isTableLoadDebugEnabled,
   logTableLoadSummary,
   TABLE_LOAD_DEBUG_LOG_PREFIX,
 } from "../../../../src/DataTable/lesmateriaal-import/shared-utils/tableLoadDebug.js";
-import type { TMITableLoadSettledPayload } from "../../../../src/DataTable/lesmateriaal-import/shared-types/tmiTableConfig.types.js";
 
 const payload: TMITableLoadSettledPayload = {
   event: "table_load_settled",
@@ -16,6 +28,7 @@ const payload: TMITableLoadSettledPayload = {
 
 describe("tableLoadDebug", () => {
   beforeEach(() => {
+    envMocks.isViteDevBuild.mockReturnValue(false);
     vi.stubGlobal("window", {
       location: { hostname: "example.com" },
       localStorage: {
@@ -27,6 +40,7 @@ describe("tableLoadDebug", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+    envMocks.isViteDevBuild.mockReset();
   });
 
   describe("isTableLoadDebugEnabled", () => {
@@ -52,6 +66,11 @@ describe("tableLoadDebug", () => {
           ),
         },
       });
+      expect(isTableLoadDebugEnabled()).toBe(true);
+    });
+
+    it("returns true in Vite dev builds", () => {
+      envMocks.isViteDevBuild.mockReturnValue(true);
       expect(isTableLoadDebugEnabled()).toBe(true);
     });
 

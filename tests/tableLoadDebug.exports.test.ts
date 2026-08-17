@@ -3,7 +3,7 @@ import {
   isTableLoadDebugEnabled,
   logTableLoadSummary,
   TABLE_LOAD_DEBUG_LOG_PREFIX,
-} from "../../src/index.js";
+} from "../src/index.js";
 
 describe("tableLoadDebug public exports", () => {
   it("re-exports debug helpers from package entry", () => {

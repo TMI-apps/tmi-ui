@@ -82,24 +82,24 @@ This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts`
 
 Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a profile (`browse-only` vs `workspace+detail`), wire package APIs below, then **skip-walk** every unwired row with the human.
 
-| Capability | Package API | If skipped |
-| ---------- | ----------- | ---------- |
-| Browse grid | `TMITable` + `columns` + `serverInfinite` | Do not build a custom grid / fork TanStack in the app |
-| Workspace shell | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`) | Do not build a custom split layout |
-| Client list | `staticClientVirtualizedList(n)` | Do not hand-roll infinite scroll for all-client data |
-| Server infinite | `serverInfinite` (`TMITableServerInfinite`) | Do not paginate `data` inside the app table wrapper |
-| Tree rows | `tree` / `getSubRows` | Do not build a parallel tree UI |
-| Row reorder | `TmiRowReorderDndProvider` + `rowReorder` | Do not add a second DnD context for the grid |
-| Row selection | `selection` / `enableRowSelection` | Do not build custom multi-select chrome (export stays app) |
-| Filter prompt | `filterPromptActive` on workspace | Do not hide the table with ad-hoc empty states |
-| Optimistic feedback | `OptimisticTableFeedbackProvider` | Do not duplicate pending-row snackbar logic |
-| Detail hero / edit | `TMITableDetailEditPanel`, `DetailPanelHeroHeader` | Do not rebuild hero chrome |
-| Overlay z-index | `usePortaledOverlayPopperZIndex` from **this package** | Do not add a second `PortaledOverlayStack` context |
-| Vite dev | `optimizeDeps.include: ["@tmi-packages/ui"]` | Do not exclude the package |
-| Fill height | omit `maxHeight` (or `false` for nested) | Do not call deprecated `useTMITableMaxHeight` for fill |
-| Load debug | `debug.onTableLoadSettled: logTableLoadSummary` | Do not wrap `TMITable` in an app logger component |
-| Theme | `createTmiTableTheme` | Do not duplicate hero/workspace theme keys |
-| **Out of package** | edit session, xlsx export, feature columns, RPC | Stay in the app — do not move into wrappers |
+| Capability          | Package API                                                | If skipped                                                 |
+| ------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| Browse grid         | `TMITable` + `columns` + `serverInfinite`                  | Do not build a custom grid / fork TanStack in the app      |
+| Workspace shell     | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`) | Do not build a custom split layout                         |
+| Client list         | `staticClientVirtualizedList(n)`                           | Do not hand-roll infinite scroll for all-client data       |
+| Server infinite     | `serverInfinite` (`TMITableServerInfinite`)                | Do not paginate `data` inside the app table wrapper        |
+| Tree rows           | `tree` / `getSubRows`                                      | Do not build a parallel tree UI                            |
+| Row reorder         | `TmiRowReorderDndProvider` + `rowReorder`                  | Do not add a second DnD context for the grid               |
+| Row selection       | `selection` / `enableRowSelection`                         | Do not build custom multi-select chrome (export stays app) |
+| Filter prompt       | `filterPromptActive` on workspace                          | Do not hide the table with ad-hoc empty states             |
+| Optimistic feedback | `OptimisticTableFeedbackProvider`                          | Do not duplicate pending-row snackbar logic                |
+| Detail hero / edit  | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`         | Do not rebuild hero chrome                                 |
+| Overlay z-index     | `usePortaledOverlayPopperZIndex` from **this package**     | Do not add a second `PortaledOverlayStack` context         |
+| Vite dev            | `optimizeDeps.include: ["@tmi-packages/ui"]`               | Do not exclude the package                                 |
+| Fill height         | omit `maxHeight` (or `false` for nested)                   | Do not call deprecated `useTMITableMaxHeight` for fill     |
+| Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`            | Do not wrap `TMITable` in an app logger component          |
+| Theme               | `createTmiTableTheme`                                      | Do not duplicate hero/workspace theme keys                 |
+| **Out of package**  | edit session, xlsx export, feature columns, RPC            | Stay in the app — do not move into wrappers                |
 
 ### Public exports
 
@@ -175,11 +175,11 @@ import { TMITableWorkspace } from "@tmi-packages/ui";
 
 ### Injection
 
-| Knob                       | Default               | App                                                                               |
-| -------------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| Knob                       | Default               | App                                                                          |
+| -------------------------- | --------------------- | ---------------------------------------------------------------------------- |
 | `debug.onTableLoadSettled` | **no-op**             | Pass `logTableLoadSummary` from the package when you want dev load summaries |
-| `TmiTableLocaleText`       | English-ish built-ins | `OptimisticTableFeedbackProvider` / `UnsavedChangesDialog`                        |
-| DnD                        | off                   | `TmiRowReorderDndProvider` + `rowReorder`                                         |
+| `TmiTableLocaleText`       | English-ish built-ins | `OptimisticTableFeedbackProvider` / `UnsavedChangesDialog`                   |
+| DnD                        | off                   | `TmiRowReorderDndProvider` + `rowReorder`                                    |
 
 ### Overlay
 
@@ -236,13 +236,13 @@ Full prop surface (`ThumbnailPillProps`):
 
 ### Integration ledger
 
-| Capability | Package API | If skipped |
-| ---------- | ----------- | ---------- |
-| Navigation | `to` + `react-router-dom` | Use `onClick` + your router — do not fork `Link` styling |
-| Click action | `onClick` | Do not wrap in a custom button component |
-| App bar styling | `variant="appBar"` | Do not duplicate primary-surface pill CSS |
-| Thumbnail | `thumbnail` / `thumbnailPlaceholder` | Do not build a second thumb shell |
-| Tooltip | `tooltip` | Do not add a parallel tooltip wrapper |
+| Capability      | Package API                          | If skipped                                               |
+| --------------- | ------------------------------------ | -------------------------------------------------------- |
+| Navigation      | `to` + `react-router-dom`            | Use `onClick` + your router — do not fork `Link` styling |
+| Click action    | `onClick`                            | Do not wrap in a custom button component                 |
+| App bar styling | `variant="appBar"`                   | Do not duplicate primary-surface pill CSS                |
+| Thumbnail       | `thumbnail` / `thumbnailPlaceholder` | Do not build a second thumb shell                        |
+| Tooltip         | `tooltip`                            | Do not add a parallel tooltip wrapper                    |
 
 ### `VideoEmbedModal`
 
@@ -278,12 +278,12 @@ Supported URL shapes:
 
 ### Integration ledger
 
-| Capability | Package API | If skipped |
-| ---------- | ----------- | ---------- |
-| Open / close | `open`, `onClose` | Do not build a second modal shell |
-| URL providers | `url` (YouTube/Vimeo) | Do not embed iframes manually for supported URLs |
-| Unsupported URL | component returns `null` | Do not try/catch around render — pass URL as-is |
-| a11y label | `closeAriaLabel` | Do not omit close button labeling |
+| Capability      | Package API              | If skipped                                       |
+| --------------- | ------------------------ | ------------------------------------------------ |
+| Open / close    | `open`, `onClose`        | Do not build a second modal shell                |
+| URL providers   | `url` (YouTube/Vimeo)    | Do not embed iframes manually for supported URLs |
+| Unsupported URL | component returns `null` | Do not try/catch around render — pass URL as-is  |
+| a11y label      | `closeAriaLabel`         | Do not omit close button labeling                |
 
 ### `PersistentStepperList`
 
@@ -299,12 +299,12 @@ import {
 
 ### Integration ledger
 
-| Capability | Package API | If skipped |
-| ---------- | ----------- | ---------- |
-| Checklist UI | `PersistentStepperList` | Do not rebuild stepper chrome |
-| Parsed steps | `textToStepperItems` | Do not duplicate line parser |
-| Persisted state | `usePersistentSteps` | Do not add a second storage hook |
-| Sizing tokens | `theme.checklist` (optional) | Component falls back to built-in defaults |
+| Capability      | Package API                  | If skipped                                |
+| --------------- | ---------------------------- | ----------------------------------------- |
+| Checklist UI    | `PersistentStepperList`      | Do not rebuild stepper chrome             |
+| Parsed steps    | `textToStepperItems`         | Do not duplicate line parser              |
+| Persisted state | `usePersistentSteps`         | Do not add a second storage hook          |
+| Sizing tokens   | `theme.checklist` (optional) | Component falls back to built-in defaults |
 
 ## Theme integration
 
@@ -351,14 +351,14 @@ How to classify a change, deprecation, and opt-in vs default flips: [CONTRIBUTIN
 
 ## Quick reference
 
-| What               | Where                     |
-| ------------------ | ------------------------- |
-| Source             | `src/`                    |
-| Build output       | `dist/` (gitignored)      |
-| Theme augmentation | `src/theme.ts`            |
-| TMI table API      | [§ TMI table](#tmi-table) |
+| What               | Where                                                                                                                |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Source             | `src/`                                                                                                               |
+| Build output       | `dist/` (gitignored)                                                                                                 |
+| Theme augmentation | `src/theme.ts`                                                                                                       |
+| TMI table API      | [§ TMI table](#tmi-table)                                                                                            |
 | Adopt skill        | `.agents/skills/adopt-from-tmi-ui` (copy into app — [consumer-setup](./docs/consumer-setup.md#5-adopt-skill-cursor)) |
-| Verifying tarball  | `pnpm verify:pack`        |
+| Verifying tarball  | `pnpm verify:pack`                                                                                                   |
 
 ## Migration from a vendored or monorepo copy
 
