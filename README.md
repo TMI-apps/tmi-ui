@@ -10,7 +10,7 @@ Shared UI primitives for React 19 + MUI 7.
 
 There is **no SLA** for issues or pull requests; responses are best-effort.
 
-**Install from npm** — see **[docs/installation.md](./docs/installation.md)** (`pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+**Install from npm** — see **[docs/installation.md](./docs/installation.md)** (`pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. **TMI table:** **[docs/tmi-table.md](./docs/tmi-table.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
 
 ## Contents
 
@@ -27,7 +27,7 @@ For the full prop surface of each component, read its source — the exported ty
 
 - `ThumbnailPill` → `[src/ThumbnailPill/ThumbnailPill.tsx](src/ThumbnailPill/ThumbnailPill.tsx)`, `ThumbnailPillProps`.
 - `VideoEmbedModal` → `[src/VideoEmbedModal/VideoEmbedModal.tsx](src/VideoEmbedModal/VideoEmbedModal.tsx)`, `VideoEmbedModalProps`.
-- TMI table (`TMITable`, workspace, detail shell, grid utils) → `[src/DataTable/index.ts](src/DataTable/index.ts)`. Prefer `TMITable` over deprecated `DatabaseViewer`.
+- TMI table — **[docs/tmi-table.md](./docs/tmi-table.md)**. Barrel: `[src/DataTable/index.ts](src/DataTable/index.ts)`. Prefer `TMITable` over deprecated `DatabaseViewer`.
 
 ## Peer dependencies
 
@@ -43,10 +43,10 @@ Your consuming app must already ship compatible **majors** of these. Mismatches 
 | `@emotion/styled`         | `^11.14.1`     |                                                               |
 | `react-router-dom`        | `^7.11.0`      | Used when `ThumbnailPill` receives a `to` prop                |
 | `@tanstack/react-table`   | `^8.21.3`      | TMI table column helpers                                      |
-| `@tanstack/react-virtual` | `3.13.24`      | Grid virtualization (public grid export later)                |
-| `@dnd-kit/core`           | `^6.3.1`       | Row-reorder types / later grid                                |
-| `@dnd-kit/sortable`       | `^10.0.0`      | Later grid                                                    |
-| `@dnd-kit/utilities`      | `^3.2.2`       | Later grid                                                    |
+| `@tanstack/react-virtual` | `3.13.24`      | `TMITable` virtualization                                     |
+| `@dnd-kit/core`           | `^6.3.1`       | Row reorder (`TmiRowReorderDndProvider`)                      |
+| `@dnd-kit/sortable`       | `^10.0.0`      | Row reorder                                                   |
+| `@dnd-kit/utilities`      | `^3.2.2`       | Row reorder                                                   |
 
 ## Verify the install
 
@@ -140,27 +140,7 @@ Currently augmented:
 
 If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
 
-**This library does not ship a full `createTheme`:** each app builds its own theme and may pass the optional tokens above. For TMI table workspace and detail heroes, wrap the app theme with `createTmiTableTheme`.
-
-### TMI table workspace overlays (Decision #2)
-
-`TMITableWorkspace` installs `PortaledOverlayStackProvider` around the detail drawer. **Re-export that provider from the same package** in the app (`@/shared/context/PortaledOverlayStackContext` → `@tmi-packages/ui`) so autocomplete and other portaled UI share one React context with the workspace drawer.
-
-```ts
-import {
-  createTmiTableTheme,
-  PortaledOverlayStackProvider,
-  usePortaledOverlayPopperZIndex,
-  workspaceDetailDrawerModalZ,
-} from "@tmi-packages/ui";
-
-const theme = createTmiTableTheme(appTheme);
-const hostModalZ =
-  theme.tmiTableWorkspace.detailDrawerModalZ ??
-  workspaceDetailDrawerModalZ(theme);
-```
-
-`UnsavedChangesDialog` takes the consumer’s edit-session state; `useRecordEditSession` stays in the app. Selection/export hooks and `tableLoadDebug` stay app-only; inject `debug.onTableLoadSettled` from an app `TmiTable.tsx` wrapper if needed.
+**This library does not ship a full `createTheme`:** each app builds its own theme and may pass the optional tokens above. For TMI table workspace and detail heroes, wrap the app theme with `createTmiTableTheme`. Usage: **[docs/tmi-table.md](./docs/tmi-table.md)**.
 
 ## Known limitations
 
@@ -185,20 +165,23 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Versioning
 
-- **MAJOR** — breaking API changes (coordinate with consumers).
-- **MINOR** — new components or non-breaking additions.
-- **PATCH** — bug fixes.
+Follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Extending an existing component does **not** break apps if existing props, exports, and defaults stay valid.
 
-Full history: [CHANGELOG.md](./CHANGELOG.md).
+- **MAJOR** — breaking API or behavior (coordinate with consumers).
+- **MINOR** — additive surface (new components, optional props, tokens with fallbacks).
+- **PATCH** — bug fixes; no intended contract change.
+
+How to classify a change, deprecation, and opt-in vs default flips: [CONTRIBUTING.md — Public API and semver](./CONTRIBUTING.md#public-api-and-semver). Pipeline: [docs/release-flow.md](./docs/release-flow.md). History: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Quick reference
 
-| What               | Where                |
-| ------------------ | -------------------- |
-| Source             | `src/`               |
-| Build output       | `dist/` (gitignored) |
-| Theme augmentation | `src/theme.ts`       |
-| Verifying tarball  | `pnpm verify:pack`   |
+| What               | Where                                    |
+| ------------------ | ---------------------------------------- |
+| Source             | `src/`                                   |
+| Build output       | `dist/` (gitignored)                     |
+| Theme augmentation | `src/theme.ts`                           |
+| TMI table          | [docs/tmi-table.md](./docs/tmi-table.md) |
+| Verifying tarball  | `pnpm verify:pack`                       |
 
 ## Migration from a vendored or monorepo copy
 

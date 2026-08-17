@@ -17,7 +17,7 @@ Maintainers must complete **TAG_PUSH_TOKEN**, **npm token / OIDC**, and related 
 
 ## Overview
 
-1. **Changeset** — For each release-worthy change, add a file under `.changeset/` (`pnpm changeset`). This records semver intent (patch / minor / major), not a hand-picked `x.y.z`.
+1. **Changeset** — For each release-worthy change, add a file under `.changeset/` (`pnpm changeset`). This records semver intent (patch / minor / major), not a hand-picked `x.y.z`. Classify using [CONTRIBUTING.md — Public API and semver](../CONTRIBUTING.md#public-api-and-semver) (additive updates to existing components are **minor** unless the public contract or defaults change).
 2. **PR to `main`** — Review and merge.
 3. **Version packages** — On push to `main`, the [Version packages workflow](../.github/workflows/version-packages.yml) runs. If there are pending changesets, it runs `pnpm run version-packages` (`changeset version` + `pnpm install`), then commits to `main` with message `chore: version packages [skip ci]`.
 4. **Tag** — After that commit, the same workflow **creates and pushes** a git tag `vX.Y.Z` that matches `package.json` `"version"` (only when a version commit was actually created; if the tag already exists on the remote, the step is skipped).

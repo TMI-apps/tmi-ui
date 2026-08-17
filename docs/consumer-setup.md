@@ -13,7 +13,7 @@ Align these in the app before adding the dependency (see `package.json` peer ran
 - `@tanstack/react-table` ^8.21 (TMI table satellites / column helpers)
 - `@tanstack/react-virtual` 3.13.x and `@dnd-kit/*` (needed when you adopt the grid; already peer-declared)
 
-For TMI table **workspace / detail heroes**, wrap your MUI theme with `createTmiTableTheme`. App-level portaled overlays (outside the workspace) should use `workspaceDetailDrawerModalZ(theme)` — see README § TMI table workspace overlays.
+For the **TMI table**, follow **[tmi-table.md](./tmi-table.md)** (`createTmiTableTheme`, Vite `optimizeDeps.include`, overlay z-index).
 
 ## 2. Registry
 
@@ -34,6 +34,8 @@ pnpm add @tmi-packages/ui
 ```
 
 (Same as [installation.md § Install](./installation.md#1-install-the-package): unpinned add = latest; then commit lockfile. Pin a `^x.y.z` range in `package.json` when **your** team wants upgrade boundaries — see Releases on the tmi-ui repo.)
+
+`^1.2.0` allows later **1.x** patches and minors (new optional API, bugfixes) and **does not** install **2.0.0**. A lockfile keeps the exact version until the app runs an update. Majors require an explicit range bump and a compile/UI pass. Library classification rules: [CONTRIBUTING.md — Public API and semver](../CONTRIBUTING.md#public-api-and-semver).
 
 ## 5. MUI types — no duplicate augmentations
 

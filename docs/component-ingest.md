@@ -23,3 +23,5 @@ That is a live-app unplug strategy (shim per layer, publish-before-consumer). In
 **Do not use that ordering for further ingest.** Future table (or other large) work: follow the precedent and [PASTE_GUIDE.md](./jobs/temp_job_table-component-ingest/PASTE_GUIDE.md) § Public API — export the **main table** (plus types/hooks consumers need) in **one** minor. Keep app-only adapters (export/xlsx, `useRecordEditSession`, overlay stack owned by the app) in the app. Do not make row/cell helpers public unless a second consumer needs them.
 
 Remaining grid export (historical Phase 4) should be **one** follow-up minor, not another satellite/workspace split.
+
+Consumer how-to: [tmi-table.md](./tmi-table.md).
