@@ -10,7 +10,9 @@ Shared UI primitives for React 19 + MUI 7.
 
 There is **no SLA** for issues or pull requests; responses are best-effort.
 
-**Install from npm** — see **[docs/installation.md](./docs/installation.md)** (`pnpm add`). Per-app checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. **TMI table:** **[docs/tmi-table.md](./docs/tmi-table.md)**. Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+**Install:** `pnpm add @tmi-packages/ui` — details in **[docs/installation.md](./docs/installation.md)**. Checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. **TMI table API:** [§ TMI table](#tmi-table) (this README). Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+
+Extract-complete table surface is **`1.3.x`**. Do not look for a `0.5.0` tag.
 
 ## Contents
 
@@ -23,30 +25,44 @@ There is **no SLA** for issues or pull requests; responses are best-effort.
 | `usePersistentSteps`    | `0.4.0`  | (hook only — `localStorage`)                                                            |
 | TMI table (full grid)   | `1.3.0`+ | `@tanstack/react-table`, `@tanstack/react-virtual`, `@dnd-kit/*`; `createTmiTableTheme` |
 
-For the full prop surface of each component, read its source — the exported types are the canonical contract:
+Exported types are the contract (`dist/index.d.ts`, `src/index.ts`). Prop surfaces: `ThumbnailPill` / `VideoEmbedModal` source; TMI table → [§ TMI table](#tmi-table). Prefer `TMITable` over deprecated `DatabaseViewer`.
 
-- `ThumbnailPill` → `[src/ThumbnailPill/ThumbnailPill.tsx](src/ThumbnailPill/ThumbnailPill.tsx)`, `ThumbnailPillProps`.
-- `VideoEmbedModal` → `[src/VideoEmbedModal/VideoEmbedModal.tsx](src/VideoEmbedModal/VideoEmbedModal.tsx)`, `VideoEmbedModalProps`.
-- TMI table — **[docs/tmi-table.md](./docs/tmi-table.md)**. Barrel: `[src/DataTable/index.ts](src/DataTable/index.ts)`. Prefer `TMITable` over deprecated `DatabaseViewer`.
+## Install
+
+```bash
+pnpm add @tmi-packages/ui
+```
+
+Public npm; no GitHub Packages token. Pin `^1.3.0` (or later `1.3.x`) for the grid.
+
+### Vite
+
+```ts
+optimizeDeps: {
+  include: ["@tmi-packages/ui"],
+},
+```
+
+**Never** `exclude` this package. Excluding it pulls CJS `react-is` / a raw `.pnpm` MUI copy and named exports fail in `pnpm dev`.
 
 ## Peer dependencies
 
 Your consuming app must already ship compatible **majors** of these. Mismatches should be reported to this repository rather than patched with `--force`.
 
-| Package                   | Required range | Notes                                                         |
-| ------------------------- | -------------- | ------------------------------------------------------------- |
-| `react`                   | `^19.2.0`      |                                                               |
-| `react-dom`               | `^19.2.0`      |                                                               |
-| `@mui/material`           | `^7.3.6`       |                                                               |
-| `@mui/icons-material`     | `^7.3.6`       | Used by `VideoEmbedModal` and `PersistentStepperList` (icons) |
-| `@emotion/react`          | `^11.14.0`     |                                                               |
-| `@emotion/styled`         | `^11.14.1`     |                                                               |
-| `react-router-dom`        | `^7.11.0`      | Used when `ThumbnailPill` receives a `to` prop                |
-| `@tanstack/react-table`   | `^8.21.3`      | TMI table column helpers                                      |
-| `@tanstack/react-virtual` | `3.13.24`      | `TMITable` virtualization                                     |
-| `@dnd-kit/core`           | `^6.3.1`       | Row reorder (`TmiRowReorderDndProvider`)                      |
-| `@dnd-kit/sortable`       | `^10.0.0`      | Row reorder                                                   |
-| `@dnd-kit/utilities`      | `^3.2.2`       | Row reorder                                                   |
+| Package                   | Required range | Notes                                      |
+| ------------------------- | -------------- | ------------------------------------------ |
+| `react`                   | `^19.2.0`      |                                            |
+| `react-dom`               | `^19.2.0`      |                                            |
+| `@mui/material`           | `^7.3.6`       |                                            |
+| `@mui/icons-material`     | `^7.3.6`       | `VideoEmbedModal`, `PersistentStepperList` |
+| `@emotion/react`          | `^11.14.0`     |                                            |
+| `@emotion/styled`         | `^11.14.1`     |                                            |
+| `react-router-dom`        | `^7.11.0`      | `ThumbnailPill` with `to`                  |
+| `@tanstack/react-table`   | `^8.21.3`      | `TMITable`                                 |
+| `@tanstack/react-virtual` | `3.13.24`      | `TMITable` virtualization                  |
+| `@dnd-kit/core`           | `^6.3.1`       | Row reorder (`TmiRowReorderDndProvider`)   |
+| `@dnd-kit/sortable`       | `^10.0.0`      | Row reorder                                |
+| `@dnd-kit/utilities`      | `^3.2.2`       | Row reorder                                |
 
 ## Verify the install
 
@@ -56,6 +72,95 @@ pnpm ls @tmi-packages/ui
 
 Confirm `node_modules/@tmi-packages/ui/dist/index.js` and `node_modules/@tmi-packages/ui/dist/index.d.ts` exist.
 
+## TMI table
+
+This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts` win if this page lags. [Lesmateriaal](https://github.com/TMI-apps/lesmateriaal-datasync) is one consumer, not the spec.
+
+### Public exports
+
+| Area          | Symbols                                                                                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Grid          | `TMITable`, `DatabaseViewer` (deprecated alias), `staticClientVirtualizedList`                                                                               |
+| Workspace     | `TMITableWorkspace`, layout hooks/contexts (`useDatabaseViewerMaxHeight`, `useDatabaseTableDetailWorkspaceHeights`, …)                                       |
+| Detail / hero | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`, `DetailPanelHeroStatsStrip`, `DetailPanelSectionHeading`, `UnsavedChangesDialog`, `RecordWorkspaceShell` |
+| Overlay       | `PortaledOverlayStackProvider`, `usePortaledOverlayPopperZIndex`, `useWorkspaceDrawerOverlayZIndex`, `workspaceDetailDrawerModalZ`                           |
+| Reorder       | `TmiRowReorderDndProvider`                                                                                                                                   |
+| Thumbnails    | `createAirtableAttachmentThumbnailColumn`, `TableRowThumbnailShell`, `AirtableAttachmentThumbnailCell`                                                       |
+| Feedback      | `OptimisticTableFeedbackProvider`, `useOptimisticTableFeedback`, `TmiTableLocaleText`                                                                        |
+
+### Theme
+
+This package does **not** ship a full `createTheme`. Wrap **your** theme with `createTmiTableTheme` before workspace / hero UI. That fills `theme.detailPanelHero` and `theme.tmiTableWorkspace.detailDrawerModalZ`. Import `@tmi-packages/ui` once for MUI module augmentation. Do not redeclare those keys in the app.
+
+```ts
+import { createTheme } from "@mui/material/styles";
+import { createTmiTableTheme } from "@tmi-packages/ui";
+import "@tmi-packages/ui";
+
+const theme = createTmiTableTheme(createTheme(/* your tokens */));
+```
+
+Optional elsewhere: `theme.thumbnailPill`, `palette.primary.surface` / `surfaceHover`, `theme.checklist`.
+
+### Grid and `serverInfinite`
+
+`TMITable` always takes `serverInfinite` (`TMITableServerInfinite`). Internally the grid uses TanStack Table with **`manualPagination: true`** and **`rowCount`** from that contract (`totalCount` / loaded rows). The table does not page `data` itself — you accumulate rows.
+
+Client-only list:
+
+```tsx
+import { TMITable, staticClientVirtualizedList } from "@tmi-packages/ui";
+import type { ColumnDef } from "@tanstack/react-table";
+
+type Row = { id: string; name: string };
+
+const columns: ColumnDef<Row>[] = [{ accessorKey: "name", header: "Name" }];
+
+<TMITable
+  data={rows}
+  columns={columns}
+  loading={false}
+  error={null}
+  getRowId={(r) => r.id}
+  serverInfinite={staticClientVirtualizedList(rows.length)}
+/>;
+```
+
+Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree`. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`.
+
+### Workspace
+
+```tsx
+import { TMITableWorkspace } from "@tmi-packages/ui";
+
+<TMITableWorkspace
+  leftHeader={filters}
+  table={<TMITable /* ... */ />}
+  detailOpen={Boolean(selected)}
+  detailPanel={selected ? <YourDetail record={selected} /> : null}
+/>;
+```
+
+### Injection
+
+| Knob                       | Default               | App                                                                               |
+| -------------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| `debug.onTableLoadSettled` | **no-op**             | Pass a logger if you want load summaries. Do not expect a library default logger. |
+| `TmiTableLocaleText`       | English-ish built-ins | `OptimisticTableFeedbackProvider` / `UnsavedChangesDialog`                        |
+| DnD                        | off                   | `TmiRowReorderDndProvider` + `rowReorder`                                         |
+
+### Overlay
+
+The package owns `PortaledOverlayStackProvider` (`TMITableWorkspace` mounts it around the detail drawer). Autocomplete / Popper must use **`usePortaledOverlayPopperZIndex` from this package** (same module instance). Re-export that module from an app path if you need a stable alias — **do not** keep a second React context. Modals above the drawer: `workspaceDetailDrawerModalZ(theme)`.
+
+### Out of package
+
+Stay in the app: edit session, Excel / selection-export orchestration, feature column defs, RPC / data fetching.
+
+### Check
+
+`pnpm type-check`, `pnpm build`, cold `pnpm dev`. Narrow-viewport autocomplete must sit **above** the detail drawer, not behind it.
+
 ## Smoke test (after upgrade or first install)
 
 1. **ThumbnailPill** — Renders without console errors; `onClick` fires; `to` navigates (if using `react-router-dom`); tooltip shows on hover; `variant="appBar"` looks correct on a primary-colored top bar; thumbnail loads and placeholder shows when `thumbnail` is omitted.
@@ -64,6 +169,7 @@ Confirm `node_modules/@tmi-packages/ui/dist/index.js` and `node_modules/@tmi-pac
 4. **VideoEmbedModal + Vimeo** — `vimeo.com/<id>` or `player.vimeo.com/video/<id>` works the same way.
 5. **Unsupported URL** — Non-video URL: component returns `null`, no console errors.
 6. **Localization** — If you pass `closeAriaLabel`, confirm the close button's `aria-label` in DevTools.
+7. **TMI table** — Grid renders; `pnpm dev` starts without named-export errors; with workspace, drawer + autocomplete stacking is correct.
 
 ## Components
 
@@ -136,11 +242,9 @@ Currently augmented:
 
 - **`theme.thumbnailPill`** _(optional)_ — sizing for `ThumbnailPill` (defaults if omitted).
 - **`theme.palette.primary.surface`** / **`surfaceHover`** _(optional)_ — low-opacity primary tints.
-- **`theme.detailPanelHero`** / **`theme.tmiTableWorkspace`** — filled by `createTmiTableTheme(baseTheme)` before rendering table workspace/hero.
+- **`theme.detailPanelHero`** / **`theme.tmiTableWorkspace`** — filled by `createTmiTableTheme` ([§ TMI table](#tmi-table)).
 
-If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors. Details and examples: previous sections in this README and MUI’s theme docs.
-
-**This library does not ship a full `createTheme`:** each app builds its own theme and may pass the optional tokens above. For TMI table workspace and detail heroes, wrap the app theme with `createTmiTableTheme`. Usage: **[docs/tmi-table.md](./docs/tmi-table.md)**.
+If your app redeclared these keys, **remove** the duplicate — conflicting augmentations cause TypeScript errors.
 
 ## Known limitations
 
@@ -169,19 +273,19 @@ Follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Extending an
 
 - **MAJOR** — breaking API or behavior (coordinate with consumers).
 - **MINOR** — additive surface (new components, optional props, tokens with fallbacks).
-- **PATCH** — bug fixes; no intended contract change.
+- **PATCH** — bug fixes; docs-only consumer guidance; no intended contract change.
 
 How to classify a change, deprecation, and opt-in vs default flips: [CONTRIBUTING.md — Public API and semver](./CONTRIBUTING.md#public-api-and-semver). Pipeline: [docs/release-flow.md](./docs/release-flow.md). History: [CHANGELOG.md](./CHANGELOG.md).
 
 ## Quick reference
 
-| What               | Where                                    |
-| ------------------ | ---------------------------------------- |
-| Source             | `src/`                                   |
-| Build output       | `dist/` (gitignored)                     |
-| Theme augmentation | `src/theme.ts`                           |
-| TMI table          | [docs/tmi-table.md](./docs/tmi-table.md) |
-| Verifying tarball  | `pnpm verify:pack`                       |
+| What               | Where                     |
+| ------------------ | ------------------------- |
+| Source             | `src/`                    |
+| Build output       | `dist/` (gitignored)      |
+| Theme augmentation | `src/theme.ts`            |
+| TMI table API      | [§ TMI table](#tmi-table) |
+| Verifying tarball  | `pnpm verify:pack`        |
 
 ## Migration from a vendored or monorepo copy
 

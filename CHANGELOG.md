@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.1
+
+### Patch Changes
+
+- [#7](https://github.com/TMI-apps/tmi-ui/pull/7) [`5b6cfcc`](https://github.com/TMI-apps/tmi-ui/commit/5b6cfccc65825de6a09ed737bc734b248bb57816) Thanks [@TomFranse](https://github.com/TomFranse)! - README is the TMI table public-API SSOT (extract-complete surface is 1.3.x). Documents Vite `optimizeDeps.include` (never exclude).
+
+## 1.3.0
+
+### Minor Changes
+
+- [#5](https://github.com/TMI-apps/tmi-ui/pull/5) [`fe526a4`](https://github.com/TMI-apps/tmi-ui/commit/fe526a441cbe12ca0575dc82e55a1609945a307b) Thanks [@TomFranse](https://github.com/TomFranse)! - Export TMI table grid (`TMITable` / `DatabaseViewer`), overlay stack context, and grid utilities. `TMITable` no longer defaults to app `tableLoadDebug` logging.
+
 ## 1.2.0
 
 ### Minor Changes

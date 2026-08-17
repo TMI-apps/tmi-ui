@@ -20,8 +20,6 @@ Lesmateriaal `IMPLEMENTATION_PLAN` Phases 2→3→4 published **row satellites**
 
 That is a live-app unplug strategy (shim per layer, publish-before-consumer). In this library it was **too slow**: extra PRs, extra Version packages + Publish cycles, consumer lockfile skew (`workspaceDetailDrawerModalZ` imported while Vite still served `1.1.0`), and after two minors the package still does not export a table.
 
-**Do not use that ordering for further ingest.** Future table (or other large) work: follow the precedent and [PASTE_GUIDE.md](./jobs/temp_job_table-component-ingest/PASTE_GUIDE.md) § Public API — export the **main table** (plus types/hooks consumers need) in **one** minor. Keep app-only adapters (export/xlsx, `useRecordEditSession`, overlay stack owned by the app) in the app. Do not make row/cell helpers public unless a second consumer needs them.
+**Do not use that ordering for further ingest.** Future table (or other large) work: follow the precedent and [PASTE_GUIDE.md](./jobs/temp_job_table-component-ingest/PASTE_GUIDE.md) § Public API — export the **main table** (plus types/hooks consumers need) in **one** minor. Keep app-only adapters (export/xlsx, `useRecordEditSession`) in the app. Overlay stack is package-owned (`PortaledOverlayStackProvider`).
 
-Remaining grid export (historical Phase 4) should be **one** follow-up minor, not another satellite/workspace split.
-
-Consumer how-to: [tmi-table.md](./tmi-table.md).
+Grid export shipped in **1.3.0**. Consumer SSOT: [README — TMI table](../README.md#tmi-table). Extract-complete version is **1.3.x**, not `0.5.0`.

@@ -13,7 +13,7 @@ Align these in the app before adding the dependency (see `package.json` peer ran
 - `@tanstack/react-table` ^8.21 (TMI table satellites / column helpers)
 - `@tanstack/react-virtual` 3.13.x and `@dnd-kit/*` (needed when you adopt the grid; already peer-declared)
 
-For the **TMI table**, follow **[tmi-table.md](./tmi-table.md)** (`createTmiTableTheme`, Vite `optimizeDeps.include`, overlay z-index).
+For the **TMI table**, see **[README — TMI table](../README.md#tmi-table)** (`createTmiTableTheme`, Vite `optimizeDeps.include`, overlay z-index, `serverInfinite`).
 
 ## 2. Registry
 
@@ -73,3 +73,4 @@ If the app used the old name **`@tmi-apps/ui`** or installed from **GitHub Packa
 ## See also
 
 - [installation.md](./installation.md) — install details and CI edge cases
+- [README — TMI table](../README.md#tmi-table) — grid public API

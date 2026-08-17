@@ -51,6 +51,6 @@ This library **does not** ship a full MUI `createTheme`. It augments the theme (
 
 ## See also
 
-- [TMI table](./tmi-table.md) — grid + workspace in a consuming app
+- [README — TMI table](../README.md#tmi-table) — grid public API
 - [Consumer setup](./consumer-setup.md) — per-app checklist
 - [Release flow](./release-flow.md) — how versions are cut and published
