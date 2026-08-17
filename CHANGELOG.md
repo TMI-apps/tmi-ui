@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0
+
+### Minor Changes
+
+- [#6](https://github.com/TMI-apps/tmi-ui/pull/6) [`e4541d8`](https://github.com/TMI-apps/tmi-ui/commit/e4541d845cd8ba5b37ff261143289f4b72f0b371) Thanks [@TomFranse](https://github.com/TomFranse)! - TMITable fills remaining workspace/standalone height when `maxHeight` is omitted. Pin with a number; opt out with `maxHeight={false}` for nested/content-sized tables. `useDatabaseViewerMaxHeight` is deprecated for this use case.
+
+### Patch Changes
+
+- [#6](https://github.com/TMI-apps/tmi-ui/pull/6) [`e4541d8`](https://github.com/TMI-apps/tmi-ui/commit/e4541d845cd8ba5b37ff261143289f4b72f0b371) Thanks [@TomFranse](https://github.com/TomFranse)! - Stretch TMITable body cells to a 48px bar so row action buttons (chevrons and others) fill the row hit target without `fullHeightInteractive`.
+
+- [#6](https://github.com/TMI-apps/tmi-ui/pull/6) [`e4541d8`](https://github.com/TMI-apps/tmi-ui/commit/e4541d845cd8ba5b37ff261143289f4b72f0b371) Thanks [@TomFranse](https://github.com/TomFranse)! - Fix TMITable tree row-reorder grip so pointerdown reaches `@dnd-kit` (drag can start).
+
 ## 1.3.1
 
 ### Patch Changes
