@@ -1,4 +1,5 @@
 import type { TMITableLoadSettledPayload } from "../shared-types/tmiTableConfig.types.js";
+import { isViteDevBuild } from "./tableLoadDebugEnv.js";
 
 /**
  * Dev-only table list debugging: counts, scope filters, optional session context.
@@ -31,8 +32,7 @@ function isLocalTableHostname(): boolean {
 
 export function isTableLoadDebugEnabled(): boolean {
   if (typeof window === "undefined") return false;
-  const env = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env;
-  if (env?.DEV) return true;
+  if (isViteDevBuild()) return true;
   if (isLocalTableHostname()) return true;
   return readLocalStorageTableDebugOn();
 }
