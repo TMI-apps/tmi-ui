@@ -8,6 +8,7 @@
  * - `theme.checklist.*` — PersistentStepperList spacing (optional; component falls back to built-in defaults)
  * - `theme.detailPanelHero` — table detail-hero tokens; apply via `createTmiTableTheme`
  * - `theme.tmiTableWorkspace.detailDrawerModalZ` — workspace detail-drawer stacking; apply via `createTmiTableTheme`
+ * - `theme.tmiPrimaryContained` — primary gradient/shadow for Autocomplete add-bars; apply via `createTmiTableTheme`
  * - `theme.palette.primary.surface` / `surfaceHover` — mode-aware low-opacity
  *   brand tints for component backgrounds / hover states. Optional; components
  *   should fall back to `alpha(primary.main, ...)` if absent.
@@ -31,6 +32,15 @@ declare module "@mui/material/styles" {
     /** Filled by `createTmiTableTheme`. Workspace detail-drawer modal z-index. */
     tmiTableWorkspace: {
       detailDrawerModalZ: number;
+    };
+    /**
+     * Filled by `createTmiTableTheme`. Primary contained chrome for
+     * `PrimaryContainedAutocompleteBar` and `ListRowAddButton` `visualVariant="primary"`.
+     */
+    tmiPrimaryContained: {
+      gradient: string;
+      restShadow: string;
+      activeShadow: string;
     };
     checklist?: {
       circleSize: number;
@@ -62,6 +72,11 @@ declare module "@mui/material/styles" {
     detailPanelHero?: DetailPanelHeroTokens;
     tmiTableWorkspace?: {
       detailDrawerModalZ?: number;
+    };
+    tmiPrimaryContained?: {
+      gradient?: string;
+      restShadow?: string;
+      activeShadow?: string;
     };
   }
 

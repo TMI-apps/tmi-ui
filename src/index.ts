@@ -28,6 +28,25 @@ export { PersistentStepperStepItem } from "./PersistentStepperList/PersistentSte
 export type { ChecklistSizing } from "./PersistentStepperList/PersistentStepperStepItem.js";
 
 export {
+  AutocompleteSelectField,
+  ListRowAddButton,
+  MetadataFiltersBar,
+  PrimaryContainedAutocompleteBar,
+  RowStyleMultiSelect,
+  RowStyleReadonlyRow,
+  ThumbnailPillRemoveTableRowSlot,
+  rowStyleTableRowShellSx,
+} from "./AutocompleteSelect/index.js";
+export type {
+  AutocompleteSelectFieldProps,
+  AutocompleteSelectOption,
+  ListRowAddButtonProps,
+  MetadataFilterFieldConfig,
+  PrimaryContainedAutocompleteBarProps,
+  RowStyleMultiSelectProps,
+} from "./AutocompleteSelect/index.js";
+
+export {
   AirtableAttachmentThumbnailCell,
   buildDatabaseViewerVirtualRowKey,
   buildModifierToggleRowSelection,

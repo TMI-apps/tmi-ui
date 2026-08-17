@@ -2,9 +2,10 @@
 name: adopt-from-tmi-ui
 description: >
   Wire @tmi-packages/ui components in a consuming app. Use when adding ThumbnailPill,
-  VideoEmbedModal, PersistentStepperList, TMITable, or bumping @tmi-packages/ui.
-  Infer profile, wire package APIs only, skip-walk unwired ledger rows with the human.
-forPackageVersion: 1.4.0
+  VideoEmbedModal, PersistentStepperList, TMITable, AutocompleteSelectField, or bumping
+  @tmi-packages/ui. Infer profile, wire package APIs only, skip-walk unwired ledger rows
+  with the human.
+forPackageVersion: 1.6.0
 ---
 
 # adopt-from-tmi-ui
@@ -18,6 +19,7 @@ Consumer-app skill. **Catalog** lives in the package README integration ledgers;
    - `node_modules/@tmi-packages/ui/README.md#videoembedmodal`
    - `node_modules/@tmi-packages/ui/README.md#persistentstepperlist`
    - `node_modules/@tmi-packages/ui/README.md#tmi-table`
+   - `node_modules/@tmi-packages/ui/README.md#autocomplete`
 2. Copy this skill into the app after install or bump (see README / consumer-setup).
 
 ## Workflow
