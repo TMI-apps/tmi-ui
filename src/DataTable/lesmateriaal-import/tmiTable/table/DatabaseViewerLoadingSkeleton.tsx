@@ -1,10 +1,13 @@
 import { Box, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { keyframes, type SxProps, type Theme } from "@mui/material/styles";
 import { searchFieldMutedBackground } from "../../shared-theme/interactiveSurfaces.js";
-import { DATABASE_VIEWER_BODY_ROW_GAP_PX } from "./databaseViewerTableStyles.js";
+import {
+  DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+  DATABASE_VIEWER_BODY_ROW_GAP_PX,
+} from "./databaseViewerTableStyles.js";
 
-const ROW_ESTIMATE_PX = 44;
-const ROW_BAR_HEIGHT_PX = ROW_ESTIMATE_PX - DATABASE_VIEWER_BODY_ROW_GAP_PX;
+const ROW_BAR_HEIGHT_PX = DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX;
+const ROW_ESTIMATE_PX = ROW_BAR_HEIGHT_PX + DATABASE_VIEWER_BODY_ROW_GAP_PX;
 const SKELETON_ROW_COUNT = 8;
 
 const databaseViewerSkeletonWaveKeyframe = keyframes`

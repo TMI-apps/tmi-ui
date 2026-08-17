@@ -12,16 +12,24 @@ export interface DatabaseViewerScopeSummary {
 }
 
 export interface DatabaseViewerColumnMeta {
+  /**
+   * Hierarchy column with chevrons. Uses edge-to-edge cell content (no text inset).
+   */
   isTreeColumn?: boolean;
   /**
    * Body row: last visible column included in the tree-depth row graphic inset.
    * Cells after this boundary keep the normal table-column grid alignment.
    */
   treeRowIndentBoundary?: boolean;
+  /**
+   * Icon-only action column: no default text inset, control centered in the
+   * 48px row bar. Optional — `TableRowActionButton` already fills bar height
+   * in every body cell.
+   */
   fullHeightInteractive?: boolean;
   /**
    * Body cell: full-cell hover like a plain table icon (no action-button chrome).
-   * Use with fullHeightInteractive for icon-only cells (e.g. visibility surrogate).
+   * Edge-to-edge layout (no text inset).
    */
   iconSurrogateCell?: boolean;
   /**

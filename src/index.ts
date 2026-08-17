@@ -131,6 +131,7 @@ export type {
   TMITableColumnMeta,
   TMITableDebugConfig,
   TMITableDetailEditPanelProps,
+  TMITableMaxHeightProp,
   TMITableProps,
   TMITableScopeSummary,
   TMITableScopeSummaryItem,

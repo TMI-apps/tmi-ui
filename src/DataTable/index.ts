@@ -177,6 +177,7 @@ export {
   getDatabaseViewerStickyHeaderBgSx,
 } from "./lesmateriaal-import/tmiTable/table/index.js";
 export type { DatabaseViewerProps } from "./lesmateriaal-import/tmiTable/table/DatabaseViewer.js";
+export type { TMITableMaxHeightProp } from "./lesmateriaal-import/tmiTable/hooks/resolveTMITableMaxHeight.js";
 export type { DatabaseViewerSurfaceMode } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";
 export type { DatabaseViewerColumnMenuState } from "./lesmateriaal-import/tmiTable/table/DatabaseViewerColumnMenu.js";
 export { HEADER_LONG_PRESS_MS } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";

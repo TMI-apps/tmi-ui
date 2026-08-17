@@ -30,7 +30,10 @@ import type { DragEvent, ReactElement, RefObject } from "react";
 import { memo, useCallback, useEffect, useRef } from "react";
 import type { TableInteractionSkinPreset } from "../../shared-theme/tableInteractionSkin.js";
 import { searchFieldMutedBackground } from "../../shared-theme/interactiveSurfaces.js";
-import { DATABASE_VIEWER_BODY_ROW_GAP_PX } from "./databaseViewerTableStyles.js";
+import {
+  DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+  DATABASE_VIEWER_BODY_ROW_GAP_PX,
+} from "./databaseViewerTableStyles.js";
 import type { DatabaseViewerServerInfinite } from "./databaseViewerServerInfinite.js";
 import type { DatabaseViewerRowFileDrop } from "./databaseViewerRowFileDrop.js";
 import type { DatabaseViewerRowReorderConfig } from "../../shared-types/databaseViewerRowReorder.types.js";
@@ -62,10 +65,10 @@ const ROW_REORDER_DND_MEASURING: MeasuringConfiguration = {
 };
 
 /** Full pitch per row slot (bar + gap). Must match `estimateSize` in `useVirtualizer`. */
-const VIRTUALIZED_ROW_ESTIMATE_PX = 44;
+const VIRTUALIZED_ROW_ESTIMATE_PX =
+  DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX + DATABASE_VIEWER_BODY_ROW_GAP_PX;
 /** Height of the painted bar within each slot; the remainder is the inter-row gap. */
-const VIRTUALIZED_ROW_BAR_HEIGHT_PX =
-  VIRTUALIZED_ROW_ESTIMATE_PX - DATABASE_VIEWER_BODY_ROW_GAP_PX;
+const VIRTUALIZED_ROW_BAR_HEIGHT_PX = DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX;
 
 /**
  * Matches MUI `Skeleton` `animation="wave"` (`@mui/material/Skeleton`), so empty placeholders

@@ -9,6 +9,13 @@ import type { DatabaseViewerSurfaceMode } from "./databaseViewerConstants.js";
 export const DATABASE_VIEWER_BODY_ROW_GAP_PX = 8;
 
 /**
+ * Painted body-row bar height (excludes {@link DATABASE_VIEWER_BODY_ROW_GAP_PX}).
+ * Full-height cells (`p: 0` + stretch inner) use this so percentage heights on
+ * row action buttons resolve to the bar, not the icon.
+ */
+export const DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX = 48;
+
+/**
  * Table `width`: TanStack total (px) when horizontally scrolling, or `"100%"` when the column
  * sum fits the block so `table-layout: fixed` can grow columns to fill the wrapper.
  * Kept in sync with `DatabaseViewer` body/header `<Table sx={...}>`.
