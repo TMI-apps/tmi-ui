@@ -37,6 +37,6 @@ export interface TMITableLoadSettledPayload {
 export interface TMITableDebugConfig {
   tableLoadResetKey?: string;
   debugTableContext?: Record<string, unknown>;
-  /** App-injected reporter; default wired in {@link TMITable} via `tableLoadDebug` utils. */
+  /** App-injected reporter; package default is no-op — pass {@link logTableLoadSummary} if wanted. */
   onTableLoadSettled?: (payload: TMITableLoadSettledPayload) => void;
 }

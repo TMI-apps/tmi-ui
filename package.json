@@ -47,7 +47,8 @@
     "dist",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    ".agents/skills/**"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ./scripts/assert-dist-esm-imports.mjs",

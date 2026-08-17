@@ -26,9 +26,16 @@ export { DATA_TABLE_TOOLTIP_PROPS } from "./lesmateriaal-import/satellites/dataT
 export type { TMITableColumnMeta } from "./lesmateriaal-import/shared-types/tmiTableMeta.types.js";
 export type {
   TMITableDebugConfig,
+  TMITableLoadSettledPayload,
   TMITableSelectionConfig,
   TMITableTreeConfig,
 } from "./lesmateriaal-import/shared-types/tmiTableConfig.types.js";
+
+export {
+  isTableLoadDebugEnabled,
+  logTableLoadSummary,
+  TABLE_LOAD_DEBUG_LOG_PREFIX,
+} from "./lesmateriaal-import/shared-utils/tableLoadDebug.js";
 export type {
   DatabaseViewerRowDropZone,
   DatabaseViewerRowReorderConfig,
@@ -176,7 +183,10 @@ export {
   getDatabaseViewerScrollContainerSx,
   getDatabaseViewerStickyHeaderBgSx,
 } from "./lesmateriaal-import/tmiTable/table/index.js";
-export type { DatabaseViewerProps } from "./lesmateriaal-import/tmiTable/table/DatabaseViewer.js";
+export type {
+  DatabaseViewerProps,
+  TMITableColumnDef,
+} from "./lesmateriaal-import/tmiTable/table/DatabaseViewer.js";
 export type { TMITableMaxHeightProp } from "./lesmateriaal-import/tmiTable/hooks/resolveTMITableMaxHeight.js";
 export type { DatabaseViewerSurfaceMode } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";
 export type { DatabaseViewerColumnMenuState } from "./lesmateriaal-import/tmiTable/table/DatabaseViewerColumnMenu.js";

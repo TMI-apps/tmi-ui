@@ -1,25 +1,22 @@
+import type { TMITableLoadSettledPayload } from "../shared-types/tmiTableConfig.types.js";
+
 /**
  * Dev-only table list debugging: counts, scope filters, optional session context.
  *
  * Enable (any one):
  * - Vite dev build (`import.meta.env.DEV`)
  * - Hostname `localhost` or `127.0.0.1`
- * - `localStorage.setItem("debug:tableLoad", "1")` or legacy `debug:lesmateriaalTableLoad`
+ * - `localStorage.setItem("debug:tableLoad", "1")`
  */
 
 export const TABLE_LOAD_DEBUG_LOG_PREFIX = "[table-load]";
 
-const LOCAL_STORAGE_KEYS = [
-  "debug:tableLoad",
-  "debug:lesmateriaalTableLoad",
-] as const;
+const LOCAL_STORAGE_KEY = "debug:tableLoad";
 
 function readLocalStorageTableDebugOn(): boolean {
   if (typeof window === "undefined") return false;
   try {
-    for (const key of LOCAL_STORAGE_KEYS) {
-      if (window.localStorage.getItem(key) === "1") return true;
-    }
+    return window.localStorage.getItem(LOCAL_STORAGE_KEY) === "1";
   } catch {
     /* ignore */
   }
@@ -42,7 +39,7 @@ export function isTableLoadDebugEnabled(): boolean {
 
 let tableLoadLogSeq = 0;
 
-export function logTableLoadSummary(payload: Record<string, unknown>): void {
+export function logTableLoadSummary(payload: TMITableLoadSettledPayload): void {
   if (!isTableLoadDebugEnabled()) return;
   const n = ++tableLoadLogSeq;
   console.log(`${TABLE_LOAD_DEBUG_LOG_PREFIX} #${n}`, payload);

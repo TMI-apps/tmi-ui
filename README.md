@@ -10,7 +10,9 @@ Shared UI primitives for React 19 + MUI 7.
 
 There is **no SLA** for issues or pull requests; responses are best-effort.
 
-**Install:** `pnpm add @tmi-packages/ui` — details in **[docs/installation.md](./docs/installation.md)**. Checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)**. **TMI table API:** [§ TMI table](#tmi-table) (this README). Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+**Install:** `pnpm add @tmi-packages/ui` — details in **[docs/installation.md](./docs/installation.md)**. Checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)** (includes **adopt skill** copy). **TMI table API:** [§ TMI table](#tmi-table). Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+
+**Integrating in an app?** Copy `.agents/skills/adopt-from-tmi-ui` from this package into your app after install and every bump — see [consumer-setup](./docs/consumer-setup.md#5-adopt-skill-cursor).
 
 Extract-complete table surface is **`1.3.x`**. Do not look for a `0.5.0` tag.
 
@@ -74,7 +76,30 @@ Confirm `node_modules/@tmi-packages/ui/dist/index.js` and `node_modules/@tmi-pac
 
 ## TMI table
 
-This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts` win if this page lags. [Lesmateriaal](https://github.com/TMI-apps/lesmateriaal-datasync) is one consumer, not the spec.
+This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts` win if this page lags.
+
+### Integration ledger
+
+Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a profile (`browse-only` vs `workspace+detail`), wire package APIs below, then **skip-walk** every unwired row with the human.
+
+| Capability | Package API | If skipped |
+| ---------- | ----------- | ---------- |
+| Browse grid | `TMITable` + `columns` + `serverInfinite` | Do not build a custom grid / fork TanStack in the app |
+| Workspace shell | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`) | Do not build a custom split layout |
+| Client list | `staticClientVirtualizedList(n)` | Do not hand-roll infinite scroll for all-client data |
+| Server infinite | `serverInfinite` (`TMITableServerInfinite`) | Do not paginate `data` inside the app table wrapper |
+| Tree rows | `tree` / `getSubRows` | Do not build a parallel tree UI |
+| Row reorder | `TmiRowReorderDndProvider` + `rowReorder` | Do not add a second DnD context for the grid |
+| Row selection | `selection` / `enableRowSelection` | Do not build custom multi-select chrome (export stays app) |
+| Filter prompt | `filterPromptActive` on workspace | Do not hide the table with ad-hoc empty states |
+| Optimistic feedback | `OptimisticTableFeedbackProvider` | Do not duplicate pending-row snackbar logic |
+| Detail hero / edit | `TMITableDetailEditPanel`, `DetailPanelHeroHeader` | Do not rebuild hero chrome |
+| Overlay z-index | `usePortaledOverlayPopperZIndex` from **this package** | Do not add a second `PortaledOverlayStack` context |
+| Vite dev | `optimizeDeps.include: ["@tmi-packages/ui"]` | Do not exclude the package |
+| Fill height | omit `maxHeight` (or `false` for nested) | Do not call deprecated `useTMITableMaxHeight` for fill |
+| Load debug | `debug.onTableLoadSettled: logTableLoadSummary` | Do not wrap `TMITable` in an app logger component |
+| Theme | `createTmiTableTheme` | Do not duplicate hero/workspace theme keys |
+| **Out of package** | edit session, xlsx export, feature columns, RPC | Stay in the app — do not move into wrappers |
 
 ### Public exports
 
@@ -152,7 +177,7 @@ import { TMITableWorkspace } from "@tmi-packages/ui";
 
 | Knob                       | Default               | App                                                                               |
 | -------------------------- | --------------------- | --------------------------------------------------------------------------------- |
-| `debug.onTableLoadSettled` | **no-op**             | Pass a logger if you want load summaries. Do not expect a library default logger. |
+| `debug.onTableLoadSettled` | **no-op**             | Pass `logTableLoadSummary` from the package when you want dev load summaries |
 | `TmiTableLocaleText`       | English-ish built-ins | `OptimisticTableFeedbackProvider` / `UnsavedChangesDialog`                        |
 | DnD                        | off                   | `TmiRowReorderDndProvider` + `rowReorder`                                         |
 
@@ -209,6 +234,16 @@ Full prop surface (`ThumbnailPillProps`):
 - `maxWidth?: number | string`
 - `disabled?: boolean`
 
+### Integration ledger
+
+| Capability | Package API | If skipped |
+| ---------- | ----------- | ---------- |
+| Navigation | `to` + `react-router-dom` | Use `onClick` + your router — do not fork `Link` styling |
+| Click action | `onClick` | Do not wrap in a custom button component |
+| App bar styling | `variant="appBar"` | Do not duplicate primary-surface pill CSS |
+| Thumbnail | `thumbnail` / `thumbnailPlaceholder` | Do not build a second thumb shell |
+| Tooltip | `tooltip` | Do not add a parallel tooltip wrapper |
+
 ### `VideoEmbedModal`
 
 Modal that embeds a YouTube or Vimeo video in a responsive 16:9 iframe. Privacy-enhanced (`youtube-nocookie.com`) for YouTube, autoplays on open, and returns `null` when the URL cannot be resolved to a supported provider — so you can render it unconditionally.
@@ -240,6 +275,36 @@ Supported URL shapes:
 
 - YouTube: `youtube.com/watch?v=...`, `youtu.be/...`, `youtube.com/embed/...`
 - Vimeo: `vimeo.com/<id>`, `player.vimeo.com/video/<id>`
+
+### Integration ledger
+
+| Capability | Package API | If skipped |
+| ---------- | ----------- | ---------- |
+| Open / close | `open`, `onClose` | Do not build a second modal shell |
+| URL providers | `url` (YouTube/Vimeo) | Do not embed iframes manually for supported URLs |
+| Unsupported URL | component returns `null` | Do not try/catch around render — pass URL as-is |
+| a11y label | `closeAriaLabel` | Do not omit close button labeling |
+
+### `PersistentStepperList`
+
+Checklist UI with optional per-entity `localStorage` via `usePersistentSteps`. Parse markdown-like lines with `textToStepperItems`.
+
+```tsx
+import {
+  PersistentStepperList,
+  textToStepperItems,
+  usePersistentSteps,
+} from "@tmi-packages/ui";
+```
+
+### Integration ledger
+
+| Capability | Package API | If skipped |
+| ---------- | ----------- | ---------- |
+| Checklist UI | `PersistentStepperList` | Do not rebuild stepper chrome |
+| Parsed steps | `textToStepperItems` | Do not duplicate line parser |
+| Persisted state | `usePersistentSteps` | Do not add a second storage hook |
+| Sizing tokens | `theme.checklist` (optional) | Component falls back to built-in defaults |
 
 ## Theme integration
 
@@ -292,6 +357,7 @@ How to classify a change, deprecation, and opt-in vs default flips: [CONTRIBUTIN
 | Build output       | `dist/` (gitignored)      |
 | Theme augmentation | `src/theme.ts`            |
 | TMI table API      | [§ TMI table](#tmi-table) |
+| Adopt skill        | `.agents/skills/adopt-from-tmi-ui` (copy into app — [consumer-setup](./docs/consumer-setup.md#5-adopt-skill-cursor)) |
 | Verifying tarball  | `pnpm verify:pack`        |
 
 ## Migration from a vendored or monorepo copy

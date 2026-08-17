@@ -47,6 +47,7 @@ try {
     "package/README.md",
     "package/LICENSE",
     "package/CHANGELOG.md",
+    "package/.agents/skills/adopt-from-tmi-ui/SKILL.md",
   ];
 
   const missing = required.filter((p) => !hasPath(p));
@@ -62,6 +63,21 @@ try {
   }
   if (!lines.some((l) => l.includes("/dist/PersistentStepperList/"))) {
     throw new Error("Tarball missing dist/PersistentStepperList/*");
+  }
+
+  const readmePath = lines.find((l) => l.endsWith("package/README.md"));
+  if (!readmePath) {
+    throw new Error("Tarball missing package/README.md path in listing");
+  }
+  const readmeExtract = execSync(
+    `tar -xOf "${join(tmp, tgzName).replace(/\\/g, "/")}" "${readmePath}"`,
+    { encoding: "utf8", shell: true },
+  );
+  const ledgerCount = (readmeExtract.match(/### Integration ledger/g) ?? []).length;
+  if (ledgerCount < 4) {
+    throw new Error(
+      `README must include >= 4 Integration ledger sections, found ${ledgerCount}`,
+    );
   }
 
   const v = pkg.version;

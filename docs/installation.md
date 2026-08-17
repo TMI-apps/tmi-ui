@@ -1,5 +1,7 @@
 # Install `@tmi-packages/ui` (npm)
 
+**Integrating components?** See [consumer-setup — adopt skill](./consumer-setup.md#5-adopt-skill-cursor) and [README integration ledgers](../README.md#components).
+
 `@tmi-packages/ui` is **open source** ([MIT](../LICENSE)). It is published to the **public npm registry** at [registry.npmjs.org](https://www.npmjs.com/) under the **`@tmi-packages`** scope.
 
 **No** consumer `.npmrc` line is required to redirect `@tmi-packages` to another registry — installs use the default npm registry like any other public scoped package.
