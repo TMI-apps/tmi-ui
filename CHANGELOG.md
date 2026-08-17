@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0
+
+### Minor Changes
+
+- [#11](https://github.com/TMI-apps/tmi-ui/pull/11) [`a6424d8`](https://github.com/TMI-apps/tmi-ui/commit/a6424d85b4b9cbdc651bb0ea3225f2010aa25cad) Thanks [@TomFranse](https://github.com/TomFranse)! - Export the AutocompleteSelect family (`AutocompleteSelectField`, `PrimaryContainedAutocompleteBar`, `MetadataFiltersBar`, `ListRowAddButton`, `RowStyleMultiSelect`, and related types).
+
+  Add `theme.tmiPrimaryContained` via `createTmiTableTheme` so the primary add-bar and `ListRowAddButton` share one token. Wrap drawer/modal hosts with `PortaledOverlayStackProvider`. Minimum consumer version `^1.6.0`.
+
 ## 1.5.0
 
 ### Minor Changes
