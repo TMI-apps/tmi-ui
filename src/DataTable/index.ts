@@ -39,6 +39,7 @@ export {
 export type {
   DatabaseViewerRowDropZone,
   DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderDropPlacement,
   DatabaseViewerRowReorderEndMeta,
   DatabaseViewerRowReorderPointerSample,
 } from "./lesmateriaal-import/shared-types/databaseViewerRowReorder.types.js";

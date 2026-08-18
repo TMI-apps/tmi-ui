@@ -11,6 +11,13 @@ import type { ReactNode } from "react";
 /** Row hit band for vertical reorder + reparent gestures (Lesmateriaal tree): upper/lower half split. */
 export type DatabaseViewerRowDropZone = "before" | "after";
 
+/**
+ * How `rowReorder` maps `@dnd-kit` `over` during drag.
+ * - `"between"` (default): sortable insert; siblings slide; before/after bands apply.
+ * - `"onto"`: no sibling gap; highlight the `over` row as the drop parent.
+ */
+export type DatabaseViewerRowReorderDropPlacement = "between" | "onto";
+
 /** Last pointer sample during drag (window capture); used for drop band + modifiers at release. */
 export type DatabaseViewerRowReorderPointerSample = {
   x: number;
@@ -41,6 +48,11 @@ export interface DatabaseViewerRowReorderConfig<TData extends object> {
   renderDragOverlay?: (activeId: UniqueIdentifier) => ReactNode;
   /** Predicate on `row.original`. */
   canDragRow?: (row: TData) => boolean;
+  /**
+   * Drop mapping. Omit or `"between"` keeps sortable insert (Lesmateriaal).
+   * `"onto"` disables sibling slide and highlights `over` as the parent (Groups reparent).
+   */
+  dropPlacement?: DatabaseViewerRowReorderDropPlacement;
   /** When true, drag handles are inactive (e.g. column sort overrides manual order mode). */
   reorderInteractionBlocked?: boolean;
   /** Mutated during drag for `before`/`after` band derivation from **`clientY`** + Alt-modifier. */

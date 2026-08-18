@@ -6,6 +6,7 @@ export type { DatabaseViewerProps } from "./DatabaseViewer.js";
 export type {
   DatabaseViewerRowDropZone,
   DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderDropPlacement,
   DatabaseViewerRowReorderEndMeta,
 } from "../../shared-types/databaseViewerRowReorder.types.js";
 export type { DatabaseViewerRowFileDrop } from "./databaseViewerRowFileDrop.js";

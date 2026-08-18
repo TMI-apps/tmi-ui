@@ -20,18 +20,21 @@ function cellWithMeta(
   } as unknown as Cell<object, unknown>;
 }
 
-function bodyCellSx(meta: DatabaseViewerColumnMeta | undefined) {
+function bodyCellSx(
+  meta: DatabaseViewerColumnMeta | undefined,
+  isDragOver = false,
+) {
   return getDatabaseViewerBodyTableCellSx({
     cell: cellWithMeta(meta),
     index: 0,
     cellStartPx: 0,
     visibleCellCount: 1,
-    isDragOver: false,
+    isDragOver,
     rowDepth: 0,
     rowSavePending: false,
     treeRowIndentBoundaryIndex: -1,
     leadingContentShiftDepth: 0,
-  }) as { p?: number; height?: number };
+  }) as { p?: number; height?: number; "&::after"?: unknown };
 }
 
 describe("databaseViewerCellIsEdgeToEdgeInteractive", () => {
@@ -80,5 +83,17 @@ describe("getDatabaseViewerBodyTableCellSx full-height band", () => {
     expect(sx.p).toBe(0);
     expect(sx.height).toBeUndefined();
     expect(sx.minHeight).toBe(DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX);
+  });
+
+  it("paints the dashed full-row overlay when isDragOver", () => {
+    const idle = bodyCellSx(undefined, false);
+    const over = bodyCellSx(undefined, true);
+    expect(idle["&::after"]).toBeUndefined();
+    expect(over["&::after"]).toEqual(
+      expect.objectContaining({
+        border: expect.stringContaining("dashed"),
+        content: '""',
+      }),
+    );
   });
 });

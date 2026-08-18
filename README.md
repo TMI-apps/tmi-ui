@@ -83,24 +83,24 @@ This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts`
 
 Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a profile (`browse-only` vs `workspace+detail`), wire package APIs below, then **skip-walk** every unwired row with the human.
 
-| Capability          | Package API                                                | If skipped                                                 |
-| ------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| Browse grid         | `TMITable` + `columns` + `serverInfinite`                  | Do not build a custom grid / fork TanStack in the app      |
-| Workspace shell     | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`) | Do not build a custom split layout                         |
-| Client list         | `staticClientVirtualizedList(n)`                           | Do not hand-roll infinite scroll for all-client data       |
-| Server infinite     | `serverInfinite` (`TMITableServerInfinite`)                | Do not paginate `data` inside the app table wrapper        |
-| Tree rows           | `tree` / `getSubRows`                                      | Do not build a parallel tree UI                            |
-| Row reorder         | `TmiRowReorderDndProvider` + `rowReorder`                  | Do not add a second DnD context for the grid               |
-| Row selection       | `selection` / `enableRowSelection`                         | Do not build custom multi-select chrome (export stays app) |
-| Filter prompt       | `filterPromptActive` on workspace                          | Do not hide the table with ad-hoc empty states             |
-| Optimistic feedback | `OptimisticTableFeedbackProvider`                          | Do not duplicate pending-row snackbar logic                |
-| Detail hero / edit  | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`         | Do not rebuild hero chrome                                 |
-| Overlay z-index     | `usePortaledOverlayPopperZIndex` from **this package**     | Do not add a second `PortaledOverlayStack` context         |
-| Vite dev            | `optimizeDeps.include: ["@tmi-packages/ui"]`               | Do not exclude the package                                 |
-| Fill height         | omit `maxHeight` (or `false` for nested)                   | Do not call deprecated `useTMITableMaxHeight` for fill     |
-| Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`            | Do not wrap `TMITable` in an app logger component          |
-| Theme               | `createTmiTableTheme`                                      | Do not duplicate hero/workspace/`tmiPrimaryContained` keys |
-| **Out of package**  | edit session, xlsx export, feature columns, RPC            | Stay in the app — do not move into wrappers                |
+| Capability          | Package API                                                 | If skipped                                                 |
+| ------------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
+| Browse grid         | `TMITable` + `columns` + `serverInfinite`                   | Do not build a custom grid / fork TanStack in the app      |
+| Workspace shell     | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`)  | Do not build a custom split layout                         |
+| Client list         | `staticClientVirtualizedList(n)`                            | Do not hand-roll infinite scroll for all-client data       |
+| Server infinite     | `serverInfinite` (`TMITableServerInfinite`)                 | Do not paginate `data` inside the app table wrapper        |
+| Tree rows           | `tree` / `getSubRows`                                       | Do not build a parallel tree UI                            |
+| Row reorder         | `TmiRowReorderDndProvider` + `rowReorder` (`dropPlacement`) | Do not add a second DnD context for the grid               |
+| Row selection       | `selection` / `enableRowSelection`                          | Do not build custom multi-select chrome (export stays app) |
+| Filter prompt       | `filterPromptActive` on workspace                           | Do not hide the table with ad-hoc empty states             |
+| Optimistic feedback | `OptimisticTableFeedbackProvider`                           | Do not duplicate pending-row snackbar logic                |
+| Detail hero / edit  | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`          | Do not rebuild hero chrome                                 |
+| Overlay z-index     | `usePortaledOverlayPopperZIndex` from **this package**      | Do not add a second `PortaledOverlayStack` context         |
+| Vite dev            | `optimizeDeps.include: ["@tmi-packages/ui"]`                | Do not exclude the package                                 |
+| Fill height         | omit `maxHeight` (or `false` for nested)                    | Do not call deprecated `useTMITableMaxHeight` for fill     |
+| Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`             | Do not wrap `TMITable` in an app logger component          |
+| Theme               | `createTmiTableTheme`                                       | Do not duplicate hero/workspace/`tmiPrimaryContained` keys |
+| **Out of package**  | edit session, xlsx export, feature columns, RPC             | Stay in the app — do not move into wrappers                |
 
 ### Public exports
 
@@ -157,7 +157,7 @@ const columns: ColumnDef<Row>[] = [{ accessorKey: "name", header: "Name" }];
 
 `useDatabaseViewerMaxHeight` / `useTMITableMaxHeight` stay exported for one release but are **deprecated** for this use case.
 
-Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree`. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`.
+Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree`. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`. `rowReorder.dropPlacement` defaults to `"between"` (sortable insert, before/after bands). Set `"onto"` to reparent onto the `over` row: no sibling slide, dashed overlay on `over` (same look as file-drop `isDragOver`). `canDragRow` is unchanged — non-draggable rows stay droppable.
 
 Body cells are a **48px** stretch band (`p: 0`). `TableRowActionButton` fills that height (chevrons, icon columns, custom actions). Default content keeps a 16px horizontal inset; set `meta.fullHeightInteractive`, `iconSurrogateCell`, or `isTreeColumn` to drop it. Do not set `fullHeightInteractive` on plain text columns.
 
@@ -181,6 +181,7 @@ import { TMITableWorkspace } from "@tmi-packages/ui";
 | `debug.onTableLoadSettled` | **no-op**             | Pass `logTableLoadSummary` from the package when you want dev load summaries |
 | `TmiTableLocaleText`       | English-ish built-ins | `OptimisticTableFeedbackProvider` / `UnsavedChangesDialog`                   |
 | DnD                        | off                   | `TmiRowReorderDndProvider` + `rowReorder`                                    |
+| `rowReorder.dropPlacement` | `"between"`           | `"onto"` for drop-on-parent (Groups); omit for Lesmateriaal insert-between   |
 
 ### Overlay
 
