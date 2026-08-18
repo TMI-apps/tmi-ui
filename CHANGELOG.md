@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0
+
+### Minor Changes
+
+- [#12](https://github.com/TMI-apps/tmi-ui/pull/12) [`599fdfe`](https://github.com/TMI-apps/tmi-ui/commit/599fdfe18c7541cb20efb9e4d7e86228be8c9789) Thanks [@TomFranse](https://github.com/TomFranse)! - Add optional `rowReorder.dropPlacement` (`"between"` default, `"onto"` for drop-on-parent). Onto skips sibling slide, uses pointer collision, and highlights `over` with the existing file-drop dashed overlay.
+
 ## 1.6.0
 
 ### Minor Changes

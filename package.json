@@ -1,6 +1,6 @@
 {
   "name": "@tmi-packages/ui",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Shared React + MUI UI primitives (ThumbnailPill, VideoEmbedModal, PersistentStepperList, TMI table satellites and workspace).",
   "keywords": [
     "tmi",
