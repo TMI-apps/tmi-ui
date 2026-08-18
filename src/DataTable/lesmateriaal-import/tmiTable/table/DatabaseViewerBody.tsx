@@ -16,11 +16,7 @@ import type {
   MeasuringConfiguration,
   UniqueIdentifier,
 } from "@dnd-kit/core";
-import {
-  closestCenter,
-  MeasuringFrequency,
-  MeasuringStrategy,
-} from "@dnd-kit/core";
+import { MeasuringFrequency, MeasuringStrategy } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -37,6 +33,7 @@ import {
 import type { DatabaseViewerServerInfinite } from "./databaseViewerServerInfinite.js";
 import type { DatabaseViewerRowFileDrop } from "./databaseViewerRowFileDrop.js";
 import type { DatabaseViewerRowReorderConfig } from "../../shared-types/databaseViewerRowReorder.types.js";
+import { resolveDatabaseViewerRowReorderCollisionDetection } from "../../shared-utils/databaseViewerRowReorderDropPlacement.js";
 import { DatabaseViewerColumnGroup } from "./DatabaseViewerColumnGroup.js";
 import { DatabaseViewerDataRow } from "./DatabaseViewerDataRow.js";
 import { DatabaseViewerReorderDataRow } from "./DatabaseViewerReorderDataRow.js";
@@ -419,7 +416,6 @@ function renderDatabaseViewerBodyDataRow<TData extends object>(
   );
 }
 
-// eslint-disable-next-line max-lines-per-function -- DnD shell + sortable + virtualized table forwarding
 function DatabaseViewerBodyWithRowReorder<TData extends object>(
   props: DatabaseViewerBodyProps<TData> & {
     rowReorder: DatabaseViewerRowReorderConfig<TData>;
@@ -556,7 +552,9 @@ function DatabaseViewerBodyWithRowReorder<TData extends object>(
   return (
     <TmiRowReorderDndProvider
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={resolveDatabaseViewerRowReorderCollisionDetection(
+        rowReorder.dropPlacement,
+      )}
       measuring={ROW_REORDER_DND_MEASURING}
       dragPointerSampleRef={dragPointerSampleRef}
       onDragEnd={handleReorderDragEnd}
@@ -658,7 +656,6 @@ type DatabaseViewerBodyVirtualizedTableProps<TData extends object> = Pick<
   rowReorder?: DatabaseViewerRowReorderConfig<TData>;
 };
 
-// eslint-disable-next-line max-lines-per-function -- spacer + SortableContext + sentinel in one JSX tree
 function DatabaseViewerBodyVirtualizedTable<TData extends object>(
   props: DatabaseViewerBodyVirtualizedTableProps<TData>,
 ) {
@@ -728,6 +725,7 @@ function DatabaseViewerBodyVirtualizedTable<TData extends object>(
           })}
           dndRowId={row.id as UniqueIdentifier}
           canDragThisRow={canDragThisRow}
+          dropPlacement={rowReorder.dropPlacement}
           reorderInteractionBlocked={Boolean(
             rowReorder.reorderInteractionBlocked,
           )}

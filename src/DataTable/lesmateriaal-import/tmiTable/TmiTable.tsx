@@ -5,6 +5,7 @@ import {
   type DatabaseViewerProps,
   type DatabaseViewerRowFileDrop,
   type DatabaseViewerRowReorderConfig,
+  type DatabaseViewerRowReorderDropPlacement,
   type TMITableServerInfinite,
 } from "./table/index.js";
 
@@ -41,5 +42,6 @@ export { staticClientVirtualizedList };
 export type {
   DatabaseViewerRowFileDrop,
   DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderDropPlacement,
   TMITableServerInfinite,
 };

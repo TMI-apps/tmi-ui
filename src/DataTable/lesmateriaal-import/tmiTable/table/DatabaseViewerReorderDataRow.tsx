@@ -1,8 +1,12 @@
 import type { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import type { MutableRefObject, ReactElement } from "react";
 import { useCallback, useMemo } from "react";
+import type { DatabaseViewerRowReorderDropPlacement } from "../../shared-types/databaseViewerRowReorder.types.js";
+import {
+  buildDatabaseViewerReorderRowTableRowSx,
+  mergeDatabaseViewerRowReorderOntoIsDragOver,
+} from "../../shared-utils/databaseViewerRowReorderDropPlacement.js";
 import {
   DatabaseViewerDataRow,
   type DatabaseViewerDataRowProps,
@@ -14,6 +18,7 @@ export interface DatabaseViewerReorderDataRowProps<
   dndRowId: UniqueIdentifier;
   canDragThisRow: boolean;
   reorderInteractionBlocked: boolean;
+  dropPlacement?: DatabaseViewerRowReorderDropPlacement;
   measureElement?: (el: HTMLTableRowElement) => void;
 }
 
@@ -25,15 +30,17 @@ function DatabaseViewerReorderDataRowInner<TData extends object>(
     row,
     canDragThisRow,
     reorderInteractionBlocked,
+    dropPlacement,
     measureElement,
     tableRowRef,
+    isDragOver: fileDropIsDragOver,
     ...pass
   } = props;
 
   const dragActivatorDisabled = reorderInteractionBlocked || !canDragThisRow;
 
   /**
-   * Non-draggable rows stay valid drop targets so siblings can land between them; the wrapping
+   * Non-draggable rows stay valid drop targets (insert-between and onto-parent).
    * `SortableContext` `disabled` handles the global column-sort gate.
    */
   const sortableDisabled = canDragThisRow
@@ -48,6 +55,7 @@ function DatabaseViewerReorderDataRowInner<TData extends object>(
     transform,
     transition,
     isDragging,
+    isOver,
   } = useSortable({
     id: dndRowId,
     disabled: sortableDisabled,
@@ -70,17 +78,23 @@ function DatabaseViewerReorderDataRowInner<TData extends object>(
     [measureElement, setNodeRef, tableRowRef],
   );
 
-  const tableRowSx = useMemo(() => {
-    if (transform === null && !transition && !isDragging) return undefined;
-    return {
-      transform:
-        transform === null ? undefined : CSS.Transform.toString(transform),
-      transition,
-      ...(isDragging
-        ? { visibility: "hidden" as const, pointerEvents: "none" as const }
-        : undefined),
-    };
-  }, [isDragging, transform, transition]);
+  const tableRowSx = useMemo(
+    () =>
+      buildDatabaseViewerReorderRowTableRowSx({
+        transform,
+        transition,
+        isDragging,
+        dropPlacement,
+      }),
+    [dropPlacement, isDragging, transform, transition],
+  );
+
+  const isDragOver = mergeDatabaseViewerRowReorderOntoIsDragOver({
+    fileDropIsDragOver,
+    dropPlacement,
+    isOver,
+    isDragging,
+  });
 
   return (
     <DatabaseViewerDataRow
@@ -94,6 +108,7 @@ function DatabaseViewerReorderDataRowInner<TData extends object>(
         attributes,
         listeners,
       }}
+      isDragOver={isDragOver}
       tableRowSx={tableRowSx}
     />
   );

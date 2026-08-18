@@ -6,6 +6,7 @@ export type {
   TmiTableProps as TMITableProps,
   DatabaseViewerRowFileDrop,
   DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderDropPlacement,
   TMITableServerInfinite,
 } from "./TmiTable.js";
 

@@ -129,6 +129,7 @@ export type {
   DatabaseViewerRowDropZone,
   DatabaseViewerRowFileDrop,
   DatabaseViewerRowReorderConfig,
+  DatabaseViewerRowReorderDropPlacement,
   DatabaseViewerRowReorderEndMeta,
   DatabaseViewerRowReorderPointerSample,
   DatabaseViewerRowSelectionClick,
