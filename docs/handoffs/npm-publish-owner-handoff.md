@@ -8,22 +8,22 @@ Meer detail: [release-flow.md](../release-flow.md) · workflow: [.github/workflo
 
 ## Wat je nodig hebt (voor je start)
 
-| #   | Vereiste                                                                                                                                                    |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **npm:** account met **publish** op scope **`@tmi-packages`** (org-lid / token mag publiceren). GitHub-lidmaatschap alleen is niet genoeg.                  |
-| 2   | **GitHub:** rechten om **Actions secrets** te beheren op repo `TMI-apps/tmi-ui` (of org-secret die deze repo mag gebruiken).                                |
-| 3   | Op `main`: migratie-code + **changeset** gemerged (anders geen nette version bump / publish).                                                               |
-| 4   | **GitHub:** secret `TAG_PUSH_TOKEN` (PAT met `repo`) toegevoegd — anders start **Publish** niet automatisch na een tag (GitHub-beperking). Zie **Deel B2**. |
+| #   | Vereiste                                                                                                                                                                    |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **npm:** account met **publish** op scope **`@tmi-packages`** (org-lid / token mag publiceren). GitHub-lidmaatschap alleen is niet genoeg.                                  |
+| 2   | **GitHub:** rechten om **Actions secrets** te beheren op repo `TMI-apps/tmi-ui` (of org-secret die deze repo mag gebruiken).                                                |
+| 3   | Op `main`: migratie-code + **changeset** gemerged (anders geen nette version bump / publish).                                                                               |
+| 4   | **GitHub:** Trusted Publisher voor `publish.yml` (OIDC). Auto-publish na een changeset-merge gaat via **Version packages → Publish** (`workflow_call`), geen PAT-tag nodig. |
 
 ---
 
-## Deel B2 — GitHub: `TAG_PUSH_TOKEN` (Publish na tag automatisch)
+## Deel B2 — Auto-publish na version bump
 
-**Probleem:** De **Version packages**-workflow pusht de `v…`-tag met de standaard **`GITHUB_TOKEN`**. GitHub start daardoor **geen tweede workflow** — dus **Publish** draait niet, terwijl de tag wél bestaat.
+**Version packages** bumped, tagged, en **roept Publish aan in dezelfde run** (`workflow_call`). Dat omzeilt GitHub’s regel dat een `GITHUB_TOKEN`-tagpush geen tweede workflow start.
 
-**Oplossing:** Maak een **[classic PAT](https://github.com/settings/tokens)** met scope **`repo`** (of fine-grained: **Contents: Read and write** op `TMI-apps/tmi-ui`). Zet die als repository secret **`TAG_PUSH_TOKEN`**. De workflow gebruikt hem **alleen** voor `git push` van de tag, zodat **Publish** wél wordt getriggerd.
+**Retry:** **Actions → Publish → Run workflow** (checkout van huidige `main`).
 
-**Tot `TAG_PUSH_TOKEN` staat:** na elke release **Actions → Publish → Run workflow** handmatig (of tijdelijk tag opnieuw pushen met een PAT vanaf je machine — lastiger).
+Een losse `v*` tag push (vanaf je machine) start Publish nog steeds via `on.push.tags`.
 
 ---
 
@@ -154,7 +154,7 @@ Alleen als CI steeds blijft falen en je **snel** het pakket op npm wilt **claime
 
 | Symptoom                         | Meest waarschijnlijk                                                                                                                                            |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tag op GitHub, nooit Publish-run | `TAG_PUSH_TOKEN` mist: tag ging met `GITHUB_TOKEN` → **Publish** triggert niet. Zet `TAG_PUSH_TOKEN` of start **Publish** handmatig.                            |
+| Tag op GitHub, nooit Publish-run | Oude runs: tag ging met `GITHUB_TOKEN` zonder `workflow_call`. Merge de auto-publish workflow, of start **Publish** handmatig.                                  |
 | 402 / 403 bij publish            | Geen publish-recht op `@tmi-packages`, of package niet public.                                                                                                  |
 | Auth error in Actions            | `NPM_TOKEN` ontbreekt, verkeerde secret-naam, of token verlopen.                                                                                                |
 | Version packages faalt           | Branch protection / bot mag niet naar `main` pushen.                                                                                                            |

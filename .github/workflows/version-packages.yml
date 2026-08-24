@@ -1,4 +1,6 @@
 # Consumes changesets and commits version + changelog to `main` (no second PR for that step).
+# After a version commit, calls Publish as a reusable workflow so npm does not depend on
+# a PAT tag-push (GITHUB_TOKEN tag pushes do not start other workflows).
 
 name: Version packages
 
@@ -14,11 +16,15 @@ concurrency:
 permissions:
   contents: write
   pull-requests: read
+  id-token: write
 
 jobs:
   version:
     name: Version packages
     runs-on: ubuntu-latest
+    outputs:
+      should_publish: ${{ steps.tag.outputs.should_publish }}
+      publish_ref: ${{ steps.tag.outputs.publish_ref }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -70,29 +76,33 @@ jobs:
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
 
-      # Pushes using GITHUB_TOKEN do not trigger other workflows (e.g. Publish on tag).
-      # Use TAG_PUSH_TOKEN (PAT) for the tag push. actions/checkout persist-credentials
-      # writes GITHUB_TOKEN to http.extraheader, which overrides a PAT in the remote URL —
-      # unset that header first or GitHub still treats the push as GITHUB_TOKEN.
-      # Secret: classic PAT with `repo`, or fine-grained PAT with Contents: Read and write.
+      # Tag with GITHUB_TOKEN (will not trigger Publish). Publish runs via workflow_call below.
       - name: Push version tag
+        id: tag
         if: steps.pending.outputs.ready == 'true' && steps.auto_commit.outputs.commit_hash != ''
         env:
           COMMIT_HASH: ${{ steps.auto_commit.outputs.commit_hash }}
-          TAG_PUSH_TOKEN: ${{ secrets.TAG_PUSH_TOKEN }}
         run: |
           set -euo pipefail
           VERSION="$(node -p "require('./package.json').version")"
           TAG="v${VERSION}"
           if git ls-remote --tags origin "refs/tags/${TAG}" | grep -q .; then
-            echo "Remote tag ${TAG} already exists; skipping."
+            echo "Remote tag ${TAG} already exists; skipping tag push and publish."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git tag "${TAG}" "${COMMIT_HASH}"
-          if [ -n "${TAG_PUSH_TOKEN}" ]; then
-            git config --local --unset-all http.https://github.com/.extraheader || true
-            git remote set-url origin "https://x-access-token:${TAG_PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          else
-            echo "::warning::TAG_PUSH_TOKEN secret is not set. Tag is pushed with GITHUB_TOKEN; the Publish workflow will NOT start automatically. Add repo secret TAG_PUSH_TOKEN (PAT with repo scope), or run Publish manually for this tag (Actions → Publish → Run workflow)."
-          fi
           git push origin "refs/tags/${TAG}"
+          echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          echo "publish_ref=${COMMIT_HASH}" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Publish
+    needs: version
+    if: needs.version.outputs.should_publish == 'true'
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/publish.yml
+    with:
+      checkout_ref: ${{ needs.version.outputs.publish_ref }}
