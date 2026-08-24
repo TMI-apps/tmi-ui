@@ -1,6 +1,9 @@
-# Publish to the public npm registry when a version tag (v*) is pushed.
-# Tags are normally created by the Version packages workflow after changesets merge.
-# workflow_dispatch lets you re-run when a prior tag did not trigger (e.g. workflow added later).
+# Publish to the public npm registry.
+#
+# Triggers:
+# - Version packages calls this as a reusable workflow after it bumps + tags (auto-publish).
+# - Push of a v* tag (manual tag from a maintainer machine).
+# - workflow_dispatch (fallback / retry).
 #
 # Auth: npm Trusted Publisher (OIDC) for repo TMI-apps/tmi-ui, workflow file publish.yml.
 # Do not set NODE_AUTH_TOKEN or setup-node registry-url on publish — those write .npmrc
@@ -8,11 +11,15 @@
 name: Publish
 
 on:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: Git SHA or tag to check out and publish
+        type: string
+        required: true
   push:
     tags:
       - "v*"
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       reason:
@@ -29,6 +36,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_call' && inputs.checkout_ref || github.sha }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
