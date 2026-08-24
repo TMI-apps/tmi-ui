@@ -5,6 +5,7 @@ import {
   TableRowThumbnailShell,
 } from "./TableRowThumbnailShell.js";
 
+/** @deprecated Keep until 2.0; no `Attachment*` alias in 1.8. */
 export interface AirtableAttachmentThumbnailCellProps {
   /** Raw JSONB value from e.g. `externe_tools.thumbnail` or `media.afbeelding`. */
   value: unknown;
@@ -15,6 +16,8 @@ export interface AirtableAttachmentThumbnailCellProps {
  * Full-bleed thumbnail cell for table rows that surface an Airtable-synced
  * `multipleAttachments` column. The image fills the entire cell (`objectFit: cover`)
  * behind **`meta.rowThumbnailCell`** (zero-padding “paint dip” layout from `DatabaseViewer`).
+ *
+ * @deprecated Airtable-shaped helper. Still supported in 1.x; 2.0 may rename after a consumer skip-walk.
  *
  * Resolution stays in **`getAirtableAttachmentChipThumbnailUrl`**; paint uses **`TableRowThumbnailShell`**
  * (same placeholder tint + **`Fade`** + lazy/low-priority **`img`** as Lesmateriaal row thumbs).

@@ -12,8 +12,8 @@ import {
 export type TmiTableProps<TData extends object> = DatabaseViewerProps<TData>;
 
 /**
- * Company table master: TanStack Table + MUI shell ({@link DatabaseViewer}).
- * Display name: TMI-table.
+ * Company table master: TanStack Table + MUI shell.
+ * Display name: TMI-table. Prefer this over deprecated {@link DatabaseViewer}.
  *
  * Does not default `debug.onTableLoadSettled` — inject from the app (e.g. `logTableLoadSummary`).
  * Omit `maxHeight` to fill remaining workspace/standalone height; pass a number to pin;

@@ -5,7 +5,7 @@ description: >
   VideoEmbedModal, PersistentStepperList, TMITable, AutocompleteSelectField, or bumping
   @tmi-packages/ui. Infer profile, wire package APIs only, skip-walk unwired ledger rows
   with the human.
-forPackageVersion: 1.6.0
+forPackageVersion: 1.8.0
 ---
 
 # adopt-from-tmi-ui

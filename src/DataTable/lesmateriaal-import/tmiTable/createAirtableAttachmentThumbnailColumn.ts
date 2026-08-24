@@ -8,7 +8,11 @@ import { AirtableAttachmentThumbnailCell } from "../satellites/AirtableAttachmen
 import { TABLE_ROW_THUMB_COLUMN_PX } from "../satellites/tableRowThumbConstants.js";
 import type { DatabaseViewerColumnMeta } from "../shared-types/tmiTableMeta.types.js";
 
-/** Leading Airtable `multipleAttachments` thumb column (**`meta.rowThumbnailCell`**). */
+/**
+ * Leading Airtable `multipleAttachments` thumb column (**`meta.rowThumbnailCell`**).
+ *
+ * @deprecated Airtable-shaped helper. Still supported in 1.x; 2.0 may rename after a consumer skip-walk.
+ */
 export function createAirtableAttachmentThumbnailColumn<TData>(
   columnHelper: ColumnHelper<TData>,
   options: {

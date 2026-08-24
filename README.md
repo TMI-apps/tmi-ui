@@ -18,15 +18,15 @@ Extract-complete table surface is **`1.3.x`**. Do not look for a `0.5.0` tag.
 
 ## Contents
 
-| Component               | Since    | Peer deps beyond core                                                                                                  |
-| ----------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `ThumbnailPill`         | `0.1.0`  | `react-router-dom` (when `to` prop is used)                                                                            |
-| `VideoEmbedModal`       | `0.2.0`  | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                                               |
-| `PersistentStepperList` | `0.4.0`  | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`)                                |
-| Autocomplete family     | `1.6.0`  | `@mui/icons-material`; wrap hosts with `PortaledOverlayStackProvider`; `createTmiTableTheme` for `tmiPrimaryContained` |
-| `textToStepperItems`    | `0.4.0`  | (parser only — no MUI)                                                                                                 |
-| `usePersistentSteps`    | `0.4.0`  | (hook only — `localStorage`)                                                                                           |
-| TMI table (full grid)   | `1.3.0`+ | `@tanstack/react-table`, `@tanstack/react-virtual`, `@dnd-kit/*`; `createTmiTableTheme`                                |
+| Component               | Since    | Peer deps beyond core (install vs runtime)                                                                                                      |
+| ----------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ThumbnailPill`         | `0.1.0`  | `react-router-dom` **optional at install**; **required at runtime** when `to` is used                                                           |
+| `VideoEmbedModal`       | `0.2.0`  | `@mui/icons-material` (uses `@mui/icons-material/Close`)                                                                                        |
+| `PersistentStepperList` | `0.4.0`  | `@mui/icons-material` (expand + check); optional `theme.checklist` (see `src/theme.ts`)                                                         |
+| Autocomplete family     | `1.6.0`  | `@mui/icons-material`; wrap hosts with `PortaledOverlayStackProvider`; `createTmiTableTheme` for `tmiPrimaryContained`                          |
+| `textToStepperItems`    | `0.4.0`  | (parser only — no MUI)                                                                                                                          |
+| `usePersistentSteps`    | `0.4.0`  | (hook only — `localStorage`)                                                                                                                    |
+| TMI table (full grid)   | `1.3.0`+ | TanStack table/virtual and `@dnd-kit/*` **optional at install**; **required at compile/runtime** if you import grid APIs. `createTmiTableTheme` |
 
 Exported types are the contract (`dist/index.d.ts`, `src/index.ts`). Prop surfaces: `ThumbnailPill` / `VideoEmbedModal` source; TMI table → [§ TMI table](#tmi-table). Prefer `TMITable` over deprecated `DatabaseViewer`.
 
@@ -52,20 +52,22 @@ optimizeDeps: {
 
 Your consuming app must already ship compatible **majors** of these. Mismatches should be reported to this repository rather than patched with `--force`.
 
-| Package                   | Required range | Notes                                                           |
-| ------------------------- | -------------- | --------------------------------------------------------------- |
-| `react`                   | `^19.2.0`      |                                                                 |
-| `react-dom`               | `^19.2.0`      |                                                                 |
-| `@mui/material`           | `^7.3.6`       |                                                                 |
-| `@mui/icons-material`     | `^7.3.6`       | `VideoEmbedModal`, `PersistentStepperList`, Autocomplete family |
-| `@emotion/react`          | `^11.14.0`     |                                                                 |
-| `@emotion/styled`         | `^11.14.1`     |                                                                 |
-| `react-router-dom`        | `^7.11.0`      | `ThumbnailPill` with `to`                                       |
-| `@tanstack/react-table`   | `^8.21.3`      | `TMITable`                                                      |
-| `@tanstack/react-virtual` | `3.13.24`      | `TMITable` virtualization                                       |
-| `@dnd-kit/core`           | `^6.3.1`       | Row reorder (`TmiRowReorderDndProvider`)                        |
-| `@dnd-kit/sortable`       | `^10.0.0`      | Row reorder                                                     |
-| `@dnd-kit/utilities`      | `^3.2.2`       | Row reorder                                                     |
+`peerDependenciesMeta.optional` means the **package manager may not fail install** if the peer is missing. It does **not** mean those modules are loaded lazily. Importing `TMITable` / dnd / `ThumbnailPill` `to=` still requires the matching peer at compile and runtime.
+
+| Package                   | Required range | Install  | Runtime when                             |
+| ------------------------- | -------------- | -------- | ---------------------------------------- |
+| `react`                   | `^19.2.0`      | required | always                                   |
+| `react-dom`               | `^19.2.0`      | required | always                                   |
+| `@mui/material`           | `^7.3.6`       | required | always                                   |
+| `@mui/icons-material`     | `^7.3.6`       | required | `VideoEmbedModal`, stepper, Autocomplete |
+| `@emotion/react`          | `^11.14.0`     | required | always                                   |
+| `@emotion/styled`         | `^11.14.1`     | required | always                                   |
+| `react-router-dom`        | `^7.11.0`      | optional | `ThumbnailPill` with `to`                |
+| `@tanstack/react-table`   | `^8.21.3`      | optional | `TMITable` / table helpers               |
+| `@tanstack/react-virtual` | `3.13.24`      | optional | `TMITable` virtualization                |
+| `@dnd-kit/core`           | `^6.3.1`       | optional | row reorder (`TmiRowReorderDndProvider`) |
+| `@dnd-kit/sortable`       | `^10.0.0`      | optional | row reorder                              |
+| `@dnd-kit/utilities`      | `^3.2.2`       | optional | row reorder                              |
 
 ## Verify the install
 
@@ -100,6 +102,8 @@ Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a 
 | Fill height         | omit `maxHeight` (or `false` for nested)                    | Do not call deprecated `useTMITableMaxHeight` for fill     |
 | Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`             | Do not wrap `TMITable` in an app logger component          |
 | Theme               | `createTmiTableTheme`                                       | Do not duplicate hero/workspace/`tmiPrimaryContained` keys |
+| Subpath import      | `@tmi-packages/ui/table`                                    | Also `import "@tmi-packages/ui"` once for theme types      |
+| Optional peers      | TanStack / `@dnd-kit/*` optional at **install**             | Still required at runtime if you import the grid           |
 | **Out of package**  | edit session, xlsx export, feature columns, RPC             | Stay in the app — do not move into wrappers                |
 
 ### Public exports
@@ -115,6 +119,18 @@ Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a 
 | Row actions   | `TableRowActionButton`                                                                                                                                       |
 | Feedback      | `OptimisticTableFeedbackProvider`, `useOptimisticTableFeedback`, `TmiTableLocaleText`                                                                        |
 
+### Deprecated public names (1.x)
+
+These still export from `@tmi-packages/ui`. Prefer the replacements. **1.8 does not add `Attachment*` aliases** — a rename is a **2.0** skip-walk item.
+
+| Still exported                                        | Prefer                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------- |
+| `DatabaseViewer`                                      | `TMITable`                                              |
+| `DatabaseViewerProps`                                 | `TmiTableProps` / `TMITableProps`                       |
+| `useDatabaseViewerMaxHeight` / `useTMITableMaxHeight` | omit `maxHeight` on `TMITable` to fill remaining height |
+| `AirtableAttachmentThumbnailCell`                     | keep until 2.0 (no new public name in 1.8)              |
+| `createAirtableAttachmentThumbnailColumn`             | keep until 2.0 (no new public name in 1.8)              |
+
 ### Theme
 
 This package does **not** ship a full `createTheme`. Wrap **your** theme with `createTmiTableTheme` before workspace / hero UI / Autocomplete primary bars. That fills `theme.detailPanelHero`, `theme.tmiTableWorkspace.detailDrawerModalZ`, and `theme.tmiPrimaryContained`. Import `@tmi-packages/ui` once for MUI module augmentation. Do not redeclare those keys in the app.
@@ -128,6 +144,17 @@ const theme = createTmiTableTheme(createTheme(/* your tokens */));
 ```
 
 Optional elsewhere: `theme.thumbnailPill`, `palette.primary.surface` / `surfaceHover`, `theme.checklist`.
+
+### Entry points
+
+Root barrel (`@tmi-packages/ui`) re-exports everything. Additive subpaths (1.8+):
+
+```ts
+import { TMITable, PortaledOverlayStackProvider } from "@tmi-packages/ui/table";
+import { AutocompleteSelectField } from "@tmi-packages/ui/autocomplete";
+```
+
+Subpath files do **not** run the root `theme.js` side-effect. Always `import "@tmi-packages/ui"` once in the app for MUI module augmentation. `./autocomplete` still uses table overlay/skin internals — wrap hosts with `PortaledOverlayStackProvider` from the root or `./table`; it is not a standalone bundle.
 
 ### Grid and `serverInfinite`
 
@@ -311,7 +338,7 @@ import {
 
 ### Autocomplete
 
-Shared combobox family for table/detail editors. Minimum consumer version: **`@tmi-packages/ui@^1.6.0`**.
+Shared combobox family for table/detail editors. Minimum consumer version: **`@tmi-packages/ui@^1.6.0`**. Hygiene contract (optional peers, subpaths, deprecations): **`^1.8.0`**.
 
 ```ts
 import {
@@ -320,6 +347,8 @@ import {
   RowStyleMultiSelect,
 } from "@tmi-packages/ui";
 ```
+
+Or `import { AutocompleteSelectField } from "@tmi-packages/ui/autocomplete"` plus a root `import "@tmi-packages/ui"` and overlay from root/`./table`.
 
 Wrap drawer/modal hosts with `PortaledOverlayStackProvider` (`hostModalZ` = drawer z-index). Merge `createTmiTableTheme` so `tmiPrimaryContained` exists. `PrimaryContainedAutocompleteBar` and `ListRowAddButton` `visualVariant="primary"` read that token — do not restyle via `MuiButton` overrides or app brand hex in wrappers.
 
@@ -334,6 +363,7 @@ Wrap drawer/modal hosts with `PortaledOverlayStackProvider` (`hostModalZ` = draw
 | Metadata filter row | `MetadataFiltersBar`                               | Do not rebuild the compact multi-select filter layout          |
 | Selected-row list   | `RowStyleMultiSelect`                              | Pass `thumbnailPlaceholder`; do not import feature-domain art  |
 | Pill remove slot    | `ThumbnailPillRemoveTableRowSlot`                  | Do not restyle `ThumbnailPill` `rightSlot` delete per screen   |
+| Subpath import      | `@tmi-packages/ui/autocomplete`                    | Still import root once for theme; overlay comes from table     |
 
 ## Theme integration
 

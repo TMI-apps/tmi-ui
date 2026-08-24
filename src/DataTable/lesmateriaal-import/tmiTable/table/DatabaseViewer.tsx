@@ -104,6 +104,7 @@ const DEFAULT_INITIAL_SORTING: SortingState = [];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TanStack ColumnDef is invariant in TValue; wide TValue at package boundary
 export type TMITableColumnDef<TData extends object> = ColumnDef<TData, any>;
 
+/** @deprecated Same contract as {@link TMITable}; remains in 1.x. */
 export interface DatabaseViewerProps<TData extends object> {
   data: TData[];
   columns: Array<TMITableColumnDef<TData>>;
@@ -243,6 +244,11 @@ export function staticClientVirtualizedList(
   };
 }
 
+/**
+ * Low-level grid shell. Prefer {@link TMITable} for new call sites.
+ *
+ * @deprecated Use {@link TMITable}. This export remains in 1.x for existing apps.
+ */
 export function DatabaseViewer<TData extends object>({
   data,
   columns,
