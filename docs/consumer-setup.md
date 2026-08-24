@@ -6,16 +6,21 @@ Use this when adding `@tmi-packages/ui` to **your application** (or your team’
 
 ## 1. Preflight — peer major versions
 
-Align these in the app before adding the dependency (see `package.json` peer ranges):
+Align these in the app before adding the dependency (see `package.json` peer ranges). **Install optional** peers (`peerDependenciesMeta`) may be omitted for pill-only apps; **runtime** still needs them if you import those APIs.
 
-- `react` / `react-dom` ^19
-- `@mui/material` / `@mui/icons-material` ^7
-- `@emotion/react` / `@emotion/styled` ^11
-- `react-router-dom` ^7 (if you use `ThumbnailPill` with `to=`)
-- `@tanstack/react-table` ^8.21 (TMI table satellites / column helpers)
-- `@tanstack/react-virtual` 3.13.x and `@dnd-kit/*` (needed when you adopt the grid; already peer-declared)
+| You use                    | Install                       | Runtime                                                                  |
+| -------------------------- | ----------------------------- | ------------------------------------------------------------------------ |
+| Pills without `to=`        | React, MUI, Emotion           | same                                                                     |
+| `ThumbnailPill` `to=`      | plus `react-router-dom`       | `react-router-dom`                                                       |
+| Autocomplete family        | plus icons (already required) | `PortaledOverlayStackProvider`; `createTmiTableTheme` for primary chrome |
+| `TMITable` / table helpers | plus TanStack table + virtual | same packages at compile/runtime                                         |
+| Row reorder                | plus `@dnd-kit/*`             | same                                                                     |
 
-For the **TMI table**, see **[README — TMI table](../README.md#tmi-table)** (`createTmiTableTheme`, Vite `optimizeDeps.include`, overlay z-index, `serverInfinite`).
+Required always: `react` / `react-dom` ^19, `@mui/material` / `@mui/icons-material` ^7, `@emotion/react` / `@emotion/styled` ^11.
+
+Optional at **install** (declared optional in 1.8+): `react-router-dom` ^7, `@tanstack/react-table` ^8.21, `@tanstack/react-virtual` **3.13.24**, `@dnd-kit/*`.
+
+Hygiene bump + skip-walk groups: **[consumer-hygiene-1.8.md](./handoffs/consumer-hygiene-1.8.md)**. For the **TMI table**, see **[README — TMI table](../README.md#tmi-table)** (`createTmiTableTheme`, Vite `optimizeDeps.include`, overlay z-index, `serverInfinite`, subpaths).
 
 ## 2. Registry
 

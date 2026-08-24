@@ -44,6 +44,10 @@ try {
     "package/dist/index.js",
     "package/dist/index.d.ts",
     "package/dist/theme.js",
+    "package/dist/DataTable/index.js",
+    "package/dist/DataTable/index.d.ts",
+    "package/dist/AutocompleteSelect/index.js",
+    "package/dist/AutocompleteSelect/index.d.ts",
     "package/README.md",
     "package/LICENSE",
     "package/CHANGELOG.md",
@@ -78,6 +82,22 @@ try {
     throw new Error(
       `README must include >= 4 Integration ledger sections, found ${ledgerCount}`,
     );
+  }
+
+  const packedPkgJsonPath = lines.find((l) => l.endsWith("package/package.json"));
+  if (!packedPkgJsonPath) {
+    throw new Error("Tarball missing package/package.json path in listing");
+  }
+  const packedPkg = JSON.parse(
+    execSync(`tar -xOf "${join(tmp, tgzName).replace(/\\/g, "/")}" "${packedPkgJsonPath}"`, {
+      encoding: "utf8",
+      shell: true,
+    }),
+  );
+  for (const key of [".", "./table", "./autocomplete"]) {
+    if (!packedPkg.exports?.[key]) {
+      throw new Error(`Packed package.json exports missing "${key}"`);
+    }
   }
 
   const v = pkg.version;

@@ -73,7 +73,7 @@ interface AutocompleteSelectFieldBaseProps {
   /**
    * When `dropdownOnly`, use this element as the portaled suggestions popper anchor instead of MUI's
    * default (the collapsed input). Keeps dropdown flush with e.g. a full-width hero stat cell; the
-   * default 1Ã—1 clipped input anchors badly.
+   * default 1×1 clipped input anchors badly.
    */
   dropdownAnchorEl?: HTMLElement | null;
   /**

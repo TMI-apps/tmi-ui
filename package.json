@@ -41,6 +41,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./table": {
+      "types": "./dist/DataTable/index.d.ts",
+      "import": "./dist/DataTable/index.js"
+    },
+    "./autocomplete": {
+      "types": "./dist/AutocompleteSelect/index.d.ts",
+      "import": "./dist/AutocompleteSelect/index.js"
     }
   },
   "files": [
@@ -79,6 +87,26 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2"
+  },
+  "peerDependenciesMeta": {
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "@tanstack/react-virtual": {
+      "optional": true
+    },
+    "@dnd-kit/core": {
+      "optional": true
+    },
+    "@dnd-kit/sortable": {
+      "optional": true
+    },
+    "@dnd-kit/utilities": {
+      "optional": true
+    },
+    "react-router-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
