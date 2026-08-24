@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0
+
+### Minor Changes
+
+- [#13](https://github.com/TMI-apps/tmi-ui/pull/13) [`dedbd70`](https://github.com/TMI-apps/tmi-ui/commit/dedbd706bc006270ee4017dcb5697971e339c2af) Thanks [@TomFranse](https://github.com/TomFranse)! - Optional peers, `./table` and `./autocomplete` entry points, JSDoc deprecations (no `Attachment*` aliases), Autocomplete behavioral tests, and consumer 1.8 hygiene handoff.
+
 ## 1.7.0
 
 ### Minor Changes
