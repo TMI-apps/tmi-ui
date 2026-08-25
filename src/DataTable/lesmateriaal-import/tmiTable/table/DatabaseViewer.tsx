@@ -95,6 +95,8 @@ import {
 import { shouldClearRowSelectionForKeyChange } from "./databaseViewerClearRowSelection.js";
 import { DatabaseViewerLoadingSkeleton } from "./DatabaseViewerLoadingSkeleton.js";
 import { DatabaseViewerInlineErrorBanner } from "./DatabaseViewerInlineErrorBanner.js";
+import { DatabaseViewerCreateRow } from "./DatabaseViewerCreateRow.js";
+import type { TmiTableRowCreateConfig } from "./tmiTableRowCreate.types.js";
 
 /* Monolithic table shell: TanStack + MUI; behavior split across DatabaseViewer* siblings and style hooks. */
 
@@ -221,6 +223,11 @@ export interface DatabaseViewerProps<TData extends object> {
   selection?: TMITableSelectionConfig;
   /** Dev table-load debug config. */
   debug?: TMITableDebugConfig;
+  /**
+   * Opt-in pinned create row (viewport bottom). Omit to keep current behavior.
+   * Not a selectable data row. See {@link TmiTableRowCreateConfig}.
+   */
+  rowCreate?: TmiTableRowCreateConfig;
 }
 
 /**
@@ -293,6 +300,7 @@ export function DatabaseViewer<TData extends object>({
   tree,
   selection,
   debug,
+  rowCreate,
 }: DatabaseViewerProps<TData>) {
   const treeConfig = resolveDatabaseViewerTreeConfig(tree, {
     getSubRows,
@@ -956,6 +964,7 @@ export function DatabaseViewer<TData extends object>({
             sx={{
               width: scrollContentWidth,
               minWidth: "100%",
+              minHeight: "100%",
               display: "flex",
               flexDirection: "column",
             }}
@@ -1002,32 +1011,43 @@ export function DatabaseViewer<TData extends object>({
                 </Typography>
               </Box>
             ) : null}
-            <DatabaseViewerBody<TData>
-              table={table}
-              paginatedRows={paginatedRows}
-              colCount={colCount}
-              bodyTableSx={bodyTableSx}
-              ariaLabel={ariaLabel}
-              emptyMessage={emptyMessage}
-              tableColumnSizeStyle={tableColumnSizeStyle}
-              rowIsClickable={rowIsClickable}
-              rowIntentEnabled={rowIntentEnabled}
-              onRowClick={onRowClick}
-              onRowIntent={onRowIntent}
-              rowFileDrop={rowFileDrop}
-              treeRowExpandableOverride={resolvedTreeRowExpandableOverride}
-              onTreeRowWillExpand={resolvedOnTreeRowWillExpand}
-              treeRowPartiallyExpanded={resolvedTreeRowPartiallyExpanded}
-              interactionSkinPreset={interactionSkinPreset}
-              serverInfinite={serverInfinite}
-              dataLength={data.length}
-              tableScrollElement={tableScrollElement}
-              getRowDataAttributes={getRowDataAttributes}
-              rowSavePending={rowSavePending}
-              rowReorder={rowReorderResolved}
-              rowSelectionConfig={rowSelectionConfig}
-              rowSelectionEnabled={rowSelectionEnabled}
-            />
+            <Box sx={{ flex: 1, minHeight: 0 }}>
+              <DatabaseViewerBody<TData>
+                table={table}
+                paginatedRows={paginatedRows}
+                colCount={colCount}
+                bodyTableSx={bodyTableSx}
+                ariaLabel={ariaLabel}
+                emptyMessage={emptyMessage}
+                tableColumnSizeStyle={tableColumnSizeStyle}
+                rowIsClickable={rowIsClickable}
+                rowIntentEnabled={rowIntentEnabled}
+                onRowClick={onRowClick}
+                onRowIntent={onRowIntent}
+                rowFileDrop={rowFileDrop}
+                treeRowExpandableOverride={resolvedTreeRowExpandableOverride}
+                onTreeRowWillExpand={resolvedOnTreeRowWillExpand}
+                treeRowPartiallyExpanded={resolvedTreeRowPartiallyExpanded}
+                interactionSkinPreset={interactionSkinPreset}
+                serverInfinite={serverInfinite}
+                dataLength={data.length}
+                tableScrollElement={tableScrollElement}
+                getRowDataAttributes={getRowDataAttributes}
+                rowSavePending={rowSavePending}
+                rowReorder={rowReorderResolved}
+                rowSelectionConfig={rowSelectionConfig}
+                rowSelectionEnabled={rowSelectionEnabled}
+              />
+            </Box>
+            {rowCreate ? (
+              <DatabaseViewerCreateRow
+                table={table}
+                rowCreate={rowCreate}
+                surfaceMode={surfaceMode}
+                tableColumnSizeStyle={tableColumnSizeStyle}
+                headerTableSx={headerTableSx}
+              />
+            ) : null}
           </Box>
         </TableContainer>
         {bottomEndAction ? (

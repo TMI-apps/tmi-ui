@@ -188,6 +188,14 @@ export type {
   DatabaseViewerProps,
   TMITableColumnDef,
 } from "./lesmateriaal-import/tmiTable/table/DatabaseViewer.js";
+export type {
+  TmiTableRowCreateConfig,
+  TmiTableRowCreateRequest,
+  TmiTableRowCreateSource,
+  TMITableRowCreateConfig,
+  TMITableRowCreateRequest,
+  TMITableRowCreateSource,
+} from "./lesmateriaal-import/tmiTable/table/tmiTableRowCreate.types.js";
 export type { TMITableMaxHeightProp } from "./lesmateriaal-import/tmiTable/hooks/resolveTMITableMaxHeight.js";
 export type { DatabaseViewerSurfaceMode } from "./lesmateriaal-import/tmiTable/table/databaseViewerConstants.js";
 export type { DatabaseViewerColumnMenuState } from "./lesmateriaal-import/tmiTable/table/DatabaseViewerColumnMenu.js";
