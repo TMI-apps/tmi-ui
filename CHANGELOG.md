@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.1
+
+### Patch Changes
+
+- [`615e9e6`](https://github.com/TMI-apps/tmi-ui/commit/615e9e6c8c599c5a0488b6c110ceee35c29c5e3b) Thanks [@Tom-TMI](https://github.com/Tom-TMI)! - Pin the optional TMITable create row to the table viewport, keep workspace detail in the split pane or drawer when viewport fill is off, and clip row-action hover/ripple to the painted bar corners.
+
 ## 1.9.0
 
 ### Minor Changes
