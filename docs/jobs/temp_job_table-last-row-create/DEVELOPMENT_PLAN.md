@@ -2,7 +2,7 @@
 
 ## Summary
 
-- **What:** Optional **pinned create row** on `TMITable`: a blank, data-like row stuck to the **bottom of the table viewport**. Typing or **EOL paste** in a column calls a consumer `onCreate` handler (once per line). The handler **returns a row id**; the library uses existing optimistic pending-row feedback. Opt-in only — no library create drawer.
+- **What:** Optional **pinned create row** on `TMITable`: a blank, data-like row stuck to the **bottom of the table viewport**. Typing or **EOL paste** in a column calls a consumer `onCreate` handler (once per line). The handler **returns a row id**. Pending chrome is consumer-owned (D12). Opt-in only — no library create drawer.
 - **Why:** Spreadsheet-style add without leaving the grid. Locked in `DECISIONS.md` (D0–D11).
 - **Complexity:** **M** — public optional API, sticky footer vs virtualizer, paste, tree/infinite still using **current view**.
 - **Plan review:** **Done 2026-08-24** (M) — six-lens `review-dev-plan` accepted; locks in `DECISIONS.md` D12–D14 and § Decisions made.
@@ -12,26 +12,26 @@
 
 This clone is on `main` with **uncommitted component-workshop** files. D0 forbids mixing jobs.
 
-| Field     | Value                                                                                          |
-| --------- | ---------------------------------------------------------------------------------------------- |
-| Base      | `origin/main` (clean)                                                                          |
-| Branch    | `feature/table-last-row-create`                                                                |
-| Worktree  | **Required:** `git worktree add <sibling>/tmi-ui-table-last-row-create -b feature/table-last-row-create origin/main` |
-| This clone | Leave workshop dirty tree untouched                                                            |
-| Delivery  | One PR to `main`. Changeset **minor** in `finish`                                              |
+| Field      | Value                                                                                                                |
+| ---------- | -------------------------------------------------------------------------------------------------------------------- |
+| Base       | `origin/main` (clean)                                                                                                |
+| Branch     | `feature/table-last-row-create`                                                                                      |
+| Worktree   | **Required:** `git worktree add <sibling>/tmi-ui-table-last-row-create -b feature/table-last-row-create origin/main` |
+| This clone | Leave workshop dirty tree untouched                                                                                  |
+| Delivery   | One PR to `main`. Changeset **minor** in `finish`                                                                    |
 
 ## Phase overview
 
-| Phase | Goal                                         | Gate                                                                 | Status  |
-| ----- | -------------------------------------------- | -------------------------------------------------------------------- | ------- |
-| 0     | Isolated worktree + branch                   | Worktree on `feature/table-last-row-create`; `git status` clean      | Pending |
-| 1     | Public types + optional `rowCreate` prop     | `pnpm type-check`                                                    | Pending |
-| 2     | Pinned create strip (layout, a11y, no select)| RTL: strip present when prop set; absent when omitted; not in row ids | Pending |
-| 3     | Commit + pending id contract                 | `pnpm test:run` (create + pending + reject)                          | Pending |
-| 4     | EOL paste (one column, N handler calls)      | `pnpm test:run` (paste cases)                                        | Pending |
-| 5     | Docs + README ledger                         | Ledger row; JSDoc on prop                                            | Pending |
-| 6     | Playground (conditional)                     | Skip if no `playground/` on branch; else kitchen-sink uses `rowCreate` | Pending |
-| 7     | Pre-PR suite                                 | type-check, type-check:test, lint, format:check, test:run, build, verify:pack | Pending |
+| Phase | Goal                                          | Gate                                                                          | Status |
+| ----- | --------------------------------------------- | ----------------------------------------------------------------------------- | ------ |
+| 0     | Isolated worktree + branch                    | Worktree on `feature/table-last-row-create`; `git status` clean               | Done   |
+| 1     | Public types + optional `rowCreate` prop      | `pnpm type-check`                                                             | Done   |
+| 2     | Pinned create strip (layout, a11y, no select) | RTL: strip present when prop set; absent when omitted; not in row ids         | Done   |
+| 3     | Commit + pending id contract                  | `pnpm test:run` (create + pending + reject)                                   | Done   |
+| 4     | EOL paste (one column, N handler calls)       | `pnpm test:run` (paste cases)                                                 | Done   |
+| 5     | Docs + README ledger                          | Ledger row; JSDoc on prop                                                     | Done   |
+| 6     | Playground (conditional)                      | Skip if no `playground/` on branch; else kitchen-sink uses `rowCreate`        | Done   |
+| 7     | Pre-PR suite                                  | type-check, type-check:test, lint, format:check, test:run, build, verify:pack | Done   |
 
 ## Conflict & compliance
 
@@ -46,13 +46,13 @@ This clone is on `main` with **uncommitted component-workshop** files. D0 forbid
 
 ## Pattern & precedent
 
-| Field                | Value |
-| -------------------- | ----- |
-| **Capability**       | Trailing create row on a virtualized data grid |
-| **Industry**         | Airtable/Sheets: blank row + cell commit; GitHub/Notion: ghost “New”; AG Grid: pinned bottom. **D7 diverts** from Airtable in-flow: pin to **viewport**. Paste: EOL → one column (D5), not TSV. |
-| **Repo neighbors**   | Sticky **header** strip in `DatabaseViewer` (same `TableContainer`). Virtualizer in `DatabaseViewerBody` — create row must **not** be a virtual item. `rowSavePending` + `OptimisticTableFeedbackProvider` (`beginPendingRow` / `endPendingRow`) for ids after create. `ListRowAddButton` is autocomplete **click** chrome — do not reuse. |
-| **Verdict**          | **Acceptable product-specific:** Airtable cell model + AG Grid–style pin. |
-| **Risks**            | Horizontal scroll desync if footer leaves the scroll root; short lists without `min-height: 100%` leave the strip under rows instead of at the viewport bottom; injecting a phantom TanStack row would break selection (D8). |
+| Field              | Value                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Capability**     | Trailing create row on a virtualized data grid                                                                                                                                                                                                                                                                                             |
+| **Industry**       | Airtable/Sheets: blank row + cell commit; GitHub/Notion: ghost “New”; AG Grid: pinned bottom. **D7 diverts** from Airtable in-flow: pin to **viewport**. Paste: EOL → one column (D5), not TSV.                                                                                                                                            |
+| **Repo neighbors** | Sticky **header** strip in `DatabaseViewer` (same `TableContainer`). Virtualizer in `DatabaseViewerBody` — create row must **not** be a virtual item. `rowSavePending` + `OptimisticTableFeedbackProvider` (`beginPendingRow` / `endPendingRow`) for ids after create. `ListRowAddButton` is autocomplete **click** chrome — do not reuse. |
+| **Verdict**        | **Acceptable product-specific:** Airtable cell model + AG Grid–style pin.                                                                                                                                                                                                                                                                  |
+| **Risks**          | Horizontal scroll desync if footer leaves the scroll root; short lists without `min-height: 100%` leave the strip under rows instead of at the viewport bottom; injecting a phantom TanStack row would break selection (D8).                                                                                                               |
 
 ## Scope / out of scope
 
@@ -104,7 +104,7 @@ rowCreate?: TmiTableRowCreateConfig;
 - Omit `rowCreate` → current behavior (D1).
 - Default cell UI: compact text input per **visible leaf** column (skip checkbox/reorder/thumbnail columns via existing column meta flags). Optional `meta.createCell` **only if** a column cannot be a string; do not block v1 on that — add if kitchen-sink/tests hit a non-text column.
 - Paste: `clipboardData.getData("text")`, split `/\\r?\\n/`, **skip blank lines**, call `onCreate` per line with `source: "paste"` and the focused `columnId`.
-- Rejected promise: `endPendingRow` + `showRollbackToast`; keep draft text in the pin.
+- Rejected promise / empty id: `showRollbackToast` (noop without provider); keep draft text in the pin. Library does not call `beginPendingRow` / `endPendingRow` (D12).
 - Escape: clear local draft; no `onCreate`.
 
 ## Layout contract (D7)
@@ -121,17 +121,20 @@ Short lists: strip sits on the viewport bottom (flex + minHeight 100%). Long lis
 
 ## Notes during development
 
-(empty)
+- Phase 3 pending: implemented **D12** — library only `showRollbackToast` on reject/empty id; no `beginPendingRow` / `endPendingRow`.
+- Paste leftovers use `InputBase multiline` so failed + unsent lines keep `\n` in the pin (single-line `<input>` strips newlines).
+- Phase 6: **skipped** — no `playground/` on this worktree / `origin/main`. Do not copy workshop files from the dirty clone.
+- Phase 7: local suite green 2026-08-24 (`type-check`, `type-check:test`, `lint`, `format:check`, `test:run` 128, `build`, `verify:pack`).
 
 ## Decisions made
 
-| Decision | Context | Outcome | User asked? |
-| -------- | ------- | ------- | ----------- |
-| Pattern C | D5 EOL paste + D7 viewport pin vs Airtable in-flow / Sheets TSV | Proceed as planned: AG Grid–style pin + one-column EOL paste; README must say pin is viewport chrome, not “row after last record.” Tree parent is app-owned. | Yes — accept critique |
+| Decision                        | Context                                                                                               | Outcome                                                                                                                                                                                                                                                                                                                                | User asked?           |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| Pattern C                       | D5 EOL paste + D7 viewport pin vs Airtable in-flow / Sheets TSV                                       | Proceed as planned: AG Grid–style pin + one-column EOL paste; README must say pin is viewport chrome, not “row after last record.” Tree parent is app-owned.                                                                                                                                                                           | Yes — accept critique |
 | Pending lifecycle (narrows D10) | Table pending is consumer `rowSavePending` + optional provider; library must not invent a second loop | Library does **not** call `beginPendingRow` / `endPendingRow`. Consumer: `onCreate` inserts + returns id; wire `rowSavePending` to `isRowPending(getRowId(r))` if they want chrome. On reject, library `showRollbackToast` (no-op without provider) and keeps draft. Empty/`""` id = reject path. Provider absent: create still works. | Yes — accept critique |
-| Paste batch failure | Sequential N `onCreate` | Stop on first reject; keep the failed line and all unsent lines in the pin; do not roll back already-succeeded creates. | Yes — accept critique |
-| Test split | RTL cannot prove sticky pin / H-scroll | Automated: omit-prop, commit, `DataTransfer` paste order, blank-line skip, reject+draft, not selectable, loading/error = no strip. Manual: pin while scrolling, column alignment, tree/infinite, `maxHeight={false}`. | Yes — accept critique |
-| Phase 7 playground | Worktree from `origin/main` has no `playground/` | `pnpm playground` is **N/A** unless `playground/` exists on the branch. | Yes — accept critique |
+| Paste batch failure             | Sequential N `onCreate`                                                                               | Stop on first reject; keep the failed line and all unsent lines in the pin; do not roll back already-succeeded creates.                                                                                                                                                                                                                | Yes — accept critique |
+| Test split                      | RTL cannot prove sticky pin / H-scroll                                                                | Automated: omit-prop, commit, `DataTransfer` paste order, blank-line skip, reject+draft, not selectable, loading/error = no strip. Manual: pin while scrolling, column alignment, tree/infinite, `maxHeight={false}`.                                                                                                                  | Yes — accept critique |
+| Phase 7 playground              | Worktree from `origin/main` has no `playground/`                                                      | `pnpm playground` is **N/A** unless `playground/` exists on the branch.                                                                                                                                                                                                                                                                | Yes — accept critique |
 
 ---
 
@@ -185,8 +188,7 @@ Short lists: strip sits on the viewport bottom (flex + minHeight 100%). Long lis
 **Steps:**
 
 1. Local draft state keyed by `columnId` (or single focused value).
-2. On commit: `void onCreate(...)`; if Promise, `beginPendingRow(id)` after resolve **or** if the consumer returns id then inserts data asynchronously, call `beginPendingRow` immediately with returned id when it is known. If the id is only known after await, begin pending as soon as the string is available; `endPendingRow` when `isRowPending` would otherwise stick — typically consumer `data` update + `endPendingRow` in consumer. **Library:** `beginPendingRow` after id returned; `endPendingRow` on the next paint if the row exists **or** document that **consumers** call `endPendingRow` (existing optimistic pattern). Match existing `rowSavePending` / provider docs so we do not invent a second pending API.
-   - Prefer: after `await onCreate`, `beginPendingRow(id)` and `endPendingRow(id)` in `finally` if the library cannot see the row — **better:** `beginPendingRow` after id, `endPendingRow` in `finally` after a microtask only if that matches current save UX. Read `OptimisticTableFeedbackContext` + one consumer-style test and **copy that lifecycle** (note the choice under Decisions made).
+2. On commit: `await onCreate(...)`. Success with a non-empty id: clear that column’s draft and refocus (D9). Reject or empty id: `showRollbackToast`, keep draft. Do **not** call `beginPendingRow` / `endPendingRow` (D12).
 3. Empty commit: no call.
 4. Failure: toast + keep draft.
 
@@ -232,6 +234,8 @@ Short lists: strip sits on the viewport bottom (flex + minHeight 100%). Long lis
 2. If it **is**, add `rowCreate` to `kitchenSinkTable.tsx` with in-memory `onCreate` returning a new id and appending state — do not enable it in this PR by copying uncommitted workshop files from the other clone.
 
 **Gate:** Skip **or** `pnpm playground` type-check path already used by workshop (`pnpm type-check` includes playground if present).
+
+**Notes:** Skipped 2026-08-24 — no `playground/` in worktree.
 
 ---
 

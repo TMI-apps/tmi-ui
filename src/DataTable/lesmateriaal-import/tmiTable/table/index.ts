@@ -4,6 +4,14 @@ export {
 } from "./DatabaseViewer.js";
 export type { DatabaseViewerProps } from "./DatabaseViewer.js";
 export type {
+  TmiTableRowCreateConfig,
+  TmiTableRowCreateRequest,
+  TmiTableRowCreateSource,
+  TMITableRowCreateConfig,
+  TMITableRowCreateRequest,
+  TMITableRowCreateSource,
+} from "./tmiTableRowCreate.types.js";
+export type {
   DatabaseViewerRowDropZone,
   DatabaseViewerRowReorderConfig,
   DatabaseViewerRowReorderDropPlacement,
