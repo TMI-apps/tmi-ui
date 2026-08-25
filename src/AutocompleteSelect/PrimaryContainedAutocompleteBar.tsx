@@ -8,7 +8,7 @@ import {
   type AutocompleteSelectFieldProps,
 } from "./AutocompleteSelectField.js";
 import { getTableInteractionSkin } from "../DataTable/lesmateriaal-import/shared-theme/tableInteractionSkin.js";
-import { resolveTmiPrimaryContained } from "./tmiPrimaryContained.js";
+import { tmiPrimaryContainedRowShellSx } from "./tmiPrimaryContained.js";
 
 /**
  * Outer-shell sx for the primary-gradient autocomplete bar — matches the
@@ -22,36 +22,11 @@ import { resolveTmiPrimaryContained } from "./tmiPrimaryContained.js";
  */
 function primaryContainedAutocompleteBarOuterSx(theme: Theme) {
   const skin = getTableInteractionSkin(theme, "lightweight");
-  const contained = resolveTmiPrimaryContained(theme);
   const h = skin.rowMinHeightPx;
-  const r = `${skin.rowBorderRadiusPx}px`;
   return {
-    display: "flex",
-    alignItems: "stretch",
-    justifyContent: "flex-start",
-    gap: 0,
-    width: "100%",
+    ...tmiPrimaryContainedRowShellSx(theme),
     height: h,
-    minHeight: h,
     maxHeight: h,
-    minWidth: 0,
-    m: 0,
-    padding: 0,
-    borderRadius: r,
-    overflow: "hidden",
-    boxSizing: "border-box",
-    boxShadow: contained.restShadow,
-    background: contained.gradient,
-    backgroundSize: "200% 200%",
-    backgroundPosition: "0% 50%",
-    color: theme.palette.common.white,
-    textTransform: "none",
-    fontSize: theme.typography.body2.fontSize ?? "0.875rem",
-    fontWeight:
-      theme.typography.body2.fontWeight ??
-      theme.typography.fontWeightRegular ??
-      400,
-    lineHeight: 1,
   };
 }
 

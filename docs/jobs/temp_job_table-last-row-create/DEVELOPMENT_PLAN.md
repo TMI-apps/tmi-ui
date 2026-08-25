@@ -22,16 +22,16 @@ This clone is on `main` with **uncommitted component-workshop** files. D0 forbid
 
 ## Phase overview
 
-| Phase | Goal                                          | Gate                                                                          | Status |
-| ----- | --------------------------------------------- | ----------------------------------------------------------------------------- | ------ |
-| 0     | Isolated worktree + branch                    | Worktree on `feature/table-last-row-create`; `git status` clean               | Done   |
-| 1     | Public types + optional `rowCreate` prop      | `pnpm type-check`                                                             | Done   |
-| 2     | Pinned create strip (layout, a11y, no select) | RTL: strip present when prop set; absent when omitted; not in row ids         | Done   |
-| 3     | Commit + pending id contract                  | `pnpm test:run` (create + pending + reject)                                   | Done   |
-| 4     | EOL paste (one column, N handler calls)       | `pnpm test:run` (paste cases)                                                 | Done   |
-| 5     | Docs + README ledger                          | Ledger row; JSDoc on prop                                                     | Done   |
-| 6     | Playground (conditional)                      | Skip if no `playground/` on branch; else kitchen-sink uses `rowCreate`        | Done   |
-| 7     | Pre-PR suite                                  | type-check, type-check:test, lint, format:check, test:run, build, verify:pack | Done   |
+| Phase | Goal                                          | Gate                                                                          | Status                                      |
+| ----- | --------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------- |
+| 0     | Isolated worktree + branch                    | Worktree on `feature/table-last-row-create`; `git status` clean               | Done                                        |
+| 1     | Public types + optional `rowCreate` prop      | `pnpm type-check`                                                             | Done                                        |
+| 2     | Pinned create strip (layout, a11y, no select) | RTL: strip present when prop set; absent when omitted; not in row ids         | Done                                        |
+| 3     | Commit + pending id contract                  | `pnpm test:run` (create + pending + reject)                                   | Done                                        |
+| 4     | EOL paste (one column, N handler calls)       | `pnpm test:run` (paste cases)                                                 | Done                                        |
+| 5     | Docs + README ledger                          | Ledger row; JSDoc on prop                                                     | Done                                        |
+| 6     | Playground (conditional)                      | Skip if no `playground/` on branch; else kitchen-sink uses `rowCreate`        | **Done** (workshop kitchen-sink 2026-08-25) |
+| 7     | Pre-PR suite                                  | type-check, type-check:test, lint, format:check, test:run, build, verify:pack | Done                                        |
 
 ## Conflict & compliance
 
@@ -123,7 +123,7 @@ Short lists: strip sits on the viewport bottom (flex + minHeight 100%). Long lis
 
 - Phase 3 pending: implemented **D12** — library only `showRollbackToast` on reject/empty id; no `beginPendingRow` / `endPendingRow`.
 - Paste leftovers use `InputBase multiline` so failed + unsent lines keep `\n` in the pin (single-line `<input>` strips newlines).
-- Phase 6: **skipped** — no `playground/` on this worktree / `origin/main`. Do not copy workshop files from the dirty clone.
+- Phase 6: **skipped** on the library PR (no `playground/` on that worktree). **2026-08-25:** workshop kitchen-sink now passes `rowCreate` + consumer `rowSavePending` / `beginPendingRow`.
 - Phase 7: local suite green 2026-08-24 (`type-check`, `type-check:test`, `lint`, `format:check`, `test:run` 128, `build`, `verify:pack`).
 
 ## Decisions made

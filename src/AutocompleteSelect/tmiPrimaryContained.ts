@@ -1,4 +1,5 @@
-import type { PaletteMode, Theme } from "@mui/material/styles";
+import type { CSSObject, PaletteMode, Theme } from "@mui/material/styles";
+import { getTableInteractionSkin } from "../DataTable/lesmateriaal-import/shared-theme/tableInteractionSkin.js";
 
 export interface TmiPrimaryContainedTokens {
   gradient: string;
@@ -34,4 +35,44 @@ export function resolveTmiPrimaryContained(
       theme.palette.primary.main,
     )
   );
+}
+
+/**
+ * Outer shell shared by `PrimaryContainedAutocompleteBar`,
+ * `ListRowAddButton` `visualVariant="primary"`, and the TMITable create row.
+ */
+export function tmiPrimaryContainedRowShellSx(
+  theme: Theme,
+  options?: { heightPx?: number },
+): CSSObject {
+  const skin = getTableInteractionSkin(theme, "lightweight");
+  const contained = resolveTmiPrimaryContained(theme);
+  const h = options?.heightPx ?? skin.rowMinHeightPx;
+  const r = `${skin.rowBorderRadiusPx}px`;
+  return {
+    display: "flex",
+    alignItems: "stretch",
+    justifyContent: "flex-start",
+    gap: 0,
+    width: "100%",
+    minHeight: h,
+    minWidth: 0,
+    m: 0,
+    padding: 0,
+    borderRadius: r,
+    overflow: "hidden",
+    boxSizing: "border-box" as const,
+    boxShadow: contained.restShadow,
+    background: contained.gradient,
+    backgroundSize: "200% 200%",
+    backgroundPosition: "0% 50%",
+    color: theme.palette.common.white,
+    textTransform: "none" as const,
+    fontSize: theme.typography.body2.fontSize ?? "0.875rem",
+    fontWeight:
+      theme.typography.body2.fontWeight ??
+      theme.typography.fontWeightRegular ??
+      400,
+    lineHeight: 1,
+  };
 }

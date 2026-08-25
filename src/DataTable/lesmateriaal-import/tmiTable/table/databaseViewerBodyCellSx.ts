@@ -23,12 +23,17 @@ const fullHeightCellInnerBaseSx = {
   inset: 0,
   display: "flex",
   zIndex: 1,
+  overflow: "hidden",
+  borderRadius: "inherit",
 } as const;
 
 function getDatabaseViewerDataCellCornerRadius(
   isFirst: boolean,
   isLast: boolean,
 ): number | string {
+  if (isFirst && isLast) {
+    return `${TABLE_ROW_CORNER_RADIUS_PX}px`;
+  }
   if (isFirst) {
     return `${TABLE_ROW_CORNER_RADIUS_PX}px 0 0 ${TABLE_ROW_CORNER_RADIUS_PX}px`;
   }

@@ -70,6 +70,8 @@ export function TableRowActionButton({
           height: "100%",
           alignSelf: "stretch",
           lineHeight: 0,
+          overflow: "hidden",
+          borderRadius: "inherit",
         }}
       >
         <ButtonBase
@@ -88,6 +90,8 @@ export function TableRowActionButton({
               alignItems: "center",
               justifyContent: "center",
               lineHeight: 0,
+              overflow: "hidden",
+              borderRadius: "inherit",
               color: "text.primary",
               fontFamily: theme.typography.fontFamily,
               fontSize: theme.typography.body2.fontSize,

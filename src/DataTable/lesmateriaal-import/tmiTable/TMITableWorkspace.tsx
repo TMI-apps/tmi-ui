@@ -19,7 +19,10 @@ import {
   WorkspaceDetailFullscreenProvider,
   type WorkspaceDetailFullscreenValue,
 } from "./context/WorkspaceDetailFullscreenContext.js";
-import { useDatabaseTableDetailWorkspaceHeights } from "./hooks/useDatabaseTableDetailWorkspaceHeights.js";
+import {
+  resolveTMITableWorkspacePanelHeight,
+  useDatabaseTableDetailWorkspaceHeights,
+} from "./hooks/useDatabaseTableDetailWorkspaceHeights.js";
 import { TMITableWorkspacePrimaryColumn } from "./TMITableWorkspaceFilterPromptLayout.js";
 
 const detailPaneBorderSx = {
@@ -64,7 +67,7 @@ function useTMITableWorkspaceChrome(options: {
   }, []);
 
   const {
-    panelHeightPx,
+    panelHeightPx: hookPanelHeightPx,
     tableMaxHeightPx: hookTableMaxHeight,
     fillViewport: hookFillViewport,
   } = useDatabaseTableDetailWorkspaceHeights();
@@ -72,6 +75,10 @@ function useTMITableWorkspaceChrome(options: {
   const tableMaxHeightPx = detailInDrawer ? "100%" : hookTableMaxHeight;
   const layoutFillViewportFlag = detailInDrawer ? true : hookFillViewport;
   const effectiveFill = enableViewportFill && layoutFillViewportFlag;
+  const panelHeightPx = resolveTMITableWorkspacePanelHeight(
+    hookPanelHeightPx,
+    effectiveFill,
+  );
 
   const layoutValue = useMemo(
     () => ({ tableMaxHeightPx, fillViewport: layoutFillViewportFlag }),
@@ -132,6 +139,7 @@ function TMITableWorkspaceInlineDetailColumn({
         flexDirection: "column",
         overflow: "hidden",
         height: panelHeightPx,
+        position: "relative",
         ...detailPaneBorderSx,
       }}
     >
@@ -180,6 +188,7 @@ function TMITableWorkspaceDetailDrawerShell({
           flexDirection: "column",
           overflow: "hidden",
           bgcolor: "background.paper",
+          position: "relative",
         }}
       >
         {detailChrome}
@@ -245,7 +254,7 @@ function TMITableWorkspaceSplitRow({
         data-primary-hidden={primaryColumnHidden ? "true" : "false"}
         sx={{
           flex: primaryColumnHidden ? "0 0 0px" : undefined,
-          width: primaryColumnHidden ? 0 : "100%",
+          width: primaryColumnHidden ? 0 : detailSibling ? undefined : "100%",
           minWidth: 0,
           overflow: "hidden",
           position: "relative",

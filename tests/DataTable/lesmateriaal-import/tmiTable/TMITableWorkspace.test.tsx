@@ -329,6 +329,23 @@ describe("TMITableWorkspace detail fullscreen", () => {
     ).toHaveAttribute("data-primary-hidden", "false");
   });
 
+  it("should show an inline detail column when viewport fill is off", () => {
+    mockMatchMedia({ lgPlus: true });
+    render(
+      withTheme(
+        <TMITableWorkspace
+          leftHeader={<div data-testid="workspace-header">Filters</div>}
+          table={<div data-testid="workspace-table">Table body</div>}
+          detailOpen
+          detailPanel={<div data-testid="workspace-detail">Pane</div>}
+          enableViewportFill={false}
+        />,
+      ),
+    );
+    expect(screen.getByTestId("tmi-workspace-detail-column")).toBeVisible();
+    expect(screen.getByTestId("workspace-detail")).toBeVisible();
+  });
+
   it("should not expose fullscreen toggle in drawer mode", () => {
     mockMatchMedia({ lgPlus: false });
 
@@ -351,5 +368,9 @@ describe("TMITableWorkspace detail fullscreen", () => {
     expect(
       screen.getByTestId("tmi-workspace-primary-column-shell"),
     ).toHaveAttribute("data-primary-hidden", "false");
+    expect(
+      screen.queryByTestId("tmi-workspace-detail-column"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId("workspace-detail")).toBeInTheDocument();
   });
 });

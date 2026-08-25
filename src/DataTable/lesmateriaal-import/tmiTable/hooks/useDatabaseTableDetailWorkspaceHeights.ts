@@ -41,3 +41,20 @@ export function useDatabaseTableDetailWorkspaceHeights(): {
     };
   }, [downSm, downMd, downLg]);
 }
+
+/** Pixel fallback when `lg+` would use `height: 100%` but the page is not viewport-flex. */
+export const TMI_TABLE_WORKSPACE_UNFILLED_PANEL_HEIGHT_PX = 420;
+
+/**
+ * `TMITableDetailEditPanel` is absolutely stacked; a `height: 100%` pane in an
+ * auto-height parent collapses to 0 and the detail disappears.
+ */
+export function resolveTMITableWorkspacePanelHeight(
+  hookPanelHeightPx: number | string,
+  effectiveFill: boolean,
+): number | string {
+  if (effectiveFill || typeof hookPanelHeightPx === "number") {
+    return hookPanelHeightPx;
+  }
+  return TMI_TABLE_WORKSPACE_UNFILLED_PANEL_HEIGHT_PX;
+}

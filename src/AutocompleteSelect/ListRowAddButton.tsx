@@ -2,7 +2,10 @@ import { Box, Button, ButtonBase, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 import type { ReactNode } from "react";
 import { getTableInteractionSkin } from "../DataTable/lesmateriaal-import/shared-theme/tableInteractionSkin.js";
-import { resolveTmiPrimaryContained } from "./tmiPrimaryContained.js";
+import {
+  resolveTmiPrimaryContained,
+  tmiPrimaryContainedRowShellSx,
+} from "./tmiPrimaryContained.js";
 
 export interface ListRowAddButtonProps {
   /** Visible label (e.g. “Toevoegen…”). */
@@ -72,29 +75,10 @@ export function ListRowAddButton({
             const contained = resolveTmiPrimaryContained(theme);
             const h = skin.rowMinHeightPx;
             return {
-              display: "flex",
-              alignItems: "stretch",
-              justifyContent: "flex-start",
-              gap: 0,
-              width: "100%",
+              ...tmiPrimaryContainedRowShellSx(theme, { heightPx: h }),
               height: h,
-              minHeight: h,
               maxHeight: h,
-              minWidth: 0,
-              m: 0,
               padding: `${theme.spacing(0)} ${theme.spacing(1)}`,
-              borderRadius: `${skin.rowBorderRadiusPx}px`,
-              overflow: "hidden",
-              boxSizing: "border-box",
-              textTransform: "none",
-              fontSize: theme.typography.body2.fontSize,
-              fontWeight: theme.typography.fontWeightRegular,
-              lineHeight: 1,
-              color: theme.palette.common.white,
-              background: contained.gradient,
-              backgroundSize: "200% 200%",
-              backgroundPosition: "0% 50%",
-              boxShadow: contained.restShadow,
               "&:hover": {
                 background: contained.gradient,
                 boxShadow: contained.restShadow,

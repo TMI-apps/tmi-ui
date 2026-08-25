@@ -52,7 +52,7 @@ External contributors without direct repo access: **fork** and open a PR as usua
 
 **Consumer integration:** process skill lives in [`.agents/skills/adopt-from-tmi-ui/`](./.agents/skills/adopt-from-tmi-ui/SKILL.md) (published in the npm tarball). Maintainer workflow skills stay under `.cursor/skills/`. **New or changed public export → add/update the matching Integration ledger row** in README. If README exceeds ~500 lines, split ledgers to `docs/ledgers/` (link from README) in a follow-up.
 
-**Visual checks in a real app** are outside this repo: while developing, use **`pnpm link`** or a **`file:`** dependency from a consumer app (or an internal playground) so components run in full app context.
+**Visual checks:** run the local workshop with `pnpm playground` (component one-pager + docs from real markdown). Optional: `pnpm playground:build`. Playground is dev-only and is not published to npm. For consumer-app fidelity you can still use **`pnpm link`** or a **`file:`** dependency.
 
 ## Rules
 
@@ -101,6 +101,7 @@ Before opening / merging a PR:
   pnpm test:run
   pnpm run build
   pnpm verify:pack
+  pnpm playground
   ```
 - **README.md** — update when consumers would notice (new props, peers, install/auth, components).
 - **CHANGELOG.md** — you normally **do not** hand-edit a new release block on a feature branch. A **Changeset** (`.changeset/*.md`) describes the semver intent; after merge to `main`, **Version packages** updates `CHANGELOG.md` and `package.json` (see [docs/release-flow.md](docs/release-flow.md)). Only touch `CHANGELOG.md` yourself if the team uses a different convention for a one-off.

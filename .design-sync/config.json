@@ -1,0 +1,17 @@
+{
+  "pkg": "@tmi-packages/ui",
+  "globalName": "TmiUi",
+  "projectId": "6624bdd1-18b0-4993-b7eb-7f320a971a8f",
+  "shape": "package",
+  "extraEntries": ["./.design-sync/provider/AppProviders.tsx"],
+  "provider": { "component": "AppProviders" },
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "VideoEmbedModal": { "cardMode": "single", "primaryStory": "YouTube" },
+    "UnsavedChangesDialog": { "cardMode": "single", "primaryStory": "ConfirmClose" },
+    "OptimisticTableFeedbackProvider": { "cardMode": "single" },
+    "MetadataFiltersBar": { "cardMode": "column" },
+    "RowStyleMultiSelect": { "cardMode": "column" },
+    "DatabaseViewer": { "cardMode": "column" }
+  }
+}

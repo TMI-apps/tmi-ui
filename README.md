@@ -10,7 +10,7 @@ Shared UI primitives for React 19 + MUI 7.
 
 There is **no SLA** for issues or pull requests; responses are best-effort.
 
-**Install:** `pnpm add @tmi-packages/ui` — details in **[docs/installation.md](./docs/installation.md)**. Checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)** (includes **adopt skill** copy). **TMI table API:** [§ TMI table](#tmi-table). Releases: **[docs/release-flow.md](./docs/release-flow.md)**.
+**Install:** `pnpm add @tmi-packages/ui` — details in **[docs/installation.md](./docs/installation.md)**. Checklist: **[docs/consumer-setup.md](./docs/consumer-setup.md)** (includes **adopt skill** copy). **TMI table API:** [§ TMI table](#tmi-table). Releases: **[docs/release-flow.md](./docs/release-flow.md)**. **Local component workshop:** `pnpm playground` (maintainers).
 
 **Integrating in an app?** Copy `.agents/skills/adopt-from-tmi-ui` from this package into your app after install and every bump — see [consumer-setup](./docs/consumer-setup.md#5-adopt-skill-cursor).
 

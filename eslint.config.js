@@ -14,6 +14,10 @@ export default tseslint.config(
       "scripts/**",
       "*.mjs",
       "eslint.config.js",
+      "playground/dist/**",
+      "ds-bundle/**",
+      ".ds-sync/**",
+      ".design-sync/**",
     ],
   },
   js.configs.recommended,
@@ -21,7 +25,12 @@ export default tseslint.config(
   react.configs.flat.recommended,
   react.configs.flat["jsx-runtime"],
   {
-    files: ["src/**/*.{ts,tsx}", "tests/**/*.{ts,tsx}", "vitest.config.ts"],
+    files: [
+      "src/**/*.{ts,tsx}",
+      "tests/**/*.{ts,tsx}",
+      "playground/**/*.{ts,tsx}",
+      "vitest.config.ts",
+    ],
     languageOptions: {
       globals: globals.browser,
     },

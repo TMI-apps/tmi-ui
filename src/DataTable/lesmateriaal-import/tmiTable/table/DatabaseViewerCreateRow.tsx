@@ -1,3 +1,4 @@
+import Add from "@mui/icons-material/Add";
 import {
   Box,
   InputBase,
@@ -6,7 +7,7 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import type { SxProps, Theme } from "@mui/material/styles";
+import { alpha, type SxProps, type Theme } from "@mui/material/styles";
 import type { Column, Table as TanStackTable } from "@tanstack/react-table";
 import {
   useCallback,
@@ -18,6 +19,7 @@ import {
   type KeyboardEvent,
   type SetStateAction,
 } from "react";
+import { tmiPrimaryContainedRowShellSx } from "../../../../AutocompleteSelect/tmiPrimaryContained.js";
 import { useOptimisticTableFeedback } from "../feedback/OptimisticTableFeedbackContext.js";
 import { getDatabaseViewerColumnWidthCssValue } from "./databaseViewerColumnSizeStyle.js";
 import type { DatabaseViewerSurfaceMode } from "./databaseViewerConstants.js";
@@ -27,7 +29,11 @@ import {
 } from "./databaseViewerCreateColumn.js";
 import { splitCreatePasteLines } from "./databaseViewerCreatePaste.js";
 import { getPinnedCellSx } from "./databaseViewerTableModelUtils.js";
-import { getDatabaseViewerStickyHeaderBgSx } from "./databaseViewerTableStyles.js";
+import {
+  DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+  DATABASE_VIEWER_BODY_ROW_GAP_PX,
+  getDatabaseViewerStickyHeaderBgSx,
+} from "./databaseViewerTableStyles.js";
 import { DatabaseViewerColumnGroup } from "./DatabaseViewerColumnGroup.js";
 import type { TmiTableRowCreateConfig } from "./tmiTableRowCreate.types.js";
 
@@ -57,6 +63,9 @@ export function DatabaseViewerCreateRow<TData extends object>({
   >({});
 
   const leafColumns = table.getVisibleLeafColumns();
+  const plusColumnId = leafColumns.find((column) =>
+    isDatabaseViewerCreateInputColumn(column),
+  )?.id;
 
   const focusColumn = useCallback((columnId: string) => {
     requestAnimationFrame(() => {
@@ -148,33 +157,45 @@ export function DatabaseViewerCreateRow<TData extends object>({
         position: "sticky",
         bottom: 0,
         zIndex: 3,
+        overflowAnchor: "none",
+        pt: `${DATABASE_VIEWER_BODY_ROW_GAP_PX / 2}px`,
+        pb: `${DATABASE_VIEWER_BODY_ROW_GAP_PX / 2}px`,
         ...getDatabaseViewerStickyHeaderBgSx(surfaceMode),
       }}
     >
-      <Table
-        size="small"
-        sx={headerTableSx}
-        style={tableColumnSizeStyle}
-        aria-label={rowCreate.ariaLabel ?? DEFAULT_CREATE_STRIP_ARIA_LABEL}
+      <Box
+        sx={(theme) => ({
+          ...tmiPrimaryContainedRowShellSx(theme, {
+            heightPx: DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+          }),
+        })}
       >
-        <DatabaseViewerColumnGroup table={table} />
-        <TableBody>
-          <TableRow role="row" aria-selected={false} data-tmi-create-row="">
-            {leafColumns.map((column) => (
-              <CreateCell
-                key={column.id}
-                column={column}
-                drafts={drafts}
-                setDrafts={setDrafts}
-                commitColumn={commitColumn}
-                handleKeyDown={handleKeyDown}
-                handlePaste={handlePaste}
-                inputRefs={inputRefs}
-              />
-            ))}
-          </TableRow>
-        </TableBody>
-      </Table>
+        <Table
+          size="small"
+          sx={headerTableSx}
+          style={tableColumnSizeStyle}
+          aria-label={rowCreate.ariaLabel ?? DEFAULT_CREATE_STRIP_ARIA_LABEL}
+        >
+          <DatabaseViewerColumnGroup table={table} />
+          <TableBody>
+            <TableRow role="row" aria-selected={false} data-tmi-create-row="">
+              {leafColumns.map((column) => (
+                <CreateCell
+                  key={column.id}
+                  column={column}
+                  drafts={drafts}
+                  setDrafts={setDrafts}
+                  commitColumn={commitColumn}
+                  handleKeyDown={handleKeyDown}
+                  handlePaste={handlePaste}
+                  inputRefs={inputRefs}
+                  showPlus={column.id === plusColumnId}
+                />
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Box>
     </Box>
   );
 }
@@ -187,6 +208,7 @@ function CreateCell<TData extends object>({
   handleKeyDown,
   handlePaste,
   inputRefs,
+  showPlus,
 }: {
   column: Column<TData, unknown>;
   drafts: Record<string, string>;
@@ -197,6 +219,7 @@ function CreateCell<TData extends object>({
   inputRefs: {
     current: Record<string, HTMLTextAreaElement | HTMLInputElement | null>;
   };
+  showPlus: boolean;
 }) {
   const widthCss = getDatabaseViewerColumnWidthCssValue(column.id, () =>
     column.getSize(),
@@ -206,39 +229,73 @@ function CreateCell<TData extends object>({
 
   return (
     <TableCell
-      padding={skip ? "none" : "normal"}
+      padding="none"
       sx={{
         ...getPinnedCellSx(column),
         width: widthCss,
         maxWidth: widthCss,
-        py: skip ? 0 : 0.5,
-        px: skip ? 0 : 1,
+        py: 0,
+        px: 0,
         borderBottom: "none",
-        bgcolor: "inherit",
+        bgcolor: "transparent",
+        verticalAlign: "middle",
       }}
     >
       {skip ? null : (
-        <InputBase
-          multiline
-          minRows={1}
-          maxRows={6}
-          inputRef={(el) => {
-            inputRefs.current[column.id] = el;
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            minHeight: DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX,
+            width: "100%",
+            px: 1,
+            gap: 1,
           }}
-          value={drafts[column.id] ?? ""}
-          onChange={(e) => {
-            const next = e.target.value;
-            setDrafts((prev) => ({ ...prev, [column.id]: next }));
-          }}
-          onBlur={() => commitColumn(column.id)}
-          onKeyDown={(e) => handleKeyDown(column.id, e)}
-          onPaste={(e) => handlePaste(column.id, e)}
-          inputProps={{
-            "aria-label": label,
-            "data-tmi-create-column": column.id,
-          }}
-          sx={{ width: "100%", fontSize: "0.875rem" }}
-        />
+        >
+          {showPlus ? (
+            <Add
+              fontSize="small"
+              data-tmi-create-plus=""
+              sx={{ flexShrink: 0, color: "inherit" }}
+            />
+          ) : null}
+          <InputBase
+            multiline
+            minRows={1}
+            maxRows={6}
+            inputRef={(el) => {
+              inputRefs.current[column.id] = el;
+            }}
+            value={drafts[column.id] ?? ""}
+            onChange={(e) => {
+              const next = e.target.value;
+              setDrafts((prev) => ({ ...prev, [column.id]: next }));
+            }}
+            onBlur={() => commitColumn(column.id)}
+            onKeyDown={(e) => handleKeyDown(column.id, e)}
+            onPaste={(e) => handlePaste(column.id, e)}
+            placeholder={label}
+            inputProps={{
+              "aria-label": label,
+              "data-tmi-create-column": column.id,
+            }}
+            sx={(theme) => ({
+              flex: 1,
+              minWidth: 0,
+              width: "100%",
+              fontSize: theme.typography.body2.fontSize,
+              fontWeight: theme.typography.body2.fontWeight,
+              color: theme.palette.common.white,
+              "& textarea": {
+                color: theme.palette.common.white,
+                "&::placeholder": {
+                  color: alpha(theme.palette.common.white, 0.65),
+                  opacity: 1,
+                },
+              },
+            })}
+          />
+        </Box>
       )}
     </TableCell>
   );

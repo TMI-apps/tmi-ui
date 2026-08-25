@@ -69,6 +69,10 @@ try {
     throw new Error("Tarball missing dist/PersistentStepperList/*");
   }
 
+  if (lines.some((l) => l.includes("/playground/"))) {
+    throw new Error("Tarball must not include playground/ (dev-only workshop)");
+  }
+
   const readmePath = lines.find((l) => l.endsWith("package/README.md"));
   if (!readmePath) {
     throw new Error("Tarball missing package/README.md path in listing");

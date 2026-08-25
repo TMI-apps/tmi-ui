@@ -56,19 +56,24 @@ export function getDatabaseViewerStickyHeaderBgSx(
 }
 
 /**
- * Single scroll surface for header + virtualized body: both axes scroll here so native
- * horizontal and vertical scrollbars stay on the viewport edges (no nested overflow-y on wide content).
+ * Table viewport: this node is a flex *item* of the viewer shell (`flex: 1; minHeight: 0`)
+ * so pin/fill height is definite. Children use a block formatting context (`overflow-y: auto`
+ * + `display` not flex) so `position: sticky` on the header/create strip can pin to this
+ * scrollport. Horizontal overflow is `hidden` unless the column sum exceeds the viewport —
+ * `overflow: auto` on both axes plus `scrollbar-gutter: stable` and `min-width: 100%` created a
+ * phantom X scrollbar (gutter reserved for Y, content still sized to 100%).
  */
 export function getDatabaseViewerScrollContainerSx(
   hasHorizontalOverflow: boolean,
 ): SxProps<Theme> {
   return {
-    display: "flex",
-    flexDirection: "column",
     flex: 1,
+    flexBasis: 0,
     minHeight: 0,
-    overflow: "auto",
-    scrollbarGutter: "stable",
+    minWidth: 0,
+    overflowX: hasHorizontalOverflow ? "auto" : "hidden",
+    overflowY: "auto",
+    overflowAnchor: "none",
     borderBottom: hasHorizontalOverflow ? 0 : 1,
     borderColor: (theme) => theme.palette.divider,
   };

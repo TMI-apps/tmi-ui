@@ -4,6 +4,7 @@ import type { DatabaseViewerColumnMeta } from "../../../../../src/DataTable/lesm
 import {
   databaseViewerCellIsEdgeToEdgeInteractive,
   getDatabaseViewerBodyTableCellSx,
+  getDatabaseViewerFullHeightCellInnerSx,
 } from "../../../../../src/DataTable/lesmateriaal-import/tmiTable/table/databaseViewerBodyCellSx.js";
 import { DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX } from "../../../../../src/DataTable/lesmateriaal-import/tmiTable/table/databaseViewerTableStyles.js";
 
@@ -95,5 +96,18 @@ describe("getDatabaseViewerBodyTableCellSx full-height band", () => {
         content: '""',
       }),
     );
+  });
+});
+
+describe("getDatabaseViewerFullHeightCellInnerSx", () => {
+  it("clips hover paint to the inherited row-bar radius", () => {
+    const sx = getDatabaseViewerFullHeightCellInnerSx({
+      meta: { iconSurrogateCell: true },
+      interactionSkinPreset: "lightweight",
+      leadingContentShiftDepth: 0,
+      clipLeadingRowCorner: false,
+    }) as { overflow?: string; borderRadius?: string };
+    expect(sx.overflow).toBe("hidden");
+    expect(sx.borderRadius).toBe("inherit");
   });
 });

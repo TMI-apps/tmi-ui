@@ -1,5 +1,6 @@
 node_modules
 dist
+playground/dist
 coverage
 *.tgz
 .turbo
@@ -10,3 +11,12 @@ coverage
 .env
 .env.*
 !.env.example
+
+# design-sync: staged converter scripts, build output, and machine state.
+# The durable set (config.json, NOTES.md, conventions.md, previews/, overrides/)
+# is NOT listed here and IS committed.
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

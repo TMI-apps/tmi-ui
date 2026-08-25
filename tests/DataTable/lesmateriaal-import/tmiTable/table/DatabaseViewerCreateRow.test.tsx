@@ -102,6 +102,7 @@ describe("TMITable rowCreate", () => {
     });
     expect(createNameInput()).toBeTruthy();
     expect(screen.getByLabelText("Add row")).toBeTruthy();
+    expect(document.querySelector("[data-tmi-create-plus]")).toBeTruthy();
   });
 
   it("does not show the strip on full-page loading", () => {

@@ -379,7 +379,7 @@ export function DatabaseViewer<TData extends object>({
   } | null>(null);
   /** After touch long-press opens the column menu, ignore the next label click (ghost tap). */
   const suppressNextSortClickRef = useRef(false);
-  /** Unified overflow:auto scroll root for virtualization, width measurement, and both axes. */
+  /** Overflow:auto scroll root (block BFC). Virtualizer + width measure bind here. */
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
   /**
    * Scroll element for TanStack Virtual: refs attach after descendant `useLayoutEffect` in the same
@@ -840,7 +840,7 @@ export function DatabaseViewer<TData extends object>({
       position: "sticky" as const,
       top: 0,
       zIndex: 3,
-      flexShrink: 0,
+      overflowAnchor: "none" as const,
       ...getDatabaseViewerStickyHeaderBgSx(surfaceMode),
     }),
     [surfaceMode],
@@ -913,7 +913,12 @@ export function DatabaseViewer<TData extends object>({
           ...(fillHeight
             ? { height: "100%", flex: 1, minHeight: 0 }
             : resolvedMaxHeight !== undefined
-              ? { maxHeight: resolvedMaxHeight, minHeight: 0 }
+              ? {
+                  height: "100%",
+                  flex: 1,
+                  minHeight: 0,
+                  maxHeight: "100%",
+                }
               : { minHeight: 0 }),
           width: "100%",
           position: "relative",
@@ -963,10 +968,9 @@ export function DatabaseViewer<TData extends object>({
           <Box
             sx={{
               width: scrollContentWidth,
-              minWidth: "100%",
+              minWidth: hasHorizontalOverflow ? totalTableWidth : 0,
               minHeight: "100%",
-              display: "flex",
-              flexDirection: "column",
+              display: "block",
             }}
           >
             <Box sx={stickyHeaderStripSx}>
@@ -1011,7 +1015,7 @@ export function DatabaseViewer<TData extends object>({
                 </Typography>
               </Box>
             ) : null}
-            <Box sx={{ flex: 1, minHeight: 0 }}>
+            <Box>
               <DatabaseViewerBody<TData>
                 table={table}
                 paginatedRows={paginatedRows}
@@ -1097,7 +1101,15 @@ export function DatabaseViewer<TData extends object>({
           flexDirection: "column",
           minHeight: 0,
         }
-      : {}),
+      : resolvedMaxHeight !== undefined
+        ? {
+            height: resolvedMaxHeight,
+            maxHeight: resolvedMaxHeight,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+          }
+        : {}),
     ...(surfaceMode === "inherit"
       ? { bgcolor: "inherit", boxShadow: "none", backgroundImage: "none" }
       : {}),
