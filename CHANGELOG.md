@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.0
+
+### Minor Changes
+
+- [#15](https://github.com/TMI-apps/tmi-ui/pull/15) [`035376e`](https://github.com/TMI-apps/tmi-ui/commit/035376e024813492db0a427a61ae0c470d0d5fdd) Thanks [@TomFranse](https://github.com/TomFranse)! - Add optional `rowCreate` on TMITable: a pinned viewport create row with cell commit and one-column newline paste. `onCreate` returns the new row id; pending styling stays consumer-owned.
+
 ## 1.8.0
 
 ### Minor Changes
