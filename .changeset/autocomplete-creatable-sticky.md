@@ -2,4 +2,4 @@
 "@tmi-packages/ui": minor
 ---
 
-Keep AutocompleteSelect `creatableOptionId` rows first in the list and sticky-visible as a listbox header so create stays reachable.
+Define `creatableOptionId` as: when that id is in the filtered list, the row is first and a sticky listbox header. No placement flags.

@@ -3,6 +3,11 @@ import type { Row, RowSelectionState } from "@tanstack/react-table";
 /** Tree expansion / lazy-load configuration for {@link TMITable}. */
 export interface TMITableTreeConfig<TData extends object> {
   getSubRows?: (row: TData) => TData[] | undefined;
+  /**
+   * When true (default), expand every parent when `data` changes — not when
+   * `getRowId` / `getSubRows` get a new function identity. Wrap those in
+   * `useCallback` for the row model; expand-all must not depend on identity.
+   */
   expandAllOnDataChange?: boolean;
   expandResetKey?: string;
   mergeExpandedRowIds?: Record<string, boolean> | null;

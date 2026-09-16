@@ -131,11 +131,16 @@ export interface DatabaseViewerProps<TData extends object> {
    * Pass a number or CSS length to pin. Pass `false` for content-sized nested/dialog tables.
    */
   maxHeight?: TMITableMaxHeightProp;
+  /**
+   * When true (default), expand every parent when `data` changes — not when
+   * `getRowId` / `getSubRows` get a new function identity.
+   */
   expandAllOnDataChange?: boolean;
   /**
    * When `expandAllOnDataChange` is false, only reset row expansion to collapsed when
    * this value changes (e.g. list query + pagination), not on every `data` update
    * (e.g. lazy-fetched subrows). Omit for legacy: reset on `data` change.
+   * Accessor identity does not reset expanded.
    */
   expandResetKey?: string;
   initialSorting?: SortingState;

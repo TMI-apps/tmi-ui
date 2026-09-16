@@ -3,7 +3,7 @@ import type { FilterOptionsState } from "@mui/material/useAutocomplete";
 import type { AutocompleteSelectOption } from "./autocompleteSelect.types.js";
 
 /**
- * Move the creatable option to the start when it is present. Does not invent a row.
+ * Move the creatable option to index 0 when it is present. Does not invent a row.
  * Relative order of other options is preserved.
  */
 export function moveCreatableOptionFirst(
@@ -19,6 +19,7 @@ export function moveCreatableOptionFirst(
   return next;
 }
 
+/** Apply `moveCreatableOptionFirst` after an existing Autocomplete `filterOptions`. */
 export function wrapFilterOptionsWithCreatableFirst(
   filter: (
     options: AutocompleteSelectOption[],

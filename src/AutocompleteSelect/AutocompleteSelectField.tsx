@@ -131,9 +131,9 @@ interface AutocompleteSelectFieldBaseProps {
   clearText?: string;
   getOptionDisabled?: (option: AutocompleteSelectOption) => boolean;
   /**
-   * When set, that option id is rendered as a creatable row (add icon + primary label; no checkbox
-   * in multiple). After `filterOptions` / `filterOptionsOverride`, the row is moved first if present
-   * (never invented). It is a sticky listbox header so it stays visible while matches scroll.
+   * When set **and** this id is still in the filtered options, that row is always first and a
+   * sticky listbox header (add icon; no checkbox in multiple). The field never invents the option.
+   * There is no placement flag — passing the id is the contract.
    */
   creatableOptionId?: string;
   /**
@@ -486,6 +486,23 @@ function getListOptionRowSx(isCreatable: boolean): Record<string, unknown> {
         }
       : {}),
   };
+}
+
+function useFilterOptionsWithCreatableFirst(
+  defaultFilter: (
+    options: AutocompleteSelectOption[],
+    state: FilterOptionsState<AutocompleteSelectOption>,
+  ) => AutocompleteSelectOption[],
+  filterOptionsOverride:
+    | AutocompleteSelectFieldBaseProps["filterOptionsOverride"]
+    | undefined,
+  creatableOptionId: string | undefined,
+) {
+  const inner = filterOptionsOverride ?? defaultFilter;
+  return useMemo(
+    () => wrapFilterOptionsWithCreatableFirst(inner, creatableOptionId),
+    [inner, creatableOptionId],
+  );
 }
 
 function useFillCellDropdownAnchorWidth(
@@ -849,20 +866,10 @@ function AutocompleteMultipleFieldInner({
     ) => filterOptionsWithSelectedFirst(selectedIdSet, options, state),
     [selectedIdSet],
   );
-  const resolvedFilterOptions = useCallback(
-    (
-      options: AutocompleteSelectOption[],
-      state: FilterOptionsState<AutocompleteSelectOption>,
-    ) =>
-      wrapFilterOptionsWithCreatableFirst(
-        commonProps.filterOptionsOverride ?? defaultFilterOptions,
-        commonProps.creatableOptionId,
-      )(options, state),
-    [
-      commonProps.filterOptionsOverride,
-      commonProps.creatableOptionId,
-      defaultFilterOptions,
-    ],
+  const resolvedFilterOptions = useFilterOptionsWithCreatableFirst(
+    defaultFilterOptions,
+    commonProps.filterOptionsOverride,
+    commonProps.creatableOptionId,
   );
 
   const controlled = commonProps.controlledInput;
@@ -1110,20 +1117,10 @@ function AutocompleteSingleFieldInner({
     ) => filterOptionsWithSelectedFirst(selectedIdSet, options, state),
     [selectedIdSet],
   );
-  const resolvedFilterOptions = useCallback(
-    (
-      options: AutocompleteSelectOption[],
-      state: FilterOptionsState<AutocompleteSelectOption>,
-    ) =>
-      wrapFilterOptionsWithCreatableFirst(
-        commonProps.filterOptionsOverride ?? defaultFilterOptions,
-        commonProps.creatableOptionId,
-      )(options, state),
-    [
-      commonProps.filterOptionsOverride,
-      commonProps.creatableOptionId,
-      defaultFilterOptions,
-    ],
+  const resolvedFilterOptions = useFilterOptionsWithCreatableFirst(
+    defaultFilterOptions,
+    commonProps.filterOptionsOverride,
+    commonProps.creatableOptionId,
   );
 
   const controlled = commonProps.controlledInput;
