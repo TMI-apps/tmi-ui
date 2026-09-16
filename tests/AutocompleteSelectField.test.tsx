@@ -277,3 +277,179 @@ describe("Autocomplete primary chrome", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
+
+const CREATE = { id: "create", label: "Create New" };
+
+describe("AutocompleteSelectField creatable sticky", () => {
+  it("places a creatable option first even when it is not first in options", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={[...OPTIONS, CREATE]}
+          value={null}
+          onChange={() => undefined}
+          creatableOptionId="create"
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const options = await screen.findAllByRole("option");
+    expect(options[0]).toHaveTextContent("Create New");
+  });
+
+  it("sticks the creatable option to the top of the listbox", async () => {
+    const user = userEvent.setup();
+    const many = Array.from({ length: 20 }, (_, i) => ({
+      id: `n${i}`,
+      label: `Hit ${i}`,
+    }));
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={[...many, CREATE]}
+          value={null}
+          onChange={() => undefined}
+          creatableOptionId="create"
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const first = (await screen.findAllByRole("option"))[0];
+    expect(first).toHaveTextContent("Create New");
+    expect(first).toHaveStyle({ position: "sticky", top: "0px" });
+  });
+
+  it("still first-sticks create when filterOptionsOverride is identity", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={[OPTIONS[0]!, CREATE, OPTIONS[1]!]}
+          value={null}
+          onChange={() => undefined}
+          creatableOptionId="create"
+          filterOptionsOverride={(opts) => opts}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const options = await screen.findAllByRole("option");
+    expect(options.map((el) => el.textContent)).toEqual([
+      "Create New",
+      "Alpha",
+      "Beta",
+    ]);
+    expect(options[0]).toHaveStyle({ position: "sticky" });
+  });
+
+  it("does not sticky-header without creatableOptionId; selected stays first", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={OPTIONS}
+          value="2"
+          onChange={() => undefined}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const options = await screen.findAllByRole("option");
+    expect(options[0]).toHaveTextContent("Beta");
+    expect(options[0]).not.toHaveStyle({ position: "sticky" });
+    expect(
+      options.filter((el) => getComputedStyle(el).position === "sticky"),
+    ).toHaveLength(0);
+  });
+
+  it("does not invent a creatable row when the id is missing from options", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={OPTIONS}
+          value={null}
+          onChange={() => undefined}
+          creatableOptionId="create"
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const options = await screen.findAllByRole("option");
+    expect(options).toHaveLength(2);
+    expect(
+      screen.queryByRole("option", { name: /create/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("renders no checkbox on the creatable row in multiple mode", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="multiple"
+          label="Tags"
+          options={[...OPTIONS, CREATE]}
+          value={[]}
+          onChange={() => undefined}
+          creatableOptionId="create"
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /tags/i }));
+    await screen.findByRole("option", { name: "Create New" });
+    expect(screen.getAllByRole("checkbox")).toHaveLength(2);
+    const first = screen.getAllByRole("option")[0];
+    expect(first).toHaveTextContent("Create New");
+    expect(first?.querySelector('input[type="checkbox"]')).toBeNull();
+  });
+
+  it("emits the creatable id on click", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          label="Pick"
+          options={[...OPTIONS, CREATE]}
+          value={null}
+          onChange={onChange}
+          creatableOptionId="create"
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    await user.click(await screen.findByRole("option", { name: "Create New" }));
+    expect(onChange).toHaveBeenCalledWith("create");
+  });
+
+  it("inherits sticky create on PrimaryContainedAutocompleteBar", async () => {
+    const user = userEvent.setup();
+    renderPrimaryChrome(
+      <PrimaryContainedAutocompleteBar
+        mode="single"
+        label="Add"
+        options={[CREATE, ...OPTIONS]}
+        value={null}
+        onChange={() => undefined}
+        creatableOptionId="create"
+      />,
+    );
+    await user.click(screen.getByRole("combobox", { name: /add/i }));
+    const first = (await screen.findAllByRole("option"))[0];
+    expect(first).toHaveTextContent("Create New");
+    expect(first).toHaveStyle({ position: "sticky" });
+  });
+});

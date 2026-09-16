@@ -359,6 +359,8 @@ Wrap drawer/modal hosts with `PortaledOverlayStackProvider` (`hostModalZ` = draw
 
 Remote search on a fill-cell / primary bar uses `controlledInput` with **`mode` matching cardinality** (`single` = one id, `multiple` = id[]). Do not fake `mode="multiple"` to unlock `controlledInput`. Fill-cell remote search in `mode="single"` requires **`@tmi-packages/ui@^1.10.0`**.
 
+When `creatableOptionId` is set and that id is in the filtered options, the create row is always **first** (above matches) and a **sticky listbox header** so it stays on screen while results scroll. The consumer still supplies the option; the field does not invent it. Requires **`@tmi-packages/ui@^1.11.0`**.
+
 ### Integration ledger
 
 | Capability          | Package API                                        | If skipped                                                     |
