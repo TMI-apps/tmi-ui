@@ -105,9 +105,10 @@ interface AutocompleteSelectFieldBaseProps {
    */
   viewMode?: boolean;
   /**
-   * Controlled filter input (remote search, etc.). When set, the text field is controlled by the
-   * parent. For `mode="multiple"`, may be combined with `fillCell` to get table-cell styling and
-   * remote search together (otherwise `fillCell` alone uses internal filter state).
+   * Controlled filter input (remote search, etc.). When set, the text field is
+   * controlled by the parent. Combines with `fillCell` in both `mode="single"`
+   * and `mode="multiple"` (otherwise `fillCell` alone uses internal / MUI filter
+   * state). Ignored when `mode="single"` and `freeSolo`.
    */
   controlledInput?: {
     inputValue: string;
@@ -1084,7 +1085,7 @@ function AutocompleteSingleFieldInner({
     commonProps.filterOptionsOverride ?? defaultFilterOptions;
 
   const controlled = commonProps.controlledInput;
-  const useControlledInput = Boolean(!fillCell && controlled && !freeSolo);
+  const useControlledInput = Boolean(controlled && !freeSolo);
 
   const fillCellDropdownAnchorWidthPx = useFillCellDropdownAnchorWidth(
     commonProps.fillCellDropdownWidthRef,

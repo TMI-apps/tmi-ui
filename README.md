@@ -357,6 +357,8 @@ Or `import { AutocompleteSelectField } from "@tmi-packages/ui/autocomplete"` plu
 
 Wrap drawer/modal hosts with `PortaledOverlayStackProvider` (`hostModalZ` = drawer z-index). Merge `createTmiTableTheme` so `tmiPrimaryContained` exists. `PrimaryContainedAutocompleteBar` and `ListRowAddButton` `visualVariant="primary"` read that token — do not restyle via `MuiButton` overrides or app brand hex in wrappers.
 
+Remote search on a fill-cell / primary bar uses `controlledInput` with **`mode` matching cardinality** (`single` = one id, `multiple` = id[]). Do not fake `mode="multiple"` to unlock `controlledInput`. Fill-cell remote search in `mode="single"` requires **`@tmi-packages/ui@^1.10.0`**.
+
 ### Integration ledger
 
 | Capability          | Package API                                        | If skipped                                                     |
