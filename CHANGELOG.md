@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.10.0
+
+### Minor Changes
+
+- [#16](https://github.com/TMI-apps/tmi-ui/pull/16) [`e3f133e`](https://github.com/TMI-apps/tmi-ui/commit/e3f133ea7470a22628cec56a108417ca3ef39bed) Thanks [@TomFranse](https://github.com/TomFranse)! - Honor `controlledInput` with `fillCell` in `mode="single"` so remote search works without faking `mode="multiple"`.
+
 ## 1.9.1
 
 ### Patch Changes
