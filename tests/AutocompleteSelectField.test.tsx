@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { ReactElement, ReactNode } from "react";
+import { useState, type ReactElement, type ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AutocompleteSelectField } from "../src/AutocompleteSelect/AutocompleteSelectField.js";
 import { ListRowAddButton } from "../src/AutocompleteSelect/ListRowAddButton.js";
@@ -119,6 +119,133 @@ describe("AutocompleteSelectField", () => {
       </Overlay>,
     );
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
+  });
+
+  it("forwards remote query on single fillCell via controlledInput", async () => {
+    const user = userEvent.setup();
+    const onInputChange = vi.fn();
+
+    function Harness() {
+      const [inputValue, setInputValue] = useState("");
+      return (
+        <AutocompleteSelectField
+          mode="single"
+          fillCell
+          label="Pick"
+          options={OPTIONS}
+          value={null}
+          onChange={() => undefined}
+          controlledInput={{
+            inputValue,
+            onInputChange: (event, value, reason) => {
+              setInputValue(value);
+              onInputChange(event, value, reason);
+            },
+          }}
+        />
+      );
+    }
+
+    renderWithTheme(
+      <Overlay>
+        <Harness />
+      </Overlay>,
+    );
+    await user.type(screen.getByRole("combobox", { name: /pick/i }), "ab");
+    expect(onInputChange).toHaveBeenCalledWith(
+      expect.anything(),
+      "ab",
+      "input",
+    );
+  });
+
+  it("emits a string id from single fillCell, not an array", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          fillCell
+          label="Pick"
+          options={OPTIONS}
+          value={null}
+          onChange={onChange}
+          controlledInput={{
+            inputValue: "",
+            onInputChange: () => undefined,
+          }}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    await user.click(await screen.findByRole("option", { name: "Alpha" }));
+    expect(onChange).toHaveBeenCalledWith("1");
+  });
+
+  it("does not render checkboxes in single fillCell", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          fillCell
+          label="Pick"
+          options={[{ id: "1", label: "Alpha" }]}
+          value={null}
+          onChange={() => undefined}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    expect(
+      await screen.findByRole("option", { name: "Alpha" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("checkbox")).toBeNull();
+  });
+
+  it("renders creatable single fillCell with add affordance and no checkbox", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="single"
+          fillCell
+          label="Pick"
+          creatableOptionId="new"
+          options={[{ id: "new", label: "Nieuwe activiteit" }]}
+          value={null}
+          onChange={() => undefined}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /pick/i }));
+    const option = await screen.findByRole("option", {
+      name: "Nieuwe activiteit",
+    });
+    expect(option.querySelector("svg")).not.toBeNull();
+    expect(screen.queryByRole("checkbox")).toBeNull();
+  });
+
+  it("still renders checkboxes in multiple fillCell with one option", async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Overlay>
+        <AutocompleteSelectField
+          mode="multiple"
+          fillCell
+          label="Tags"
+          options={[{ id: "1", label: "Alpha" }]}
+          value={[]}
+          onChange={() => undefined}
+        />
+      </Overlay>,
+    );
+    await user.click(screen.getByRole("combobox", { name: /tags/i }));
+    expect(
+      await screen.findByRole("option", { name: "Alpha" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("checkbox")).toBeInTheDocument();
   });
 });
 
