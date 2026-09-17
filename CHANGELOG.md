@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.11.0
+
+### Minor Changes
+
+- [#17](https://github.com/TMI-apps/tmi-ui/pull/17) [`0d05225`](https://github.com/TMI-apps/tmi-ui/commit/0d05225cc45a6f6bc28cab3b4ad8ad794f05fab1) Thanks [@TomFranse](https://github.com/TomFranse)! - Define `creatableOptionId` as: when that id is in the filtered list, the row is first and a sticky listbox header. No placement flags.
+
+### Patch Changes
+
+- [#17](https://github.com/TMI-apps/tmi-ui/pull/17) [`0d05225`](https://github.com/TMI-apps/tmi-ui/commit/0d05225cc45a6f6bc28cab3b4ad8ad794f05fab1) Thanks [@TomFranse](https://github.com/TomFranse)! - Fix TMITable tree expand-all so a new getRowId/getSubRows identity on re-render does not re-expand collapsed parents when data is unchanged.
+
 ## 1.10.0
 
 ### Minor Changes
