@@ -39,6 +39,7 @@ import {
 } from "react";
 
 import type { AutocompleteSelectOption } from "./autocompleteSelect.types.js";
+import { wrapFilterOptionsWithCreatableFirst } from "./moveCreatableOptionFirst.js";
 import { usePortaledOverlayPopperZIndex } from "../DataTable/lesmateriaal-import/shared-context/PortaledOverlayStackContext.js";
 
 export type { AutocompleteSelectOption };
@@ -130,8 +131,9 @@ interface AutocompleteSelectFieldBaseProps {
   clearText?: string;
   getOptionDisabled?: (option: AutocompleteSelectOption) => boolean;
   /**
-   * When set, that option id is rendered as a creatable row (add icon + primary label) instead of a
-   * checkbox (multiple mode only).
+   * When set **and** this id is still in the filtered options, that row is always first and a
+   * sticky listbox header (add icon; no checkbox in multiple). The field never invents the option.
+   * There is no placement flag — passing the id is the contract.
    */
   creatableOptionId?: string;
   /**
@@ -466,6 +468,41 @@ function autocompleteOptionPropsSxFragments(
   const sx = (optionProps as { sx?: SxProps<Theme> }).sx;
   if (sx === undefined || sx === null) return [];
   return Array.isArray(sx) ? sx : [sx];
+}
+
+function getListOptionRowSx(isCreatable: boolean): Record<string, unknown> {
+  return {
+    alignItems: "flex-start",
+    py: 1,
+    minHeight: "auto",
+    ...(isCreatable
+      ? {
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          bgcolor: "background.paper",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }
+      : {}),
+  };
+}
+
+function useFilterOptionsWithCreatableFirst(
+  defaultFilter: (
+    options: AutocompleteSelectOption[],
+    state: FilterOptionsState<AutocompleteSelectOption>,
+  ) => AutocompleteSelectOption[],
+  filterOptionsOverride:
+    | AutocompleteSelectFieldBaseProps["filterOptionsOverride"]
+    | undefined,
+  creatableOptionId: string | undefined,
+) {
+  const inner = filterOptionsOverride ?? defaultFilter;
+  return useMemo(
+    () => wrapFilterOptionsWithCreatableFirst(inner, creatableOptionId),
+    [inner, creatableOptionId],
+  );
 }
 
 function useFillCellDropdownAnchorWidth(
@@ -829,8 +866,11 @@ function AutocompleteMultipleFieldInner({
     ) => filterOptionsWithSelectedFirst(selectedIdSet, options, state),
     [selectedIdSet],
   );
-  const resolvedFilterOptions =
-    commonProps.filterOptionsOverride ?? defaultFilterOptions;
+  const resolvedFilterOptions = useFilterOptionsWithCreatableFirst(
+    defaultFilterOptions,
+    commonProps.filterOptionsOverride,
+    commonProps.creatableOptionId,
+  );
 
   const controlled = commonProps.controlledInput;
   /** Table fill-cell styling + parent-owned search query (e.g. doelen row picker). */
@@ -976,11 +1016,7 @@ function AutocompleteMultipleFieldInner({
             {...liProps}
             sx={
               [
-                {
-                  alignItems: "flex-start",
-                  py: 1,
-                  minHeight: "auto",
-                },
+                getListOptionRowSx(isCreatable),
                 ...autocompleteOptionPropsSxFragments(optionProps),
               ] as SxProps<Theme>
             }
@@ -1081,8 +1117,11 @@ function AutocompleteSingleFieldInner({
     ) => filterOptionsWithSelectedFirst(selectedIdSet, options, state),
     [selectedIdSet],
   );
-  const resolvedFilterOptions =
-    commonProps.filterOptionsOverride ?? defaultFilterOptions;
+  const resolvedFilterOptions = useFilterOptionsWithCreatableFirst(
+    defaultFilterOptions,
+    commonProps.filterOptionsOverride,
+    commonProps.creatableOptionId,
+  );
 
   const controlled = commonProps.controlledInput;
   const useControlledInput = Boolean(controlled && !freeSolo);
@@ -1185,11 +1224,7 @@ function AutocompleteSingleFieldInner({
             {...liProps}
             sx={
               [
-                {
-                  alignItems: "flex-start",
-                  py: 1,
-                  minHeight: "auto",
-                },
+                getListOptionRowSx(isCreatable),
                 ...autocompleteOptionPropsSxFragments(optionProps),
               ] as SxProps<Theme>
             }

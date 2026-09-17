@@ -185,7 +185,7 @@ const columns: ColumnDef<Row>[] = [{ accessorKey: "name", header: "Name" }];
 
 `useDatabaseViewerMaxHeight` / `useTMITableMaxHeight` stay exported for one release but are **deprecated** for this use case.
 
-Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree`. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`. `rowReorder.dropPlacement` defaults to `"between"` (sortable insert, before/after bands). Set `"onto"` to reparent onto the `over` row: no sibling slide, dashed overlay on `over` (same look as file-drop `isDragOver`). `canDragRow` is unchanged — non-draggable rows stay droppable.
+Server infinite query: map to `{ hasNextPage, isFetchingNextPage, fetchNextPage, nextPageError, onRetryNextPage, totalLoaded, totalCount }`. Tree: `tree` (`getSubRows`, optional `expandAllOnDataChange`). Expand-all runs when **`data` changes**, not when `getRowId` / `getSubRows` get a new function identity. Still wrap those accessors in `useCallback` for the row model. Reorder: wrap with `TmiRowReorderDndProvider` and pass `rowReorder`. `rowReorder.dropPlacement` defaults to `"between"` (sortable insert, before/after bands). Set `"onto"` to reparent onto the `over` row: no sibling slide, dashed overlay on `over` (same look as file-drop `isDragOver`). `canDragRow` is unchanged — non-draggable rows stay droppable.
 
 Body cells are a **48px** stretch band (`p: 0`). `TableRowActionButton` fills that height (chevrons, icon columns, custom actions). Default content keeps a 16px horizontal inset; set `meta.fullHeightInteractive`, `iconSurrogateCell`, or `isTreeColumn` to drop it. Do not set `fullHeightInteractive` on plain text columns.
 
@@ -358,6 +358,8 @@ Or `import { AutocompleteSelectField } from "@tmi-packages/ui/autocomplete"` plu
 Wrap drawer/modal hosts with `PortaledOverlayStackProvider` (`hostModalZ` = drawer z-index). Merge `createTmiTableTheme` so `tmiPrimaryContained` exists. `PrimaryContainedAutocompleteBar` and `ListRowAddButton` `visualVariant="primary"` read that token — do not restyle via `MuiButton` overrides or app brand hex in wrappers.
 
 Remote search on a fill-cell / primary bar uses `controlledInput` with **`mode` matching cardinality** (`single` = one id, `multiple` = id[]). Do not fake `mode="multiple"` to unlock `controlledInput`. Fill-cell remote search in `mode="single"` requires **`@tmi-packages/ui@^1.10.0`**.
+
+When `creatableOptionId` is set and that id is in the filtered options, the create row is always **first** and a **sticky listbox header**. Passing the id is the whole contract (no placement prop). Requires **`@tmi-packages/ui@^1.11.0`**.
 
 ### Integration ledger
 
