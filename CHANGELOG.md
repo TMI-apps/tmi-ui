@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.12.0
+
+### Minor Changes
+
+- [#18](https://github.com/TMI-apps/tmi-ui/pull/18) [`2339c47`](https://github.com/TMI-apps/tmi-ui/commit/2339c4732901e56684c81b2a7979537905b2c76f) Thanks [@TomFranse](https://github.com/TomFranse)! - Define `creatableOptionId` as: when that id is in the filtered list, the row is first and a sticky listbox header. No placement flags.
+
+- [#18](https://github.com/TMI-apps/tmi-ui/pull/18) [`2339c47`](https://github.com/TMI-apps/tmi-ui/commit/2339c4732901e56684c81b2a7979537905b2c76f) Thanks [@TomFranse](https://github.com/TomFranse)! - Row reorder hides the dragged source row with opacity instead of visibility, so a lazy thumbnail can finish loading. `TableRowThumbnailShell` accepts `imgLoading` (`"lazy"` by default); pass `"eager"` on tables that use `rowReorder`.
+
+### Patch Changes
+
+- [#18](https://github.com/TMI-apps/tmi-ui/pull/18) [`2339c47`](https://github.com/TMI-apps/tmi-ui/commit/2339c4732901e56684c81b2a7979537905b2c76f) Thanks [@TomFranse](https://github.com/TomFranse)! - Selected table rows keep the normal row fill and show a solid `primary.main` outline instead of a primary background wash.
+
+- [#18](https://github.com/TMI-apps/tmi-ui/pull/18) [`2339c47`](https://github.com/TMI-apps/tmi-ui/commit/2339c4732901e56684c81b2a7979537905b2c76f) Thanks [@TomFranse](https://github.com/TomFranse)! - Fix TMITable tree expand-all so a new getRowId/getSubRows identity on re-render does not re-expand collapsed parents when data is unchanged.
+
 ## 1.11.0
 
 ### Minor Changes
