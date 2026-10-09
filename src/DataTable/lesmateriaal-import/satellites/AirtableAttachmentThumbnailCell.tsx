@@ -20,7 +20,7 @@ export interface AirtableAttachmentThumbnailCellProps {
  * @deprecated Airtable-shaped helper. Still supported in 1.x; 2.0 may rename after a consumer skip-walk.
  *
  * Resolution stays in **`getAirtableAttachmentChipThumbnailUrl`**; paint uses **`TableRowThumbnailShell`**
- * (same placeholder tint + **`Fade`** + lazy/low-priority **`img`** as Lesmateriaal row thumbs).
+ * (same placeholder tint + **`Fade`** + default lazy/low-priority **`img`** as Lesmateriaal row thumbs).
  *
  * Missing/malformed attachment JSON shows the shared placeholder; a URL that fails to decode shows
  * the same placeholder (**no** broken-image glyph as an end state).

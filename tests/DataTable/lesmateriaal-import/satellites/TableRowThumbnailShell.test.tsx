@@ -39,8 +39,26 @@ describe("TableRowThumbnailShell", () => {
 
     const img = document.querySelector('img[alt="row"]');
     expect(img).toBeTruthy();
+    expect(img).toHaveAttribute("loading", "lazy");
+    expect(img).toHaveAttribute("fetchpriority", "low");
     fireEvent.error(img!);
 
     expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders loading=eager without low fetch priority", () => {
+    render(
+      withTheme(
+        <TableRowThumbnailShell
+          src="http://cdn.local/thumb.jpg"
+          alt="eager-row"
+          imgLoading="eager"
+        />,
+      ),
+    );
+
+    const img = document.querySelector('img[alt="eager-row"]');
+    expect(img).toHaveAttribute("loading", "eager");
+    expect(img).not.toHaveAttribute("fetchpriority");
   });
 });

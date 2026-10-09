@@ -45,8 +45,9 @@ export function TableRowThumbnailPlaceholder({
 }
 
 /**
- * Paint-dip row thumbnail (`meta.rowThumbnailCell`): themed placeholderunderneath, **`Fade`** on **`onLoad`**,
- * lazy/async/low fetch-priority **`img`**.
+ * Paint-dip row thumbnail (`meta.rowThumbnailCell`): themed placeholder underneath, **`Fade`** on **`onLoad`**,
+ * async **`img`**. Default **`loading="lazy"`** + low fetch priority. Pass **`imgLoading="eager"`** on
+ * `rowReorder` tables so a drag-hidden source row cannot stall the load.
  *
  * Caller supplies **`src` / `alt` / optional `onError`** (Lesmateriaal fallback swapping); no URL resolution here.
  */
@@ -54,11 +55,17 @@ export function TableRowThumbnailShell({
   src,
   alt,
   onError,
+  imgLoading = "lazy",
 }: {
   src: string;
   alt: string;
   /** Forwarded from `<img>` — e.g. Lesmateriaal fallback phase or caller-driven failure state */
   onError?: (event: SyntheticEvent<HTMLImageElement, Event>) => void;
+  /**
+   * Native `img` loading hint. `"eager"` for viewport row thumbs in reorder tables.
+   * @default "lazy"
+   */
+  imgLoading?: "lazy" | "eager";
 }) {
   const theme = useTheme();
   const [loaded, setLoaded] = useState(false);
@@ -82,9 +89,9 @@ export function TableRowThumbnailShell({
           component="img"
           src={src}
           alt={alt}
-          loading="lazy"
+          loading={imgLoading}
           decoding="async"
-          fetchPriority="low"
+          {...(imgLoading === "lazy" ? { fetchPriority: "low" as const } : {})}
           onError={onError}
           onLoad={() => setLoaded(true)}
           sx={{

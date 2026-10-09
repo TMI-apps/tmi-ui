@@ -8,7 +8,8 @@ import { workspaceDetailDrawerModalZ } from "../shared-theme/workspaceDetailDraw
  * `detailPanelHero` (incl. stats-strip meta colors),
  * `tmiTableWorkspace.detailDrawerModalZ` (drawer stacking), and
  * `tmiPrimaryContained` (add-bar / primary row chrome).
- * Row hover/selection still comes from {@link getTableInteractionSkin} (palette-derived).
+ * Row hover still comes from {@link getTableInteractionSkin} (palette-derived).
+ * Selected rows keep that fill and add a solid `primary.main` outline.
  */
 export function createTmiTableTheme(base: Theme): Theme {
   const detailPanelHero = buildDetailPanelHeroTokens(base.palette.mode, {
