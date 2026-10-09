@@ -30,7 +30,7 @@ export function buildDatabaseViewerReorderRowTableRowSx(args: {
   | {
       transform?: string;
       transition?: string;
-      visibility?: "hidden";
+      opacity?: 0;
       pointerEvents?: "none";
     }
   | undefined {
@@ -39,9 +39,19 @@ export function buildDatabaseViewerReorderRowTableRowSx(args: {
     args.dropPlacement,
   );
 
+  /**
+   * Hide the source row without `visibility: hidden`. A lazy `<img>` under a
+   * hidden row is not "being rendered", so the load never starts and a
+   * `Fade`-gated thumbnail stays on the placeholder after drop.
+   * `pointer-events: none` keeps the ghost out of hit-testing.
+   */
+  const dragSourceHidden = isDragging
+    ? ({ opacity: 0, pointerEvents: "none" } as const)
+    : undefined;
+
   if (dropPlacement === "onto") {
     if (!isDragging) return undefined;
-    return { visibility: "hidden", pointerEvents: "none" };
+    return dragSourceHidden;
   }
 
   if (transform === null && !transition && !isDragging) return undefined;
@@ -49,9 +59,7 @@ export function buildDatabaseViewerReorderRowTableRowSx(args: {
     transform:
       transform === null ? undefined : CSS.Transform.toString(transform),
     transition,
-    ...(isDragging
-      ? { visibility: "hidden" as const, pointerEvents: "none" as const }
-      : undefined),
+    ...dragSourceHidden,
   };
 }
 

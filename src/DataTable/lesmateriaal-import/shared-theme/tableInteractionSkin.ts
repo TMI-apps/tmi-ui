@@ -16,8 +16,6 @@ export type TableInteractionSkinPreset = "default" | "lightweight";
 export interface TableInteractionSkin {
   rowBackground: string;
   rowHoverBackground: string;
-  rowSelectedBackground: string;
-  rowSelectedHoverBackground: string;
   rowDragBackground: string;
   rowDragHoverBackground: string;
   rowMinHeightPx: number;
@@ -29,15 +27,6 @@ function buildDefaultSkin(theme: Theme): TableInteractionSkin {
   return {
     rowBackground: searchFieldMutedBackground(theme),
     rowHoverBackground: searchFieldMutedHoverBackground(theme),
-    rowSelectedBackground: alpha(
-      theme.palette.primary.main,
-      theme.palette.action.selectedOpacity,
-    ),
-    rowSelectedHoverBackground: alpha(
-      theme.palette.primary.main,
-      theme.palette.action.selectedOpacity +
-        theme.palette.action.hoverOpacity * 0.5,
-    ),
     rowDragBackground: fileDropTargetActiveBackground(theme, "default"),
     rowDragHoverBackground: fileDropTargetHoverBackground(theme),
     rowMinHeightPx: 36,
@@ -53,15 +42,6 @@ function buildLightweightSkin(theme: Theme): TableInteractionSkin {
   return {
     rowBackground: searchFieldMutedBackgroundLightweight(theme),
     rowHoverBackground: searchFieldMutedHoverBackground(theme),
-    rowSelectedBackground: alpha(
-      theme.palette.primary.main,
-      theme.palette.action.selectedOpacity,
-    ),
-    rowSelectedHoverBackground: alpha(
-      theme.palette.primary.main,
-      theme.palette.action.selectedOpacity +
-        theme.palette.action.hoverOpacity * 0.5,
-    ),
     rowDragBackground: fileDropTargetActiveBackground(theme, "lightweight"),
     rowDragHoverBackground: fileDropTargetLightweightHoverBackground(theme),
     rowMinHeightPx: 34,

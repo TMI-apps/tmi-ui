@@ -142,6 +142,74 @@ function viewerDragOverSx(params: {
   };
 }
 
+/**
+ * Solid `primary.main` ring around the painted row (same 2px weight as file-drop).
+ * Split per cell so the radius follows the row pill, including tree indent.
+ * File-drop owns `::after` while `isDragOver`.
+ */
+function viewerSelectedOutlineSx(params: {
+  rowIsSelected: boolean;
+  isDragOver: boolean;
+  isFirst: boolean;
+  isLast: boolean;
+  cellStartPx: number;
+  cellWidthPx: number;
+  rowDepth: number;
+  treeRowIndentBoundaryIndex: number;
+}): Record<string, unknown> | undefined {
+  const {
+    rowIsSelected,
+    isDragOver,
+    isFirst,
+    isLast,
+    cellStartPx,
+    cellWidthPx,
+    rowDepth,
+    treeRowIndentBoundaryIndex,
+  } = params;
+  if (!rowIsSelected || isDragOver) return undefined;
+  const hasTreeRowIndent = rowDepth > 0 && treeRowIndentBoundaryIndex >= 0;
+  return {
+    "&::after": (theme: Theme) => {
+      const indentPx = hasTreeRowIndent
+        ? getDatabaseViewerTreeRowIndentPx(theme, rowDepth)
+        : 0;
+      if (hasTreeRowIndent && cellStartPx + cellWidthPx <= indentPx) {
+        return { content: "none" };
+      }
+      const visualFirst = hasTreeRowIndent
+        ? cellContainsTreeRowGraphicStart({
+            theme,
+            rowDepth,
+            cellStartPx,
+            cellWidthPx,
+          })
+        : isFirst;
+      const width = FILE_DROP_TARGET_BORDER_WIDTH_PX;
+      return {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: hasTreeRowIndent ? `${Math.max(0, indentPx - cellStartPx)}px` : 0,
+        boxSizing: "border-box",
+        pointerEvents: "none",
+        zIndex: 2,
+        borderStyle: "solid",
+        borderColor: theme.palette.primary.main,
+        borderWidth: width,
+        borderRadius: getDatabaseViewerDataCellCornerRadius(
+          visualFirst,
+          isLast,
+        ),
+        ...(!visualFirst ? { borderLeftWidth: 0 } : {}),
+        ...(!isLast ? { borderRightWidth: 0 } : {}),
+      };
+    },
+  };
+}
+
 function getDatabaseViewerRowSavePendingShadow(theme: Theme): string {
   return `inset 3px 0 0 ${alpha(theme.palette.primary.main, 0.28)}`;
 }
@@ -247,6 +315,7 @@ export function getDatabaseViewerBodyTableCellSx<TData extends object>(params: {
   cellStartPx: number;
   visibleCellCount: number;
   isDragOver: boolean;
+  rowIsSelected: boolean;
   rowDepth: number;
   rowSavePending: boolean;
   treeRowIndentBoundaryIndex: number;
@@ -258,6 +327,7 @@ export function getDatabaseViewerBodyTableCellSx<TData extends object>(params: {
     cellStartPx,
     visibleCellCount,
     isDragOver,
+    rowIsSelected,
     rowDepth,
     rowSavePending,
     treeRowIndentBoundaryIndex,
@@ -293,6 +363,16 @@ export function getDatabaseViewerBodyTableCellSx<TData extends object>(params: {
     }),
     borderBottom: "none",
     borderRadius: getDatabaseViewerDataCellCornerRadius(isFirst, isLast),
+    ...(viewerSelectedOutlineSx({
+      rowIsSelected,
+      isDragOver,
+      isFirst,
+      isLast,
+      cellStartPx,
+      cellWidthPx,
+      rowDepth,
+      treeRowIndentBoundaryIndex,
+    }) ?? {}),
     ...(viewerDragOverSx({ isDragOver, isFirst, isLast }) ?? {}),
     ...getPinnedCellSx(cell.column),
   };

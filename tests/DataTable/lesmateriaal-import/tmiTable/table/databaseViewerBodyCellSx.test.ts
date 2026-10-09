@@ -1,4 +1,5 @@
 import type { Cell } from "@tanstack/react-table";
+import { createTheme, type Theme } from "@mui/material/styles";
 import { describe, expect, it } from "vitest";
 import type { DatabaseViewerColumnMeta } from "../../../../../src/DataTable/lesmateriaal-import/shared-types/tmiTableMeta.types.js";
 import {
@@ -24,6 +25,7 @@ function cellWithMeta(
 function bodyCellSx(
   meta: DatabaseViewerColumnMeta | undefined,
   isDragOver = false,
+  rowIsSelected = false,
 ) {
   return getDatabaseViewerBodyTableCellSx({
     cell: cellWithMeta(meta),
@@ -31,11 +33,18 @@ function bodyCellSx(
     cellStartPx: 0,
     visibleCellCount: 1,
     isDragOver,
+    rowIsSelected,
     rowDepth: 0,
     rowSavePending: false,
     treeRowIndentBoundaryIndex: -1,
     leadingContentShiftDepth: 0,
-  }) as { p?: number; height?: number; "&::after"?: unknown };
+  }) as {
+    p?: number;
+    height?: number;
+    "&::after"?:
+      | Record<string, unknown>
+      | ((theme: Theme) => Record<string, unknown>);
+  };
 }
 
 describe("databaseViewerCellIsEdgeToEdgeInteractive", () => {
@@ -86,10 +95,25 @@ describe("getDatabaseViewerBodyTableCellSx full-height band", () => {
     expect(sx.minHeight).toBe(DATABASE_VIEWER_BODY_ROW_BAR_HEIGHT_PX);
   });
 
-  it("paints the dashed full-row overlay when isDragOver", () => {
-    const idle = bodyCellSx(undefined, false);
-    const over = bodyCellSx(undefined, true);
+  it("paints a solid primary outline when the row is selected", () => {
+    const theme = createTheme();
+    const idle = bodyCellSx(undefined, false, false);
+    const selected = bodyCellSx(undefined, false, true);
     expect(idle["&::after"]).toBeUndefined();
+    const paint = selected["&::after"];
+    expect(typeof paint).toBe("function");
+    if (typeof paint !== "function") return;
+    expect(paint(theme)).toEqual(
+      expect.objectContaining({
+        borderStyle: "solid",
+        borderColor: theme.palette.primary.main,
+        borderWidth: 2,
+      }),
+    );
+  });
+
+  it("keeps the dashed file-drop overlay when a selected row is also a drop target", () => {
+    const over = bodyCellSx(undefined, true, true);
     expect(over["&::after"]).toEqual(
       expect.objectContaining({
         border: expect.stringContaining("dashed"),

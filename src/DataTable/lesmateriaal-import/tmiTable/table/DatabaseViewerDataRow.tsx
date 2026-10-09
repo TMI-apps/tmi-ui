@@ -55,7 +55,7 @@ export interface DatabaseViewerDataRowProps<TData extends object> {
   reorderTreeDragHandle?: DatabaseViewerDataRowReorderHandleProps | undefined;
   /** Extra row styles merged after skin (e.g. dragging placeholder). */
   tableRowSx?: SxProps<Theme>;
-  /** TanStack row selection highlight. */
+  /** TanStack row selection. Fill stays the normal row tint; a primary outline marks the row. */
   rowIsSelected?: boolean;
   /** When true, Space does not open row (keyboard path B). */
   rowSelectionEnabled?: boolean;
@@ -171,14 +171,10 @@ export function DatabaseViewerDataRow<TData extends object>({
         const skin = getTableInteractionSkin(theme, interactionSkinPreset);
         const rowBackground = isDragOver
           ? skin.rowDragBackground
-          : rowIsSelected
-            ? skin.rowSelectedBackground
-            : skin.rowBackground;
+          : skin.rowBackground;
         const rowHoverBackground = isDragOver
           ? skin.rowDragHoverBackground
-          : rowIsSelected
-            ? skin.rowSelectedHoverBackground
-            : skin.rowHoverBackground;
+          : skin.rowHoverBackground;
         const base = {
           "--dbv-row-bg": rowBackground,
           cursor: rowIsClickable ? ("pointer" as const) : ("default" as const),
@@ -213,6 +209,7 @@ export function DatabaseViewerDataRow<TData extends object>({
           cellStartPx={visibleCellStartPxByIndex[index] ?? 0}
           visibleCellCount={visibleCells.length}
           isDragOver={isDragOver}
+          rowIsSelected={rowIsSelected}
           rowSavePending={rowSavePending}
           treeRowIndentBoundaryIndex={treeRowIndentBoundaryIndex}
           table={table}

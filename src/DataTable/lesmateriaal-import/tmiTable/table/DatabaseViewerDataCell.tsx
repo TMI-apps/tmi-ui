@@ -22,6 +22,7 @@ export interface DatabaseViewerDataCellProps<TData extends object> {
   cellStartPx: number;
   visibleCellCount: number;
   isDragOver: boolean;
+  rowIsSelected: boolean;
   rowSavePending: boolean;
   treeRowIndentBoundaryIndex: number;
   table: TanStackTableType<TData>;
@@ -40,6 +41,7 @@ export function DatabaseViewerDataCell<TData extends object>({
   cellStartPx,
   visibleCellCount,
   isDragOver,
+  rowIsSelected,
   rowSavePending,
   treeRowIndentBoundaryIndex,
   table,
@@ -97,6 +99,7 @@ export function DatabaseViewerDataCell<TData extends object>({
         cellStartPx,
         visibleCellCount,
         isDragOver,
+        rowIsSelected,
         rowDepth: row.depth,
         rowSavePending,
         treeRowIndentBoundaryIndex,

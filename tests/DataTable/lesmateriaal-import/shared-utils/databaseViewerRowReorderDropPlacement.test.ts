@@ -49,17 +49,18 @@ describe("buildDatabaseViewerReorderRowTableRowSx", () => {
     });
     expect(sx?.transform).toContain("translate3d");
     expect(sx?.transition).toBe("transform 200ms");
-    expect(sx?.visibility).toBeUndefined();
+    expect(sx).not.toHaveProperty("visibility");
   });
 
-  it("hides the active row for between", () => {
+  it("hides the active row for between with opacity", () => {
     const sx = buildDatabaseViewerReorderRowTableRowSx({
       transform: siblingSlide,
       transition: undefined,
       isDragging: true,
       dropPlacement: "between",
     });
-    expect(sx?.visibility).toBe("hidden");
+    expect(sx?.opacity).toBe(0);
+    expect(sx).not.toHaveProperty("visibility");
     expect(sx?.pointerEvents).toBe("none");
     expect(sx?.transform).toContain("translate3d");
   });
@@ -74,7 +75,7 @@ describe("buildDatabaseViewerReorderRowTableRowSx", () => {
     expect(sx).toBeUndefined();
   });
 
-  it("still hides the active row for onto", () => {
+  it("hides the active row for onto with opacity", () => {
     const sx = buildDatabaseViewerReorderRowTableRowSx({
       transform: siblingSlide,
       transition: "transform 200ms",
@@ -82,7 +83,7 @@ describe("buildDatabaseViewerReorderRowTableRowSx", () => {
       dropPlacement: "onto",
     });
     expect(sx).toEqual({
-      visibility: "hidden",
+      opacity: 0,
       pointerEvents: "none",
     });
   });
