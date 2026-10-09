@@ -85,28 +85,28 @@ This section is the **public-API SSOT** for the grid. Types in `dist/index.d.ts`
 
 Read with the [adopt skill](.agents/skills/adopt-from-tmi-ui/SKILL.md). Infer a profile (`browse-only` vs `workspace+detail`), wire package APIs below, then **skip-walk** every unwired row with the human.
 
-| Capability          | Package API                                                 | If skipped                                                  |
-| ------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| Browse grid         | `TMITable` + `columns` + `serverInfinite`                   | Do not build a custom grid / fork TanStack in the app       |
-| Workspace shell     | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`)  | Do not build a custom split layout                          |
-| Client list         | `staticClientVirtualizedList(n)`                            | Do not hand-roll infinite scroll for all-client data        |
-| Server infinite     | `serverInfinite` (`TMITableServerInfinite`)                 | Do not paginate `data` inside the app table wrapper         |
-| Tree rows           | `tree` / `getSubRows`                                       | Do not build a parallel tree UI                             |
-| Row reorder         | `TmiRowReorderDndProvider` + `rowReorder` (`dropPlacement`) | Do not add a second DnD context for the grid                |
-| Row thumbnail       | `TableRowThumbnailShell` with `imgLoading="eager"` when the table uses `rowReorder` | Do not remount the cell after drop to unstick a lazy image |
-| Row selection       | `selection` / `enableRowSelection`                          | Do not build custom multi-select chrome (export stays app)  |
-| Filter prompt       | `filterPromptActive` on workspace                           | Do not hide the table with ad-hoc empty states              |
-| Pinned create row   | `rowCreate` (`onCreate` returns row id)                     | Do not inject a fake `data` row or reuse `ListRowAddButton` |
-| Optimistic feedback | `OptimisticTableFeedbackProvider`                           | Do not duplicate pending-row snackbar logic                 |
-| Detail hero / edit  | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`          | Do not rebuild hero chrome                                  |
-| Overlay z-index     | `usePortaledOverlayPopperZIndex` from **this package**      | Do not add a second `PortaledOverlayStack` context          |
-| Vite dev            | `optimizeDeps.include: ["@tmi-packages/ui"]`                | Do not exclude the package                                  |
-| Fill height         | omit `maxHeight` (or `false` for nested)                    | Do not call deprecated `useTMITableMaxHeight` for fill      |
-| Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`             | Do not wrap `TMITable` in an app logger component           |
-| Theme               | `createTmiTableTheme`                                       | Do not duplicate hero/workspace/`tmiPrimaryContained` keys  |
-| Subpath import      | `@tmi-packages/ui/table`                                    | Also `import "@tmi-packages/ui"` once for theme types       |
-| Optional peers      | TanStack / `@dnd-kit/*` optional at **install**             | Still required at runtime if you import the grid            |
-| **Out of package**  | edit session, xlsx export, feature columns, RPC             | Stay in the app — do not move into wrappers                 |
+| Capability          | Package API                                                                         | If skipped                                                  |
+| ------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Browse grid         | `TMITable` + `columns` + `serverInfinite`                                           | Do not build a custom grid / fork TanStack in the app       |
+| Workspace shell     | `TMITableWorkspace` (`leftHeader`, `table`, `detailPanel`)                          | Do not build a custom split layout                          |
+| Client list         | `staticClientVirtualizedList(n)`                                                    | Do not hand-roll infinite scroll for all-client data        |
+| Server infinite     | `serverInfinite` (`TMITableServerInfinite`)                                         | Do not paginate `data` inside the app table wrapper         |
+| Tree rows           | `tree` / `getSubRows`                                                               | Do not build a parallel tree UI                             |
+| Row reorder         | `TmiRowReorderDndProvider` + `rowReorder` (`dropPlacement`)                         | Do not add a second DnD context for the grid                |
+| Row thumbnail       | `TableRowThumbnailShell` with `imgLoading="eager"` when the table uses `rowReorder` | Do not remount the cell after drop to unstick a lazy image  |
+| Row selection       | `selection` / `enableRowSelection`                                                  | Do not build custom multi-select chrome (export stays app)  |
+| Filter prompt       | `filterPromptActive` on workspace                                                   | Do not hide the table with ad-hoc empty states              |
+| Pinned create row   | `rowCreate` (`onCreate` returns row id)                                             | Do not inject a fake `data` row or reuse `ListRowAddButton` |
+| Optimistic feedback | `OptimisticTableFeedbackProvider`                                                   | Do not duplicate pending-row snackbar logic                 |
+| Detail hero / edit  | `TMITableDetailEditPanel`, `DetailPanelHeroHeader`                                  | Do not rebuild hero chrome                                  |
+| Overlay z-index     | `usePortaledOverlayPopperZIndex` from **this package**                              | Do not add a second `PortaledOverlayStack` context          |
+| Vite dev            | `optimizeDeps.include: ["@tmi-packages/ui"]`                                        | Do not exclude the package                                  |
+| Fill height         | omit `maxHeight` (or `false` for nested)                                            | Do not call deprecated `useTMITableMaxHeight` for fill      |
+| Load debug          | `debug.onTableLoadSettled: logTableLoadSummary`                                     | Do not wrap `TMITable` in an app logger component           |
+| Theme               | `createTmiTableTheme`                                                               | Do not duplicate hero/workspace/`tmiPrimaryContained` keys  |
+| Subpath import      | `@tmi-packages/ui/table`                                                            | Also `import "@tmi-packages/ui"` once for theme types       |
+| Optional peers      | TanStack / `@dnd-kit/*` optional at **install**                                     | Still required at runtime if you import the grid            |
+| **Out of package**  | edit session, xlsx export, feature columns, RPC                                     | Stay in the app — do not move into wrappers                 |
 
 ### Public exports
 

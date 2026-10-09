@@ -192,9 +192,7 @@ function viewerSelectedOutlineSx(params: {
         top: 0,
         bottom: 0,
         right: 0,
-        left: hasTreeRowIndent
-          ? `${Math.max(0, indentPx - cellStartPx)}px`
-          : 0,
+        left: hasTreeRowIndent ? `${Math.max(0, indentPx - cellStartPx)}px` : 0,
         boxSizing: "border-box",
         pointerEvents: "none",
         zIndex: 2,
