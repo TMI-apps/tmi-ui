@@ -5,9 +5,8 @@
 # - Push of a v* tag (manual tag from a maintainer machine).
 # - workflow_dispatch (fallback / retry).
 #
-# Auth: npm Trusted Publisher (OIDC) for repo TMI-apps/tmi-ui, workflow file publish.yml.
-# Do not set NODE_AUTH_TOKEN or setup-node registry-url on publish — those write .npmrc
-# auth and npm then skips OIDC (surfaces as E404 on PUT).
+# Auth: npm Trusted Publisher (OIDC) when NPM_TOKEN is unset. Repository secret NPM_TOKEN
+# is used as a fallback (workflow_call must use secrets: inherit from the caller).
 name: Publish
 
 on:
@@ -35,9 +34,18 @@ jobs:
       id-token: write
 
     steps:
+      - name: Resolve checkout ref
+        id: checkout_ref
+        run: |
+          if [ -n "${{ inputs.checkout_ref }}" ]; then
+            echo "ref=${{ inputs.checkout_ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_call' && inputs.checkout_ref || github.sha }}
+          ref: ${{ steps.checkout_ref.outputs.ref }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -46,6 +54,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
       - name: Install dependencies
@@ -55,4 +64,6 @@ jobs:
         run: pnpm run build
 
       - name: Publish to npm
-        run: npm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance --no-git-checks
